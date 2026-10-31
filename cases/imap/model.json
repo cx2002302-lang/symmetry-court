@@ -1,0 +1,465 @@
+{
+ "n_bits": 3,
+ "n_actions": 6,
+ "n_states": 8,
+ "goals": [],
+ "meta": {
+  "source_system": "IMAP4rev1 connection state machine, transcribed from RFC 3501 section 3 (states and entry conditions) and section 6 (per-state commands), cross-checked against sections 6.4.2 and 7.1.4. RFC 3501 is a public standard (proposed standard, March 2003).",
+  "variant": "imap-rfc3501-connection",
+  "source_citation": "RFC 3501 (March 2003), sections 3, 3.1-3.4, 6.1, 6.2, 6.3, 6.4, 6.4.2, 7.1.4, 7.1.5. Per-edge citations in meta.edges_with_citations.",
+  "state_names": [
+   "NOT-AUTHENTICATED",
+   "AUTHENTICATED",
+   "SELECTED",
+   "LOGOUT"
+  ],
+  "action_names": [
+   "AUTHENTICATE or LOGIN (OK)",
+   "PREAUTH greeting",
+   "SELECT or EXAMINE (OK)",
+   "CLOSE (OK)",
+   "LOGOUT",
+   "unilateral close (BYE)"
+  ],
+  "real_states": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "semantics_class": "event: the actions are protocol commands or greeting/teardown events named by the RFC; their names are part of the behavior and do not follow state renamings -- candidate groups in groups/ declare semantics \"fixed\". The relabel rows in expected.json are the diagnostic contrast reading, not the protocol-true one.",
+  "encoding": "states 4..7 = unreachable padding (self-loop only); undeclared (state, event) pairs self-loop with reward 0",
+  "reward_rule": "rewards all zero: IMAP defines no payoff; the reward layer carries no information, all conclusions come from the transition layer",
+  "edges_with_citations": [
+   {
+    "from": "NOT-AUTHENTICATED",
+    "event": "AUTHENTICATE or LOGIN (OK)",
+    "to": "AUTHENTICATED",
+    "citation": "RFC 3501 sec.6.2 ('In the not authenticated state, the AUTHENTICATE or LOGIN command establishes authentication and enters the authenticated state.'); sec.3.2 ('entered when ... acceptable authentication credentials have been provided')"
+   },
+   {
+    "from": "NOT-AUTHENTICATED",
+    "event": "PREAUTH greeting",
+    "to": "AUTHENTICATED",
+    "citation": "RFC 3501 sec.3.1 (not authenticated state 'is entered when a connection starts unless the connection has been pre-authenticated'); sec.7.1.4 ('The PREAUTH response ... indicates that the connection has already been authenticated by external means; thus no LOGIN command is needed')"
+   },
+   {
+    "from": "AUTHENTICATED",
+    "event": "SELECT or EXAMINE (OK)",
+    "to": "SELECTED",
+    "citation": "RFC 3501 sec.6.3 ('the following commands are valid in the authenticated state: SELECT, EXAMINE, ...'); sec.3.3 ('This state is entered when a mailbox has been successfully selected')"
+   },
+   {
+    "from": "SELECTED",
+    "event": "SELECT or EXAMINE (OK)",
+    "to": "SELECTED",
+    "citation": "RFC 3501 sec.6.4.2 ('Even if a mailbox is selected, a SELECT, EXAMINE, or LOGOUT command MAY be issued without previously issuing a CLOSE command. The SELECT, EXAMINE, and LOGOUT commands implicitly close the currently selected mailbox') -- re-select stays selected"
+   },
+   {
+    "from": "SELECTED",
+    "event": "CLOSE (OK)",
+    "to": "AUTHENTICATED",
+    "citation": "RFC 3501 sec.6.4.2 ('Result: OK - close completed, now in authenticated state' / 'returns to the authenticated state from the selected state'); sec.3.2 ('after a successful CLOSE command')"
+   },
+   {
+    "from": "NOT-AUTHENTICATED",
+    "event": "LOGOUT",
+    "to": "LOGOUT",
+    "citation": "RFC 3501 sec.6.1 ('The following commands are valid in any state: CAPABILITY, NOOP, and LOGOUT.'); sec.3.4 ('entered as a result of a client request (via the LOGOUT command)')"
+   },
+   {
+    "from": "AUTHENTICATED",
+    "event": "LOGOUT",
+    "to": "LOGOUT",
+    "citation": "RFC 3501 sec.6.1 ('The following commands are valid in any state: CAPABILITY, NOOP, and LOGOUT.'); sec.3.4 ('entered as a result of a client request (via the LOGOUT command)')"
+   },
+   {
+    "from": "SELECTED",
+    "event": "LOGOUT",
+    "to": "LOGOUT",
+    "citation": "RFC 3501 sec.6.1 + sec.6.4.2 (implicit close) + sec.3.4"
+   },
+   {
+    "from": "NOT-AUTHENTICATED",
+    "event": "unilateral close (BYE)",
+    "to": "LOGOUT",
+    "citation": "RFC 3501 sec.3.4 ('or by unilateral action on the part of either the client or server'); sec.7.1.5 (BYE response)"
+   },
+   {
+    "from": "AUTHENTICATED",
+    "event": "unilateral close (BYE)",
+    "to": "LOGOUT",
+    "citation": "RFC 3501 sec.3.4 ('or by unilateral action on the part of either the client or server'); sec.7.1.5 (BYE response)"
+   },
+   {
+    "from": "SELECTED",
+    "event": "unilateral close (BYE)",
+    "to": "LOGOUT",
+    "citation": "RFC 3501 sec.3.4 ('or by unilateral action on the part of either the client or server'); sec.7.1.5 (BYE response)"
+   }
+  ],
+  "transcription_notes": [
+   "no drawn diagram: RFC 3501 section 3 specifies the four states in prose only (despite the heading 'State and Flow Diagram' there is no figure). The edge set is the flow reconstruction from section 3's entry conditions, section 6's per-state command lists, and the transition sentences of sec.6.4.2 (CLOSE) and sec.7.1.4 (PREAUTH); every edge carries its quoting citation.",
+   "modeling choice: the greeting is treated as an event received in the initial state -- a PREAUTH greeting moves the freshly started connection from not-authenticated to authenticated (edge 2 of EDGES). RFC wording quoted in that edge's citation.",
+   "not collected: STARTTLS (sec.6.2.1: it 'does not establish authentication or enter the authenticated state' -- no state transition); command failures (sec.6 intro: 'A rejected command (BAD response) never changes the state of the connection'); a failed SELECT ('after an error in selecting a mailbox' the connection is in authenticated state, sec.3.2 -- no transition); CAPABILITY/NOOP and the mailbox-management commands (self-loops in every state; the encoding already maps undeclared events to self-loops, so they are not declared as actions); the autologout timer (sec.5.4) is subsumed under the unilateral-close (BYE) edges.",
+   "encoding: states 4..7 are unreachable padding to reach 2^3 (engine input contract); any (state, event) pair not listed in EDGES self-loops with reward 0; rewards are all zero because IMAP defines no payoff; goals is empty.",
+   "twin note: AUTHENTICATED and SELECTED are joined by the mutually inverse edges SELECT (forward) and CLOSE (back) -- a 2-cycle that looks swap-friendly; both also have LOGOUT exits. Whether the swap is a symmetry is a question for the data -- see groups/auth_selected.json.",
+   "provenance: transcribed fresh from RFC 3501 text (fetched from rfc-editor.org on 2026-10-31) for this repository; no base model was copied."
+  ],
+  "regenerate": "python -X utf8 cases/imap/make_imap.py"
+ },
+ "trans": [
+  [
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ]
+  ]
+ ]
+}

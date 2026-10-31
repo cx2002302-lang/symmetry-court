@@ -1,0 +1,52 @@
+{
+ "n_states": 16,
+ "elements": [
+  [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15
+  ],
+  [
+   4,
+   1,
+   2,
+   3,
+   0,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15
+  ]
+ ],
+ "semantics": {
+  "action": "fixed"
+ },
+ "meta": {
+  "claim": "defendant C (control): CLOSED and ESTABLISHED -- a connection's starting state and its main working state -- could be swapped",
+  "construction": "order-2 group swapping CLOSED <-> ESTABLISHED (states 0 <-> 4)",
+  "why_it_looks_legal": "nothing -- this defendant exists as the obviously-refused control: a sanity check that all three parties (wuxing-gua relabel, wuxing-gua fixed, networkx) refuse together",
+  "why_it_is_not_a_symmetry": "CLOSED has 2 outgoing edges, ESTABLISHED has 2, but their in/out neighborhoods are entirely different (CLOSED is entered from LISTEN/LAST-ACK/TIME-WAIT; ESTABLISHED from SYN-SENT/SYN-RECEIVED); degree signatures already differ",
+  "semantics_note": "event-class model: semantics declared \"fixed\"",
+  "regenerate": "python -X utf8 cases/tcp/make_tcp.py"
+ }
+}

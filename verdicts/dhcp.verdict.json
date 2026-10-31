@@ -1,0 +1,666 @@
+{
+ "case": "dhcp",
+ "generated_utc": "2026-10-31T03:27:30Z",
+ "tools": {
+  "engine": {
+   "name": "wuxing_gua",
+   "version": "wuxing_gua 1.0.0",
+   "location": "vendored/wuxing_gua",
+   "provenance": "pinned source revision + sha256 manifest in NOTICE",
+   "invocation": "python -X utf8 -m wuxing_gua check --trans <model> --group <group> [--strict]; cwd=vendored/; PYTHONDONTWRITEBYTECODE=1"
+  },
+  "networkx": "3.6.1",
+  "python": "3.12.10"
+ },
+ "model": {
+  "path": "cases\\dhcp\\model.json",
+  "n_bits": 4,
+  "n_states": 16,
+  "n_actions": 15,
+  "source_system": "DHCP client state-transition diagram, transcribed from RFC 2131 section 4.4 Figure 5, cross-checked against sections 3.1, 3.2 and 4.4.1-4.4.5. RFC 2131 is a public standard (proposed standard, March 1997).",
+  "source_citation": "RFC 2131 (March 1997), section 4.4, Figure 5 'State-transition diagram for DHCP clients'; sections 3.1, 3.2, 4.4.1-4.4.5 for cross-checks. Per-edge citations in meta.edges_with_citations."
+ },
+ "groups": {
+  "init_start": {
+   "group_file": "groups/init_start.json",
+   "declared_semantics": {
+    "action": "fixed"
+   },
+   "claim": "defendant C (control): INIT and INIT-REBOOT are both starting states of the diagram, so they could be swapped",
+   "order_engine_reported": 2,
+   "relabel": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "generalized",
+    "error": null,
+    "reason": "转移等变层失败：max TV=inf（含非位置置换元素） > tol=1e-09（1/2 个受检元素不过）；奖励剖面层失败：同轨道剖面不同 1/1 对（判据 n_bad=0 零容忍）",
+    "semantics": {
+     "action": "relabel",
+     "judge": "generalized",
+     "declared": true,
+     "assumed": false,
+     "source": "group_file"
+    },
+    "command": [
+     "python",
+     "-X",
+     "utf8",
+     "-m",
+     "wuxing_gua",
+     "check",
+     "--trans",
+     "cases\\dhcp\\model.json",
+     "--group",
+     "<court_tmp>\\init_start.relabel.json"
+    ],
+    "stderr_tail": "",
+    "frame": "relabel",
+    "stamp_note": "court-stamped relabel copy used (original declaration: 'fixed')"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict",
+    "error": null,
+    "reason": "转移等变层失败：max TV=1 > tol=1e-09（1/2 个受检元素不过）；奖励剖面层失败：同轨道剖面不同 1/1 对（判据 n_bad=0 零容忍）",
+    "semantics": {
+     "action": "fixed",
+     "judge": "strict",
+     "declared": true,
+     "assumed": false,
+     "source": "flag_strict"
+    },
+    "command": [
+     "python",
+     "-X",
+     "utf8",
+     "-m",
+     "wuxing_gua",
+     "check",
+     "--trans",
+     "cases\\dhcp\\model.json",
+     "--group",
+     "cases\\dhcp\\groups\\init_start.json",
+     "--strict"
+    ],
+    "stderr_tail": "",
+    "frame": "fixed",
+    "stamp_note": "original group file, --strict flag (fixed frame)"
+   },
+   "networkx": {
+    "structure_symmetry": false,
+    "labeled_symmetry": false,
+    "n_elements": 2,
+    "n_unique_elements": 2,
+    "n_nontrivial": 1,
+    "per_element": [
+     {
+      "element": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "is_identity": true,
+      "structural": true,
+      "labeled": true,
+      "nx_vf2_membership_structural": true,
+      "nx_vf2_membership_labeled": true
+     },
+     {
+      "element": [
+       6,
+       1,
+       2,
+       3,
+       4,
+       5,
+       0,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "is_identity": false,
+      "structural": false,
+      "labeled": false,
+      "nx_vf2_membership_structural": false,
+      "nx_vf2_membership_labeled": false
+     }
+    ],
+    "per_element_truncated": false,
+    "method": "primary=direct edge-set check (O(E), hand-checkable); cross-check=networkx VF2 automorphism-set membership (independent implementation)",
+    "method_conflicts": [],
+    "crosscheck_status": "ok",
+    "scope": "full model (all n_states=16, padding included)",
+    "n_autos_structure": 40320,
+    "n_autos_labeled": 40320,
+    "autos_truncated": false,
+    "autos_skipped_reason": null,
+    "structural_pad_states": [
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15
+    ],
+    "n_autos_structure_nonpad": 1,
+    "n_autos_labeled_nonpad": 1,
+    "autos_nonpad_scope": "subgraph over the 8 non-pad states (structural pads excluded; a pad state = every action single self-loop successor with r=0, the same rule the engine's pad-aware mode uses)"
+   },
+   "consistency": {
+    "relabel_vs_structure": "agree",
+    "fixed_vs_labeled": "agree",
+    "arms_differ": false,
+    "ruling_code": "agree",
+    "ruling": "all columns agree: engine (both standards) and networkx (both scopes) say 'reject' for this group",
+    "binding_verdict": "reject"
+   }
+  },
+  "pads": {
+   "group_file": "groups/pads.json",
+   "declared_semantics": {
+    "action": "fixed"
+   },
+   "claim": "positive control: padding states 8 and 9 have byte-identical rows (every event self-loops, reward 0), so the swap is a genuine symmetry under BOTH readings and should be admitted everywhere",
+   "order_engine_reported": 2,
+   "relabel": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "generalized",
+    "error": null,
+    "reason": "两层判据均通过：转移等变（max TV=0.00e+00 ≤ tol=1e-09）+ 奖励剖面（n_bad=0）",
+    "semantics": {
+     "action": "relabel",
+     "judge": "generalized",
+     "declared": true,
+     "assumed": false,
+     "source": "group_file"
+    },
+    "command": [
+     "python",
+     "-X",
+     "utf8",
+     "-m",
+     "wuxing_gua",
+     "check",
+     "--trans",
+     "cases\\dhcp\\model.json",
+     "--group",
+     "<court_tmp>\\pads.relabel.json"
+    ],
+    "stderr_tail": "",
+    "frame": "relabel",
+    "stamp_note": "court-stamped relabel copy used (original declaration: 'fixed')"
+   },
+   "fixed": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "strict",
+    "error": null,
+    "reason": "两层判据均通过：转移等变（max TV=0.00e+00 ≤ tol=1e-09）+ 奖励剖面（n_bad=0）",
+    "semantics": {
+     "action": "fixed",
+     "judge": "strict",
+     "declared": true,
+     "assumed": false,
+     "source": "flag_strict"
+    },
+    "command": [
+     "python",
+     "-X",
+     "utf8",
+     "-m",
+     "wuxing_gua",
+     "check",
+     "--trans",
+     "cases\\dhcp\\model.json",
+     "--group",
+     "cases\\dhcp\\groups\\pads.json",
+     "--strict"
+    ],
+    "stderr_tail": "",
+    "frame": "fixed",
+    "stamp_note": "original group file, --strict flag (fixed frame)"
+   },
+   "networkx": {
+    "structure_symmetry": true,
+    "labeled_symmetry": true,
+    "n_elements": 2,
+    "n_unique_elements": 2,
+    "n_nontrivial": 1,
+    "per_element": [
+     {
+      "element": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "is_identity": true,
+      "structural": true,
+      "labeled": true,
+      "nx_vf2_membership_structural": true,
+      "nx_vf2_membership_labeled": true
+     },
+     {
+      "element": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       9,
+       8,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "is_identity": false,
+      "structural": true,
+      "labeled": true,
+      "nx_vf2_membership_structural": true,
+      "nx_vf2_membership_labeled": true
+     }
+    ],
+    "per_element_truncated": false,
+    "method": "primary=direct edge-set check (O(E), hand-checkable); cross-check=networkx VF2 automorphism-set membership (independent implementation)",
+    "method_conflicts": [],
+    "crosscheck_status": "ok",
+    "scope": "full model (all n_states=16, padding included)",
+    "n_autos_structure": 40320,
+    "n_autos_labeled": 40320,
+    "autos_truncated": false,
+    "autos_skipped_reason": null,
+    "structural_pad_states": [
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15
+    ],
+    "n_autos_structure_nonpad": 1,
+    "n_autos_labeled_nonpad": 1,
+    "autos_nonpad_scope": "subgraph over the 8 non-pad states (structural pads excluded; a pad state = every action single self-loop successor with r=0, the same rule the engine's pad-aware mode uses)"
+   },
+   "consistency": {
+    "relabel_vs_structure": "agree",
+    "fixed_vs_labeled": "agree",
+    "arms_differ": false,
+    "ruling_code": "agree",
+    "ruling": "all columns agree: engine (both standards) and networkx (both scopes) say 'pass' for this group",
+    "binding_verdict": "pass"
+   }
+  },
+  "reboot_rebind": {
+   "group_file": "groups/reboot_rebind.json",
+   "declared_semantics": {
+    "action": "fixed"
+   },
+   "claim": "defendant B: REBOOTING and REBINDING have the same graph shape -- exactly one in-neighbor, two outgoing edges, both toward BOUND and INIT -- so they could be swapped",
+   "order_engine_reported": 2,
+   "relabel": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "generalized",
+    "error": null,
+    "reason": "转移等变层失败：max TV=inf（含非位置置换元素） > tol=1e-09（1/2 个受检元素不过）",
+    "semantics": {
+     "action": "relabel",
+     "judge": "generalized",
+     "declared": true,
+     "assumed": false,
+     "source": "group_file"
+    },
+    "command": [
+     "python",
+     "-X",
+     "utf8",
+     "-m",
+     "wuxing_gua",
+     "check",
+     "--trans",
+     "cases\\dhcp\\model.json",
+     "--group",
+     "<court_tmp>\\reboot_rebind.relabel.json"
+    ],
+    "stderr_tail": "",
+    "frame": "relabel",
+    "stamp_note": "court-stamped relabel copy used (original declaration: 'fixed')"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict",
+    "error": null,
+    "reason": "转移等变层失败：max TV=1 > tol=1e-09（1/2 个受检元素不过）",
+    "semantics": {
+     "action": "fixed",
+     "judge": "strict",
+     "declared": true,
+     "assumed": false,
+     "source": "flag_strict"
+    },
+    "command": [
+     "python",
+     "-X",
+     "utf8",
+     "-m",
+     "wuxing_gua",
+     "check",
+     "--trans",
+     "cases\\dhcp\\model.json",
+     "--group",
+     "cases\\dhcp\\groups\\reboot_rebind.json",
+     "--strict"
+    ],
+    "stderr_tail": "",
+    "frame": "fixed",
+    "stamp_note": "original group file, --strict flag (fixed frame)"
+   },
+   "networkx": {
+    "structure_symmetry": false,
+    "labeled_symmetry": false,
+    "n_elements": 2,
+    "n_unique_elements": 2,
+    "n_nontrivial": 1,
+    "per_element": [
+     {
+      "element": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "is_identity": true,
+      "structural": true,
+      "labeled": true,
+      "nx_vf2_membership_structural": true,
+      "nx_vf2_membership_labeled": true
+     },
+     {
+      "element": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       7,
+       6,
+       5,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "is_identity": false,
+      "structural": false,
+      "labeled": false,
+      "nx_vf2_membership_structural": false,
+      "nx_vf2_membership_labeled": false
+     }
+    ],
+    "per_element_truncated": false,
+    "method": "primary=direct edge-set check (O(E), hand-checkable); cross-check=networkx VF2 automorphism-set membership (independent implementation)",
+    "method_conflicts": [],
+    "crosscheck_status": "ok",
+    "scope": "full model (all n_states=16, padding included)",
+    "n_autos_structure": 40320,
+    "n_autos_labeled": 40320,
+    "autos_truncated": false,
+    "autos_skipped_reason": null,
+    "structural_pad_states": [
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15
+    ],
+    "n_autos_structure_nonpad": 1,
+    "n_autos_labeled_nonpad": 1,
+    "autos_nonpad_scope": "subgraph over the 8 non-pad states (structural pads excluded; a pad state = every action single self-loop successor with r=0, the same rule the engine's pad-aware mode uses)"
+   },
+   "consistency": {
+    "relabel_vs_structure": "agree",
+    "fixed_vs_labeled": "agree",
+    "arms_differ": false,
+    "ruling_code": "agree",
+    "ruling": "all columns agree: engine (both standards) and networkx (both scopes) say 'reject' for this group",
+    "binding_verdict": "reject"
+   }
+  },
+  "renew_rebind": {
+   "group_file": "groups/renew_rebind.json",
+   "declared_semantics": {
+    "action": "fixed"
+   },
+   "claim": "defendant A: RENEWING and REBINDING are the protocol's own twin pair -- both are lease-extension waiting rooms that send DHCPREQUEST and leave on the identical 'DHCPACK/Record lease' label -- so they could be swapped and compressed into one state",
+   "order_engine_reported": 2,
+   "relabel": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "generalized",
+    "error": null,
+    "reason": "转移等变层失败：max TV=inf（含非位置置换元素） > tol=1e-09（1/2 个受检元素不过）",
+    "semantics": {
+     "action": "relabel",
+     "judge": "generalized",
+     "declared": true,
+     "assumed": false,
+     "source": "group_file"
+    },
+    "command": [
+     "python",
+     "-X",
+     "utf8",
+     "-m",
+     "wuxing_gua",
+     "check",
+     "--trans",
+     "cases\\dhcp\\model.json",
+     "--group",
+     "<court_tmp>\\renew_rebind.relabel.json"
+    ],
+    "stderr_tail": "",
+    "frame": "relabel",
+    "stamp_note": "court-stamped relabel copy used (original declaration: 'fixed')"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict",
+    "error": null,
+    "reason": "转移等变层失败：max TV=1 > tol=1e-09（1/2 个受检元素不过）",
+    "semantics": {
+     "action": "fixed",
+     "judge": "strict",
+     "declared": true,
+     "assumed": false,
+     "source": "flag_strict"
+    },
+    "command": [
+     "python",
+     "-X",
+     "utf8",
+     "-m",
+     "wuxing_gua",
+     "check",
+     "--trans",
+     "cases\\dhcp\\model.json",
+     "--group",
+     "cases\\dhcp\\groups\\renew_rebind.json",
+     "--strict"
+    ],
+    "stderr_tail": "",
+    "frame": "fixed",
+    "stamp_note": "original group file, --strict flag (fixed frame)"
+   },
+   "networkx": {
+    "structure_symmetry": false,
+    "labeled_symmetry": false,
+    "n_elements": 2,
+    "n_unique_elements": 2,
+    "n_nontrivial": 1,
+    "per_element": [
+     {
+      "element": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "is_identity": true,
+      "structural": true,
+      "labeled": true,
+      "nx_vf2_membership_structural": true,
+      "nx_vf2_membership_labeled": true
+     },
+     {
+      "element": [
+       0,
+       1,
+       2,
+       3,
+       5,
+       4,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15
+      ],
+      "is_identity": false,
+      "structural": false,
+      "labeled": false,
+      "nx_vf2_membership_structural": false,
+      "nx_vf2_membership_labeled": false
+     }
+    ],
+    "per_element_truncated": false,
+    "method": "primary=direct edge-set check (O(E), hand-checkable); cross-check=networkx VF2 automorphism-set membership (independent implementation)",
+    "method_conflicts": [],
+    "crosscheck_status": "ok",
+    "scope": "full model (all n_states=16, padding included)",
+    "n_autos_structure": 40320,
+    "n_autos_labeled": 40320,
+    "autos_truncated": false,
+    "autos_skipped_reason": null,
+    "structural_pad_states": [
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15
+    ],
+    "n_autos_structure_nonpad": 1,
+    "n_autos_labeled_nonpad": 1,
+    "autos_nonpad_scope": "subgraph over the 8 non-pad states (structural pads excluded; a pad state = every action single self-loop successor with r=0, the same rule the engine's pad-aware mode uses)"
+   },
+   "consistency": {
+    "relabel_vs_structure": "agree",
+    "fixed_vs_labeled": "agree",
+    "arms_differ": false,
+    "ruling_code": "agree",
+    "ruling": "all columns agree: engine (both standards) and networkx (both scopes) say 'reject' for this group",
+    "binding_verdict": "reject"
+   }
+  }
+ },
+ "group_errors": [],
+ "rollup": {
+  "groups": 4,
+  "group_errors": 0,
+  "ruling_codes": {
+   "agree": 4
+  },
+  "all_consistent_pairs": true
+ }
+}

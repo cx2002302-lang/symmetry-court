@@ -1,0 +1,36 @@
+{
+ "n_states": 8,
+ "elements": [
+  [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  [
+   1,
+   0,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7
+  ]
+ ],
+ "semantics": {
+  "action": "fixed"
+ },
+ "meta": {
+  "claim": "defendant B (control lookalike): NOT-AUTHENTICATED and AUTHENTICATED are one command apart, so they could be swapped",
+  "construction": "order-2 group swapping NOT-AUTHENTICATED <-> AUTHENTICATED (states 0 <-> 1)",
+  "why_it_looks_legal": "the two states sit adjacent in the flow and one command separates them",
+  "why_it_is_not_a_symmetry": "NOT-AUTHENTICATED has no incoming edges at all (it is the diagram's entry point, sec.3.1) while AUTHENTICATED is entered from two states; and 'it is not possible to re-enter not authenticated state' (sec.6.2) -- no edge ever returns",
+  "semantics_note": "event-class model: semantics declared \"fixed\"",
+  "regenerate": "python -X utf8 cases/imap/make_imap.py"
+ }
+}

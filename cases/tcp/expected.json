@@ -1,0 +1,85 @@
+{
+ "case": "tcp",
+ "provenance": {
+  "recorded": "2026-10-31, observed from a live three-way arbitration run (`python -X utf8 -m symmetry_court arbitrate --emit-expected-template`); the receipt is verdicts/tcp.verdict.json; the gate (`python -X utf8 -m symmetry_court selftest`) replays the case and compares these rows field-by-field",
+  "reading_guide": "relabel row = actions may be renamed along with states (diagnostic contrast reading for an event-class model); fixed row = event names pinned (the protocol-true reading, declared in each group file); networkx columns = independent juror"
+ },
+ "groups": {
+  "swap": {
+   "claim": "defendant A: FIN-WAIT-2 (waiting for the peer's FIN) and CLOSING (waiting for the peer's ACK of our FIN) are drawn as shape-twins -- one outgoing edge each, both into TIME-WAIT -- so the two termination paths could be swapped and compressed into one",
+   "relabel": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "generalized"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict"
+   },
+   "networkx": {
+    "structure_symmetry": true,
+    "labeled_symmetry": false
+   }
+  },
+  "other": {
+   "claim": "defendant B: FIN-WAIT-1 and SYN-RECEIVED are both middle states with three outgoing edges, so they could be swapped",
+   "relabel": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "generalized"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict"
+   },
+   "networkx": {
+    "structure_symmetry": false,
+    "labeled_symmetry": false
+   }
+  },
+  "absurd": {
+   "claim": "defendant C (control): CLOSED and ESTABLISHED -- a connection's starting state and its main working state -- could be swapped",
+   "relabel": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "generalized"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict"
+   },
+   "networkx": {
+    "structure_symmetry": false,
+    "labeled_symmetry": false
+   }
+  },
+  "pads": {
+   "claim": "positive control: padding states 11 and 12 have byte-identical rows (every event self-loops, reward 0), so the swap is a genuine symmetry under BOTH readings and should be admitted everywhere",
+   "relabel": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "generalized"
+   },
+   "fixed": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "strict"
+   },
+   "networkx": {
+    "structure_symmetry": true,
+    "labeled_symmetry": true
+   }
+  }
+ }
+}

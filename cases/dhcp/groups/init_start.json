@@ -1,0 +1,52 @@
+{
+ "n_states": 16,
+ "elements": [
+  [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15
+  ],
+  [
+   6,
+   1,
+   2,
+   3,
+   4,
+   5,
+   0,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15
+  ]
+ ],
+ "semantics": {
+  "action": "fixed"
+ },
+ "meta": {
+  "claim": "defendant C (control): INIT and INIT-REBOOT are both starting states of the diagram, so they could be swapped",
+  "construction": "order-2 group swapping INIT <-> INIT-REBOOT (states 0 <-> 6)",
+  "why_it_looks_legal": "both are the diagram's entry points (fresh start vs reboot with known address)",
+  "why_it_is_not_a_symmetry": "INIT receives 5 incoming edges from four different states plus the DECLINE edge, INIT-REBOOT receives none; INIT leaves on '-/Send DHCPDISCOVER', INIT-REBOOT on '-/Send DHCPREQUEST' and 'DHCPNAK/Restart'",
+  "semantics_note": "event-class model: semantics declared \"fixed\"",
+  "regenerate": "python -X utf8 cases/dhcp/make_dhcp.py"
+ }
+}

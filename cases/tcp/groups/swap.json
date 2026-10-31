@@ -1,0 +1,52 @@
+{
+ "n_states": 16,
+ "elements": [
+  [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15
+  ],
+  [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   8,
+   7,
+   6,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15
+  ]
+ ],
+ "semantics": {
+  "action": "fixed"
+ },
+ "meta": {
+  "claim": "defendant A: FIN-WAIT-2 (waiting for the peer's FIN) and CLOSING (waiting for the peer's ACK of our FIN) are drawn as shape-twins -- one outgoing edge each, both into TIME-WAIT -- so the two termination paths could be swapped and compressed into one",
+  "construction": "order-2 group swapping CLOSING <-> FIN-WAIT-2 (states 8 <-> 6), the only nontrivial structure-level automorphism of the unlabeled RFC 9293 Figure 5 graph",
+  "why_it_looks_legal": "both states have exactly one outgoing edge and it leads to TIME-WAIT in both; on the unlabeled graph the swap maps arrows to arrows",
+  "why_it_is_not_a_symmetry": "the outgoing events differ: FIN-WAIT-2 leaves on 'rcv FIN', CLOSING leaves on 'rcv ACK of FIN' -- merging 'the peer sent FIN' with 'the peer acknowledged our FIN' is a protocol error (TV 1.0 on the completion edges under the fixed reading)",
+  "semantics_note": "event-class model: semantics declared \"fixed\" (event names pinned); the relabel row in expected.json is the diagnostic contrast reading",
+  "regenerate": "python -X utf8 cases/tcp/make_tcp.py"
+ }
+}

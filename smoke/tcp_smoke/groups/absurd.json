@@ -1,0 +1,50 @@
+{
+ "n_states": 16,
+ "elements": [
+  [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15
+  ],
+  [
+   4,
+   1,
+   2,
+   3,
+   0,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15
+  ]
+ ],
+ "semantics": {
+  "action": "fixed",
+  "note": "event-class=fixed: TCP's actions are external protocol events; their names are part of the published behavior and do not follow state renamings"
+ },
+ "meta": {
+  "construction": "swap CLOSED <-> ESTABLISHED (different degrees, should be refused)",
+  "claim": "swapping CLOSED (state 0) and ESTABLISHED (state 4) maps every transition onto a transition",
+  "provenance": "group elements identical to the upstream tcp_case sample (RFC 9293 section 3.3.2 Figure 5 base material), re-encoded with an explicit semantics declaration and a plain-language claim"
+ }
+}

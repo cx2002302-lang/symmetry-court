@@ -1,0 +1,87 @@
+{
+ "case": "tcp_smoke",
+ "provenance": {
+  "recorded_from_live_run": "2026-10-31T03:09:47Z",
+  "how": "expected rows are the observed rows of an actual court run (arbitrate --cases-dir smoke --emit-expected-template, run 2026-10-31T03:09:47Z) baked into make_tcp_smoke.py as constants; --check pins them byte-exactly. Full trial record of the same run: verdicts/tcp_smoke.verdict.json",
+  "engine": "vendored wuxing_gua 1.0.0 (see NOTICE)",
+  "jury": "networkx (independent implementation; not imported from the upstream tcp_three_way.py)"
+ },
+ "groups": {
+  "swap": {
+   "claim": "swapping CLOSING (state 8) and FIN-WAIT-2 (state 6) maps every transition onto a transition",
+   "relabel": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "generalized"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict"
+   },
+   "networkx": {
+    "structure_symmetry": true,
+    "labeled_symmetry": false
+   }
+  },
+  "other": {
+   "claim": "swapping FIN-WAIT-1 (state 5) and SYN-RECEIVED (state 3) maps every transition onto a transition",
+   "relabel": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "generalized"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict"
+   },
+   "networkx": {
+    "structure_symmetry": false,
+    "labeled_symmetry": false
+   }
+  },
+  "absurd": {
+   "claim": "swapping CLOSED (state 0) and ESTABLISHED (state 4) maps every transition onto a transition",
+   "relabel": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "generalized"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict"
+   },
+   "networkx": {
+    "structure_symmetry": false,
+    "labeled_symmetry": false
+   }
+  },
+  "identity": {
+   "claim": "renaming nothing is a symmetry (control defendant: every standard and every judge must admit it)",
+   "relabel": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "generalized"
+   },
+   "fixed": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "strict"
+   },
+   "networkx": {
+    "structure_symmetry": true,
+    "labeled_symmetry": true
+   }
+  }
+ }
+}

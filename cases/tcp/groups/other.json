@@ -1,0 +1,52 @@
+{
+ "n_states": 16,
+ "elements": [
+  [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15
+  ],
+  [
+   0,
+   1,
+   2,
+   5,
+   4,
+   3,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15
+  ]
+ ],
+ "semantics": {
+  "action": "fixed"
+ },
+ "meta": {
+  "claim": "defendant B: FIN-WAIT-1 and SYN-RECEIVED are both middle states with three outgoing edges, so they could be swapped",
+  "construction": "order-2 group swapping FIN-WAIT-1 <-> SYN-RECEIVED (states 5 <-> 3)",
+  "why_it_looks_legal": "coarse shape similarity: both are mid-handshake/teardown states with three outgoing edges in the figure",
+  "why_it_is_not_a_symmetry": "their edge targets differ (FIN-WAIT-1 leaves toward FIN-WAIT-2/CLOSING/TIME-WAIT; SYN-RECEIVED toward ESTABLISHED/LISTEN/FIN-WAIT-1): no relabeling of events can reconcile the two successor sets",
+  "semantics_note": "event-class model: semantics declared \"fixed\"",
+  "regenerate": "python -X utf8 cases/tcp/make_tcp.py"
+ }
+}

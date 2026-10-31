@@ -1,0 +1,66 @@
+{
+ "case": "imap",
+ "provenance": {
+  "recorded": "2026-10-31, observed from a live three-way arbitration run (`python -X utf8 -m symmetry_court arbitrate --emit-expected-template`); the receipt is verdicts/imap.verdict.json; the gate (`python -X utf8 -m symmetry_court selftest`) replays the case and compares these rows field-by-field",
+  "reading_guide": "relabel row = actions may be renamed along with states (diagnostic contrast reading for an event-class model); fixed row = event names pinned (the protocol-true reading, declared in each group file); networkx columns = independent juror"
+ },
+ "groups": {
+  "auth_selected": {
+   "claim": "defendant A: AUTHENTICATED and SELECTED are joined by two mutually inverse edges (SELECT forward, CLOSE back) and both have LOGOUT exits, so the two 'inside the session' states could be swapped and compressed",
+   "relabel": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "generalized"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict"
+   },
+   "networkx": {
+    "structure_symmetry": false,
+    "labeled_symmetry": false
+   }
+  },
+  "notauth_auth": {
+   "claim": "defendant B (control lookalike): NOT-AUTHENTICATED and AUTHENTICATED are one command apart, so they could be swapped",
+   "relabel": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "generalized"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict"
+   },
+   "networkx": {
+    "structure_symmetry": false,
+    "labeled_symmetry": false
+   }
+  },
+  "pads": {
+   "claim": "positive control: padding states 4 and 5 have byte-identical rows (every event self-loops, reward 0), so the swap is a genuine symmetry under BOTH readings and should be admitted everywhere",
+   "relabel": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "generalized"
+   },
+   "fixed": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "strict"
+   },
+   "networkx": {
+    "structure_symmetry": true,
+    "labeled_symmetry": true
+   }
+  }
+ }
+}

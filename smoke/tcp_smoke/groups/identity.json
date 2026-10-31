@@ -1,0 +1,32 @@
+{
+ "n_states": 16,
+ "elements": [
+  [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15
+  ]
+ ],
+ "semantics": {
+  "action": "fixed",
+  "note": "event-class=fixed: TCP's actions are external protocol events; their names are part of the published behavior and do not follow state renamings"
+ },
+ "meta": {
+  "construction": "the trivial group (identity only)",
+  "claim": "renaming nothing is a symmetry (control defendant: every standard and every judge must admit it)",
+  "provenance": "court-side control group, not from the upstream sample"
+ }
+}

@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "symmetry-court"
+version = "0.1.0"
+description = "A courtroom for symmetry claims about state machines: one claim, three judges (vendored wuxing_gua engine under two named standards, networkx as independent jury), replayable verdict files."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [{ name = "Symmetry Court contributors" }]
+keywords = ["symmetry", "state-machine", "equivariance", "model-checking", "networkx"]
+dependencies = ["networkx"]
+
+[project.scripts]
+symmetry-court = "symmetry_court.__main__:main"
+
+[tool.setuptools]
+packages = ["symmetry_court"]

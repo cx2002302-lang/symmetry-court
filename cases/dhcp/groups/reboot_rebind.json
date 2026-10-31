@@ -1,0 +1,52 @@
+{
+ "n_states": 16,
+ "elements": [
+  [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15
+  ],
+  [
+   0,
+   1,
+   2,
+   3,
+   4,
+   7,
+   6,
+   5,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15
+  ]
+ ],
+ "semantics": {
+  "action": "fixed"
+ },
+ "meta": {
+  "claim": "defendant B: REBOOTING and REBINDING have the same graph shape -- exactly one in-neighbor, two outgoing edges, both toward BOUND and INIT -- so they could be swapped",
+  "construction": "order-2 group swapping REBOOTING <-> REBINDING (states 7 <-> 5)",
+  "why_it_looks_legal": "degree signatures match exactly: one in-neighbor each (INIT-REBOOT vs RENEWING), and both leave toward {BOUND, INIT}",
+  "why_it_is_not_a_symmetry": "the in-neighborhoods are themselves non-interchangeable (INIT-REBOOT has 2 outgoing edges and no incoming ones; RENEWING has 3 outgoing and 1 incoming), and the event labels differ ('DHCPNAK/Discard offer' vs 'DHCPNAK, Lease expired/Halt network')",
+  "semantics_note": "event-class model: semantics declared \"fixed\"",
+  "regenerate": "python -X utf8 cases/dhcp/make_dhcp.py"
+ }
+}

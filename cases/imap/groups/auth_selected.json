@@ -1,0 +1,36 @@
+{
+ "n_states": 8,
+ "elements": [
+  [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  [
+   0,
+   2,
+   1,
+   3,
+   4,
+   5,
+   6,
+   7
+  ]
+ ],
+ "semantics": {
+  "action": "fixed"
+ },
+ "meta": {
+  "claim": "defendant A: AUTHENTICATED and SELECTED are joined by two mutually inverse edges (SELECT forward, CLOSE back) and both have LOGOUT exits, so the two 'inside the session' states could be swapped and compressed",
+  "construction": "order-2 group swapping AUTHENTICATED <-> SELECTED (states 1 <-> 2)",
+  "why_it_looks_legal": "the SELECT/CLOSE pair forms a 2-cycle between exactly these two states, and both leave to LOGOUT the same way; on the unlabeled graph the swap maps each arrow to an arrow",
+  "why_it_is_not_a_symmetry": "the login edge has no mirror: NOT-AUTHENTICATED enters AUTHENTICATED (by AUTHENTICATE/LOGIN or PREAUTH greeting) but nothing enters SELECTED from NOT-AUTHENTICATED; and SELECT is a self-loop once already SELECTED (sec.6.4.2) while AUTHENTICATED has no such self-loop on that event",
+  "semantics_note": "event-class model: semantics declared \"fixed\"; the relabel row in expected.json is the diagnostic contrast reading",
+  "regenerate": "python -X utf8 cases/imap/make_imap.py"
+ }
+}

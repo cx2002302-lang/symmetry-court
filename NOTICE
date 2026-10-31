@@ -1,0 +1,124 @@
+NOTICE — vendored engine provenance
+====================================
+
+This repository vendors the wuxing_gua judge engine, embedded byte-for-byte,
+zero modification (one byte of the vendored copy differing from the source
+repository is a defect; `tools/selftest.py` re-verifies the manifest).
+
+  Vendored location   vendored/wuxing_gua/   (11 files, the judge package)
+                      vendored/src/          (19 files, research modules the
+                                              package imports at runtime —
+                                              see vendored/wuxing_gua/__init__.py,
+                                              which requires src/ as a sibling)
+
+  Source repository   the wuxing-gua project repository (same author team;
+                      desensitized: local paths not recorded here)
+                      subdirectory  publish/   (its own git repository)
+
+  Pinned version      git commit e1b1fa86b04cba2bd0001134bf3c33255a748d39
+                      ("audit low fixes: split semantics warning copy ...")
+                      HEAD of the source repo at vendoring time (2026-10-31),
+                      working tree clean (git status verified at copy time)
+
+  Package version     wuxing_gua 1.0.0 (vendored/wuxing_gua/__init__.py __version__)
+
+  How it is run       all engine invocations run with cwd = vendored/ so that
+                      `python -X utf8 -m wuxing_gua` resolves THIS copy and not
+                      any site-packages install (a stale install on this
+                      machine predates the n_actions relaxation and the
+                      semantics-declaration layer; arbitrate.py and selftest.py
+                      therefore always chdir into vendored/ before invoking it)
+
+  Modification policy the vendored tree is frozen. Case engineering, arbitration
+                      and reports in this repository MUST NOT patch the engine;
+                      if the engine is wrong, the disagreement is recorded as a
+                      finding, not fixed by editing the vendored copy.
+
+  Case data provenance
+                      cases/tcp/     RFC 9293 §3.3.2 Figure 5 (TCP connection
+                                     state machine), transcribed edge-by-edge;
+                                     base material: handoff_rewrite/output/
+                                     tcp_case in the source repo, re-verified
+                                     against the RFC text before adoption
+                      cases/dhcp/    RFC 2131 §4.4 Figure 5 (DHCP client state
+                                     machine), transcribed fresh from the RFC
+                                     text for this repository
+                      cases/<third>/ see that case's model.json meta and the
+                                     main README
+
+  Third-party dependency
+                      networkx (arbitration column only). The engine itself is
+                      zero-dependency (pure standard library) — networkx is the
+                      independent juror, not a gate. Verified at selftest time.
+
+  Authorship          The vendored wuxing_gua engine is the same authors' own
+                      code (自研自用): the Symmetry Court repository and the
+                      wuxing-gua engine come from the same author team, so the
+                      vendoring above is a reuse of self-owned code, not an
+                      import of outside work. The engine carries its own MIT
+                      license (Copyright (c) 2026 wuxing-gua contributors),
+                      compatible with the MIT license of this repository; the
+                      engine's license terms continue to govern the vendored
+                      copy itself.
+
+---------------------------------------------------------------------------
+Addendum (2026-10-31, arbitration/court stream) — manifest + verification
+---------------------------------------------------------------------------
+
+The section above is preserved verbatim. This addendum records what the
+court stream added on top of it.
+
+  Copy verification   at integration time, every file under vendored/ was
+                      re-hashed against the pinned source tree: 30/30
+                      identical (11 engine + 19 src), 0 mismatches, 0 extra
+                      files; sha256 manifest below is the frozen record.
+
+  Integrated location the repository briefly held two byte-identical copies
+                      of the same pinned tree (vendored/ and vendor/, created
+                      concurrently by two work streams). Per the
+                      last-arrival-integrates convention, the duplicate at
+                      vendor/ was removed and this NOTICE keeps vendored/ as
+                      the single vendored location.
+
+  Byte-pristine note  engine subprocesses launched by symmetry_court always
+                      set PYTHONDONTWRITEBYTECODE=1 (CPython writes
+                      __pycache__ next to modules it compiles, before module
+                      code can prevent it), so runs never add cache files
+                      under vendored/.
+
+  Manifest re-check   `python -X utf8 -m symmetry_court selftest` re-hashes
+                      every manifest entry below against vendored/ on every
+                      run and fails on drift (missing/extra/altered files).
+
+## sha256 manifest — paths relative to vendored/
+
+bd74456768916d9c13cddce19ba6d473a517deadb3895d113bffa23a0bb3fb58  src/cheap_check_sample.py
+e8c6be927cc64d49aa02bec02a3b1a8b83ead421c5f141cb4a7f00a2f1fab8e0  src/core.py
+462d5f47ad0bca07d5d82b976383e593f9eaa3b5525ca77885f0bdaa50aab08b  src/experiments_c_attribution.py
+b10819501686f51b8084f16e8ecb9032337c694169ae158df42c65b43ed1cfed  src/experiments_canonical_search.py
+d993a6df357493b1ad10a1f9cd053b416607e38749fd73da294cc20a119da499  src/experiments_cheap_sample.py
+d52b63da22522c249d482f7a53cb81e370cd107037c23b4d6becc32eb1ce5b1f  src/experiments_completeness.py
+26362f11201108491ad942d5258b6a6c3780a1bf049eec60ed1b56b41c8354eb  src/experiments_discover_labeling.py
+33807b2f41d808168b0320b5180af5e85794b8f1155160b7b7ea05f355792ed7  src/experiments_e1.py
+fe491c6e848de247e56977ec2a0ca257b9d68c3a959feb2aeb8f4e417cdeabca  src/experiments_gua64.py
+f1ec9f2eec77e8bb6f7cd769af57642f4e5406202a532f7f7e9e2f01f0b76ed2  src/experiments_gua64_aut.py
+aeacd6c68ddd0ebf75ebbea5860f4aef0114ffc02c0bc7e85530e2a02fc2786f  src/experiments_ovh_girth.py
+fe1378cca2b66ba76af9ef501a59800fab37ddd6187c13fa666f9185985d54d1  src/experiments_ovh_relabel.py
+7bf59360cd60c9ad3536edea2ccd817a39a097bf2280b07a6c09ebdf168374e0  src/experiments_p3.py
+66acc1b8d5f9769f7f74c927c5b5843150dbe7cf790f542cf758097cde3e157a  src/experiments_p4.py
+354871c794b5bf5d582f98d9d65e20f6566b4e6354025383cc2d4dae5735945c  src/experiments_restart_scan2.py
+0c1e322f1da091ae1b75a6bc6ee78b4bac278decc97813ffc6009c90fdb43522  src/experiments_restart_scan3.py
+e0fdc3d031fa08d90b245b29e0faef778a3a91d7ee3b7b0c71138b6af502791e  src/experiments_restart_scan5.py
+444d48a948b1672fa8a9de858c3b2126f0c05baf21b069d45c86d0b9ece04328  src/experiments_restart_scan6.py
+c9b2692a2544641bcb24c3232a9410ba1527c98cc5078bf72ae85b4a6891e56a  src/experiments_sys3.py
+d7da74e4090cf0ffeb926dd8e6f38746b68067774ab4ad8725766b432c5c7406  wuxing_gua/README.md
+5a5aaefd346ae8ec7d0793a6f52088eaeff81f16164ed6dc66ef8c52395a5ca6  wuxing_gua/__init__.py
+56987f08d9adffeff425d081add6092dc53a898c4311a6b1d5733156f2ce74c9  wuxing_gua/__main__.py
+4c656d10197e9a87d5773ae2df0ce235faaffa5c123ee4fdc4b4f6e8f3f8252c  wuxing_gua/cli.py
+8dc935a03cfa789f54bbfbef8b34224f25cea5b68f16b3db5a3ab43dae7a697b  wuxing_gua/confidence.py
+f49bf2c7510a622339b2365b309ddeb13d07059122081420b02a42c0d2101353  wuxing_gua/core_check.py
+1c3e69ee79f2453cd93ae63791d27d65f35266d2e9d6f69a4b2144a432371f4f  wuxing_gua/core_discover.py
+066ed656074a30511c7dc44a076da8968137457cd8a23fcf096a4e26c9f9ad6c  wuxing_gua/core_sample.py
+4c694c66e93d41d374f93b767bec60b5914d1a66691cebcc5f6d05ddfba5e9d6  wuxing_gua/demo_env.py
+7329bdad703613f10465a982c2b8fc3817ffe99b4c6c9d9cbbb9013be4e4f7b9  wuxing_gua/errors.py
+b1fb95e61497bfcbbbd50966584b0123e041517742fdd23591f7a4bc296faf1b  wuxing_gua/selftest.py
