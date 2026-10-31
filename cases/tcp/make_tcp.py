@@ -63,8 +63,9 @@ FIG5 = "RFC 9293 sec.3.3.2 Figure 5"
 NOTE1 = "RFC 9293 sec.3.3.2 Figure 5 + Note 1"
 NOTE2 = "RFC 9293 sec.3.3.2 Note 2 (stated in the note; deliberately omitted from the Figure 5 drawing)"
 
-# (from, event, to, citation) -- order fixes the action indices (first
-# occurrence). Re-verified edge-by-edge against the RFC 9293 text.
+# (from, event, to, citation) -- order fixes the action indices (an event's
+# index is set by its earliest occurrence). Re-verified edge-by-edge against
+# the RFC 9293 text.
 EDGES = [
     ("CLOSED", "active OPEN", "SYN-SENT", FIG5),
     ("CLOSED", "passive OPEN", "LISTEN", FIG5),
