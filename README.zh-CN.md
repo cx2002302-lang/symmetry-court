@@ -45,6 +45,7 @@ python -X utf8 -m pip install networkx
 
 python -X utf8 -m symmetry_court list        # 看案卷
 python -X utf8 -m symmetry_court arbitrate   # 开庭——每案出一张判决表
+python -X utf8 -m symmetry_court compare     # 闸门价值对比——朴素合并 vs 过闸，逐群损害台账（见 docs/闸门价值对比.html）
 python -X utf8 -m symmetry_court selftest    # 全案重放对 expected（退出码 0 = 全绿）
 ```
 

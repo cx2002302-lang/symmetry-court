@@ -1,0 +1,79 @@
+{
+ "case": "dhcp",
+ "provenance": {
+  "gate": "vendored wuxing_gua check --strict (live run)",
+  "naive_arm": "structure-only edge-set invariance proxy (see module docstring)",
+  "damage": "fixed-caliber cell-by-cell ledger over model trans (event names pinned)"
+ },
+ "summary": {
+  "case": "dhcp",
+  "n_states": 16,
+  "n_actions": 15,
+  "n_groups": 4,
+  "naive_admits": 1,
+  "naive_harmful_admits": 0,
+  "naive_broken_real_cells": 0,
+  "gate_admits": 1,
+  "gate_admitted_broken_cells": 0,
+  "gate_saved_merges": 0,
+  "gate_total_seconds_rounded": 0.7
+ },
+ "rows": [
+  {
+   "group": "init_start.json",
+   "claim": "defendant C (control): INIT and INIT-REBOOT are both starting states of the diagram, so they could be swapped",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "gate_verdict": "reject",
+   "gate_admits": false,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 11,
+   "real_cells": 240,
+   "would_be_orbits_if_merged": 15,
+   "compression_if_true": 1.067,
+   "gate_saved_this_merge": false
+  },
+  {
+   "group": "pads.json",
+   "claim": "positive control: padding states 8 and 9 have byte-identical rows (every event self-loops, reward 0), so the swap is a genuine symmetry under BOTH readings and should be admitted everywhere",
+   "naive_structure_admits": true,
+   "gate_exit": 0,
+   "gate_verdict": "pass",
+   "gate_admits": true,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 0,
+   "real_cells": 240,
+   "would_be_orbits_if_merged": 15,
+   "compression_if_true": 1.067,
+   "gate_saved_this_merge": false
+  },
+  {
+   "group": "reboot_rebind.json",
+   "claim": "defendant B: REBOOTING and REBINDING have the same graph shape -- exactly one in-neighbor, two outgoing edges, both toward BOUND and INIT -- so they could be swapped",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "gate_verdict": "reject",
+   "gate_admits": false,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 6,
+   "real_cells": 240,
+   "would_be_orbits_if_merged": 15,
+   "compression_if_true": 1.067,
+   "gate_saved_this_merge": false
+  },
+  {
+   "group": "renew_rebind.json",
+   "claim": "defendant A: RENEWING and REBINDING are the protocol's own twin pair -- both are lease-extension waiting rooms that send DHCPREQUEST and leave on the identical 'DHCPACK/Record lease' label -- so they could be swapped and compressed into one state",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "gate_verdict": "reject",
+   "gate_admits": false,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 7,
+   "real_cells": 240,
+   "would_be_orbits_if_merged": 15,
+   "compression_if_true": 1.067,
+   "gate_saved_this_merge": false
+  }
+ ]
+}

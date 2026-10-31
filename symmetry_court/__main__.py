@@ -4,6 +4,8 @@
 
   arbitrate  开庭：cases/ 全案三方庭审 → verdicts/<case>.verdict.json + 判决书表格
   selftest   门禁：全案重放对 expected（逐字段）+ vendored 完整性；退出码 0=全过
+  compare    闸门价值对比：朴素臂（结构直觉代理）vs 闸门臂（check --strict），
+             逐群量化『不用闸会破坏多少真实转移格』（见 compare.py 文档串）
   list       列案卷：案名 / 模型规模 / 群数 / 是否有 expected / 判决书收据状态
 """
 
@@ -14,7 +16,7 @@ import sys
 from . import (DEFAULT_CASES_DIR, DEFAULT_SMOKE_DIR, DEFAULT_VERDICTS_DIR,
                VENDORED_DIR, __version__)
 
-USAGE = "usage: python -X utf8 -m symmetry_court <arbitrate|selftest|list> [flags]"
+USAGE = "usage: python -X utf8 -m symmetry_court <arbitrate|selftest|compare|list> [flags]"
 
 EXIT_OK = 0
 EXIT_FAIL = 1
@@ -94,6 +96,16 @@ def main(argv=None):
     if cmd == "selftest":
         from . import selftest
         return selftest.main(rest)
+    if cmd == "compare":
+        import argparse
+        from . import compare
+        ap = argparse.ArgumentParser(prog="symmetry_court compare")
+        ap.add_argument("--root", default=None,
+                        help="cases 根目录（默认法庭自有 cases/；可指向同格式案卷集）")
+        ap.add_argument("--out", default=None,
+                        help="对比结果输出目录（默认 verdicts/）")
+        args = ap.parse_args(rest)
+        return compare.cmd_compare(args)
     if cmd == "list":
         import argparse
         ap = argparse.ArgumentParser(prog="symmetry_court list")

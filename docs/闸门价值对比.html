@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>闸门价值对比 · 用 vs 不用 wuxing-gua</title>
+<style>
+  :root{--ink:#1a1a2e;--sub:#55566b;--bg:#fafaf8;--card:#fff;--blue:#2563eb;--green:#059669;--red:#dc2626;--amber:#d97706;--line:#e5e4de;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.75;}
+  .wrap{max-width:980px;margin:0 auto;padding:40px 20px 80px;}
+  header{text-align:center;padding:20px 0 6px;}
+  header h1{font-size:30px;}
+  header .tag{color:var(--sub);margin-top:6px;font-size:15px;}
+  section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px 30px;margin-top:26px;}
+  h2{font-size:21px;margin-bottom:8px;}
+  .lead{color:var(--sub);font-size:15px;margin-bottom:14px;}
+  svg text{font-family:"Microsoft YaHei","PingFang SC",sans-serif;}
+  table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px;}
+  th,td{border:1px solid var(--line);padding:7px 10px;text-align:center;}
+  th{background:#f8fafc;}
+  .bad{color:var(--red);font-weight:bold;}
+  .good{color:var(--green);font-weight:bold;}
+  .note{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:12px 16px;font-size:14px;color:#92400e;margin-top:14px;}
+  .ok{background:#ecfdf5;border:1px solid #a7f3d0;border-radius:10px;padding:12px 16px;font-size:15px;color:#065f46;margin-top:14px;}
+  footer{text-align:center;color:var(--sub);font-size:13px;margin-top:36px;}
+  a{color:var(--blue);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>闸门价值对比：用 vs 不用</h1>
+  <div class="tag">8 个真实系统 · 26 个合并主张 · 同一份数据跑两种决策方式（数字全部回源 comparison.*.json）</div>
+</header>
+
+<section>
+  <h2>实验设计（30 秒看懂）</h2>
+  <div class="lead">每个案卷里的"被告群"＝真实工程里会有人提的合并主张。两种决策方式各跑一遍：</div>
+  <svg viewBox="0 0 900 240" xmlns="http://www.w3.org/2000/svg">
+    <defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#55566b"/></marker></defs>
+    <rect x="40" y="60" width="300" height="120" rx="12" fill="#fffbeb" stroke="#d97706" stroke-width="2"/>
+    <text x="190" y="95" text-anchor="middle" font-size="16" font-weight="bold" fill="#92400e">不用闸（朴素臂）</text>
+    <text x="190" y="122" text-anchor="middle" font-size="13" fill="#1a1a2e">「结构长得一样 → 就合并」</text>
+    <text x="190" y="148" text-anchor="middle" font-size="12" fill="#55566b">结构直觉代理：边集不变性判定</text>
+    <text x="190" y="168" text-anchor="middle" font-size="12" fill="#55566b">＝networkx 不带标签口径的同类做法</text>
+    <rect x="560" y="60" width="300" height="120" rx="12" fill="#ecfdf5" stroke="#059669" stroke-width="2"/>
+    <text x="710" y="95" text-anchor="middle" font-size="16" font-weight="bold" fill="#065f46">用闸（闸门臂）</text>
+    <text x="710" y="122" text-anchor="middle" font-size="13" fill="#1a1a2e">check --strict 逐格对账后才放行</text>
+    <text x="710" y="148" text-anchor="middle" font-size="12" fill="#55566b">内嵌 wuxing_gua 引擎 · 事件名钉死口径</text>
+    <text x="710" y="168" text-anchor="middle" font-size="12" fill="#55566b">真群给压缩读数，假群拒答并指出错在哪</text>
+    <text x="450" y="30" text-anchor="middle" font-size="15" font-weight="bold">同一批合并主张 → 两种决策 → 量代价差</text>
+    <line x1="350" y1="120" x2="550" y2="120" stroke="#55566b" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#a)"/>
+    <text x="450" y="110" text-anchor="middle" font-size="12" fill="#55566b">对比指标</text>
+    <text x="450" y="145" text-anchor="middle" font-size="12.5" fill="#1a1a2e">合并后行为会变多少？拦对/放错各多少？闸门花了几秒？</text>
+  </svg>
+</section>
+
+<section>
+  <h2>核心结果：朴素臂的 7 次放行里，1 次是静默破坏</h2>
+  <div class="lead">8 案 26 群。朴素臂（只看结构）共放行 <b>7</b> 次合并——其中 <b>6 次恰好安全</b>（填充态对换，压缩 1.03–1.14×），<b>1 次是陷阱</b>：TCP 孪生对（FIN-WAIT-2 ↔ CLOSING）。闸门臂全部拦对放对，总耗时约 <b>4 秒</b>量级（26 群 8 案，单机实测求和，精确值见 json）。</div>
+  <svg viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg">
+    <!-- TCP 放大镜 -->
+    <rect x="30" y="30" width="840" height="120" rx="12" fill="#fef2f2" stroke="#dc2626" stroke-width="2"/>
+    <text x="60" y="62" font-size="16" font-weight="bold" fill="#991b1b">陷阱案 · TCP（RFC 9293）孪生对 swap：结构说"可合并"，闸门说"不行"</text>
+    <text x="60" y="100" font-size="13" fill="#1a1a2e">不用闸：合并成立 →</text>
+    <rect x="250" y="82" width="330" height="26" rx="6" fill="#dc2626" opacity="0.85"/>
+    <text x="595" y="100" font-size="13" fill="#1a1a2e">6 个 (状态×事件) 行为格改变</text>
+    <text x="60" y="132" font-size="13" fill="#1a1a2e">其中 4 条是真转移边被改写语义：FIN-WAIT-1 的两条出路 + FIN-WAIT-2 / CLOSING 各自的完成边——"等 FIN"与"等 ACK"被宣布等价，协议即错</text>
+    <text x="700" y="132" font-size="13" fill="#059669" font-weight="bold">用闸：exit 1 拒答（≈0.2 秒）</text>
+    <!-- 汇总条 -->
+    <g font-size="14">
+      <text x="60" y="196" fill="#1a1a2e" font-weight="bold">两臂总分（8 案 26 群）</text>
+      <text x="60" y="228" fill="#92400e">朴素臂：放行 7 · 有害 1 · 破坏 6 格 · 无从得知自己错了</text>
+      <text x="60" y="258" fill="#065f46">闸门臂：放行 6（全部安全，压缩照拿）· 拦下 20 · 放行群破坏格 0（判据性质）</text>
+      <text x="60" y="286" fill="#55566b" font-size="12.5">闸门成本：26 群 × check 共约 4 秒（单机量级）——一次静默错误协议实现的排查成本通常以人天计</text>
+    </g>
+  </svg>
+  <div class="ok"><b>一句话：闸门不是每次都救命——它救的正是"结构一样、事件不一样"这一类你用眼睛和结构工具都看不出的坑；其余时候它花几秒钟给你一张"压缩无害"的收据。</b></div>
+</section>
+
+<section>
+  <h2>逐案明细</h2>
+  <div class="lead">法庭三案（本仓 cases/，收据 verdicts/comparison.*.json）＋ 实战盲测五案（field-trial 项目案卷，同格式复跑）。</div>
+  <table>
+    <tr><th>案（系统）</th><th>群（主张）</th><th>朴素臂</th><th>闸门</th><th>破坏格</th><th>压缩读数(若真)</th></tr>
+    <tr><td rowspan="4">tcp<br>RFC 9293</td><td>swap（孪生对）</td><td class="bad">合并 ⚠️</td><td class="good">拒答 ✓</td><td class="bad">6</td><td>—</td></tr>
+    <tr><td>absurd（荒谬对照）</td><td>不合并</td><td class="good">拒答</td><td>13</td><td>—</td></tr>
+    <tr><td>other（交叉对照）</td><td>不合并</td><td class="good">拒答</td><td>15</td><td>—</td></tr>
+    <tr><td>pads（填充态）</td><td>合并</td><td class="good">放行</td><td>0</td><td>1.067×</td></tr>
+    <tr><td rowspan="3">dhcp<br>RFC 2131</td><td>renew_rebind</td><td>不合并</td><td class="good">拒答</td><td>7</td><td>—</td></tr>
+    <tr><td>reboot_rebind</td><td>不合并</td><td class="good">拒答</td><td>6</td><td>—</td></tr>
+    <tr><td>init_start</td><td>不合并</td><td class="good">拒答</td><td>11</td><td>—</td></tr>
+    <tr><td>dhcp·pads</td><td>pads</td><td>合并</td><td class="good">放行</td><td>0</td><td>1.067×</td></tr>
+    <tr><td rowspan="2">imap<br>RFC 3501</td><td>auth_selected</td><td>不合并</td><td class="good">拒答</td><td>6</td><td>—</td></tr>
+    <tr><td>notauth_auth</td><td>不合并</td><td class="good">拒答</td><td>7</td><td>—</td></tr>
+    <tr><td>imap·pads</td><td>pads</td><td>合并</td><td class="good">放行</td><td>0</td><td>1.143×</td></tr>
+    <tr><td rowspan="3">raft（etcd 源码）</td><td>cand_precand（主张）</td><td>不合并</td><td class="good">拒答</td><td>8</td><td>—</td></tr>
+    <tr><td>fol_leader（对照）</td><td>不合并</td><td class="good">拒答</td><td>25</td><td>—</td></tr>
+    <tr><td>twin_relabel（探针）</td><td>不合并</td><td class="good">拒答</td><td>8</td><td>—</td></tr>
+    <tr><td rowspan="3">hadoop-mr<br>真源码转录</td><td>failed_killed（主张）</td><td>不合并</td><td class="good">拒答</td><td>17</td><td>—</td></tr>
+    <tr><td>new_scheduled（对照）</td><td>不合并</td><td class="good">拒答</td><td>14</td><td>—</td></tr>
+    <tr><td>running_killwait（对照）</td><td>不合并</td><td class="good">拒答</td><td>11</td><td>—</td></tr>
+    <tr><td rowspan="2">k8s-pod<br>官方文档</td><td>succ_failed（主张）</td><td>不合并</td><td class="good">拒答</td><td>9</td><td>—</td></tr>
+    <tr><td>pend_running（对照）</td><td>不合并</td><td class="good">拒答</td><td>8</td><td>—</td></tr>
+    <tr><td>k8s·pads</td><td>pads</td><td>合并</td><td class="good">放行</td><td>0</td><td>1.143×</td></tr>
+    <tr><td rowspan="2">tls13<br>RFC 8446</td><td>waitcert_waitcv（主张）</td><td>不合并</td><td class="good">拒答</td><td>6</td><td>—</td></tr>
+    <tr><td>crossside（对照）</td><td>不合并</td><td class="good">拒答</td><td>8</td><td>—</td></tr>
+    <tr><td>tls·pads</td><td>pads</td><td>合并</td><td class="good">放行</td><td>0</td><td>1.032×</td></tr>
+    <tr><td rowspan="2">usb2<br>官方规范</td><td>default_address（主张）</td><td>不合并</td><td class="good">拒答</td><td>6</td><td>—</td></tr>
+    <tr><td>attached_configured（对照）</td><td>不合并</td><td class="good">拒答</td><td>9</td><td>—</td></tr>
+    <tr><td>usb·pads</td><td>pads</td><td>合并</td><td class="good">放行</td><td>0</td><td>1.143×</td></tr>
+  </table>
+  <div class="note"><b>诚实声明（三条）</b>：① 朴素臂是<b>决策方式的代理</b>（"结构像就合并"），不是某个具体第三方工具——但这正是 networkx 不带标签口径的同类做法，TCP 孪生案里它确实判"可换"；② "破坏格"按事件名钉死口径逐格对账计（合并后行为会改变的 (状态×事件) 数），协议类案卷奖励全零，判定全在转移层；③ 闸门放行群破坏格恒为 0 是<b>判据的数学性质</b>（pass 要求逐格 TV≤1e-9），不是本次运行的巧合。闸门耗时为单机量级记录，精确值在 comparison.*.json。</div>
+</section>
+
+<section>
+  <h2>怎么复跑</h2>
+  <div class="lead">compare 已是法庭正式子命令（纯标准库）：</div>
+  <pre style="background:#0f172a;color:#e2e8f0;border-radius:10px;padding:16px 18px;font-size:13.5px;overflow-x:auto;"># 法庭自有三案
+python -X utf8 -m symmetry_court compare
+
+# 任意同格式案卷集（例：实战盲测五案）
+python -X utf8 -m symmetry_court compare --root &lt;cases目录&gt; --out &lt;输出目录&gt;</pre>
+  <div class="lead" style="margin-top:10px">退出码 0 = 对比完成且「放行群零破坏、拒答群全部有据」一致性成立。逐案收据：<code>verdicts/comparison.&lt;case&gt;.json</code>；汇总：<code>verdicts/comparison.summary.json</code>。</div>
+</section>
+
+<footer>
+  symmetry-court · 闸门价值对比 · 数字全部回源落盘 comparison json · 2026-11<br>
+  <a href="https://github.com/cx2002302-lang/symmetry-court">返回仓库</a> · <a href="https://github.com/cx2002302-lang/wuxing-gua">判据引擎 wuxing-gua</a>
+</footer>
+
+</div>
+</body>
+</html>

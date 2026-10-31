@@ -1,0 +1,113 @@
+{
+ "generated": "see per-case comparison.<case>.json for provenance",
+ "cases": 3,
+ "groups": 11,
+ "naive_admits": 4,
+ "naive_harmful": 1,
+ "naive_broken": 6,
+ "gate_admits": 3,
+ "gate_broken": 0,
+ "gate_seconds": 1.9,
+ "gate_admitted_broken_is_zero_by_definition": "pass requires worst_tv <= 1e-9 on every cell",
+ "rows": [
+  {
+   "case": "dhcp",
+   "group": "init_start.json",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "broken_real_cells_fixed": 11,
+   "compression_if_true": 1.067,
+   "gate_saved_this_merge": false
+  },
+  {
+   "case": "dhcp",
+   "group": "pads.json",
+   "naive_structure_admits": true,
+   "gate_exit": 0,
+   "broken_real_cells_fixed": 0,
+   "compression_if_true": 1.067,
+   "gate_saved_this_merge": false
+  },
+  {
+   "case": "dhcp",
+   "group": "reboot_rebind.json",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "broken_real_cells_fixed": 6,
+   "compression_if_true": 1.067,
+   "gate_saved_this_merge": false
+  },
+  {
+   "case": "dhcp",
+   "group": "renew_rebind.json",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "broken_real_cells_fixed": 7,
+   "compression_if_true": 1.067,
+   "gate_saved_this_merge": false
+  },
+  {
+   "case": "imap",
+   "group": "auth_selected.json",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "broken_real_cells_fixed": 6,
+   "compression_if_true": 1.143,
+   "gate_saved_this_merge": false
+  },
+  {
+   "case": "imap",
+   "group": "notauth_auth.json",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "broken_real_cells_fixed": 7,
+   "compression_if_true": 1.143,
+   "gate_saved_this_merge": false
+  },
+  {
+   "case": "imap",
+   "group": "pads.json",
+   "naive_structure_admits": true,
+   "gate_exit": 0,
+   "broken_real_cells_fixed": 0,
+   "compression_if_true": 1.143,
+   "gate_saved_this_merge": false
+  },
+  {
+   "case": "tcp",
+   "group": "absurd.json",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "broken_real_cells_fixed": 13,
+   "compression_if_true": 1.067,
+   "gate_saved_this_merge": false
+  },
+  {
+   "case": "tcp",
+   "group": "other.json",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "broken_real_cells_fixed": 15,
+   "compression_if_true": 1.067,
+   "gate_saved_this_merge": false
+  },
+  {
+   "case": "tcp",
+   "group": "pads.json",
+   "naive_structure_admits": true,
+   "gate_exit": 0,
+   "broken_real_cells_fixed": 0,
+   "compression_if_true": 1.067,
+   "gate_saved_this_merge": false
+  },
+  {
+   "case": "tcp",
+   "group": "swap.json",
+   "naive_structure_admits": true,
+   "gate_exit": 1,
+   "broken_real_cells_fixed": 6,
+   "compression_if_true": 1.067,
+   "gate_saved_this_merge": true
+  }
+ ]
+}

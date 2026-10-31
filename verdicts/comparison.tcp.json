@@ -1,0 +1,79 @@
+{
+ "case": "tcp",
+ "provenance": {
+  "gate": "vendored wuxing_gua check --strict (live run)",
+  "naive_arm": "structure-only edge-set invariance proxy (see module docstring)",
+  "damage": "fixed-caliber cell-by-cell ledger over model trans (event names pinned)"
+ },
+ "summary": {
+  "case": "tcp",
+  "n_states": 16,
+  "n_actions": 12,
+  "n_groups": 4,
+  "naive_admits": 2,
+  "naive_harmful_admits": 1,
+  "naive_broken_real_cells": 6,
+  "gate_admits": 1,
+  "gate_admitted_broken_cells": 0,
+  "gate_saved_merges": 1,
+  "gate_total_seconds_rounded": 0.7
+ },
+ "rows": [
+  {
+   "group": "absurd.json",
+   "claim": "defendant C (control): CLOSED and ESTABLISHED -- a connection's starting state and its main working state -- could be swapped",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "gate_verdict": "reject",
+   "gate_admits": false,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 13,
+   "real_cells": 192,
+   "would_be_orbits_if_merged": 15,
+   "compression_if_true": 1.067,
+   "gate_saved_this_merge": false
+  },
+  {
+   "group": "other.json",
+   "claim": "defendant B: FIN-WAIT-1 and SYN-RECEIVED are both middle states with three outgoing edges, so they could be swapped",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "gate_verdict": "reject",
+   "gate_admits": false,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 15,
+   "real_cells": 192,
+   "would_be_orbits_if_merged": 15,
+   "compression_if_true": 1.067,
+   "gate_saved_this_merge": false
+  },
+  {
+   "group": "pads.json",
+   "claim": "positive control: padding states 11 and 12 have byte-identical rows (every event self-loops, reward 0), so the swap is a genuine symmetry under BOTH readings and should be admitted everywhere",
+   "naive_structure_admits": true,
+   "gate_exit": 0,
+   "gate_verdict": "pass",
+   "gate_admits": true,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 0,
+   "real_cells": 192,
+   "would_be_orbits_if_merged": 15,
+   "compression_if_true": 1.067,
+   "gate_saved_this_merge": false
+  },
+  {
+   "group": "swap.json",
+   "claim": "defendant A: FIN-WAIT-2 (waiting for the peer's FIN) and CLOSING (waiting for the peer's ACK of our FIN) are drawn as shape-twins -- one outgoing edge each, both into TIME-WAIT -- so the two termination paths could be swapped and compressed into one",
+   "naive_structure_admits": true,
+   "gate_exit": 1,
+   "gate_verdict": "reject",
+   "gate_admits": false,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 6,
+   "real_cells": 192,
+   "would_be_orbits_if_merged": 15,
+   "compression_if_true": 1.067,
+   "gate_saved_this_merge": true
+  }
+ ]
+}
