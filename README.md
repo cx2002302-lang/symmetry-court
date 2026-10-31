@@ -205,6 +205,8 @@ machines tried under two named equivariance standards, with an independent
 jury and replayable verdict files. If you know of one, we would genuinely
 like to hear about it: open an issue.
 
+- The judge engine is [wuxing-gua](https://github.com/cx2002302-lang/wuxing-gua) — the upstream project this courtroom instantiates; vendored byte-exact at e1b1fa8 (see [NOTICE](NOTICE)).
+
 ## License
 
 MIT — see [LICENSE](LICENSE). The vendored engine keeps its own MIT license

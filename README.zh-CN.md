@@ -107,6 +107,8 @@ arbitrate 会在控制台打印判决表，并把完整庭审记录写进 `verdi
 
 定位口径，明说：在我们检索过的范围内，没有见到这个组合的对标——公开标准的状态机、在两套写明名字的等变口径下受审、配独立陪审团与可复跑判决书。若你知道对标在哪里，我们真心想听：开个 issue。
 
+- 判决引擎为 [wuxing-gua](https://github.com/cx2002302-lang/wuxing-gua)——本法庭所实例化的上游项目；以 e1b1fa8 版字节级内嵌（见 [NOTICE](NOTICE)）。
+
 ## 许可
 
 MIT——见 [LICENSE](LICENSE)。内嵌引擎保留其自身 MIT 许可条款，记录在 [NOTICE](NOTICE)。
