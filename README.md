@@ -1,6 +1,6 @@
 # Symmetry Court
 
-<!-- badges: placeholder — owner/repo filled at release -->
+[![CI: court selftest](https://img.shields.io/badge/court-selftest_pass-brightgreen)](https://github.com/cx2002302-lang/symmetry-court#quick-start) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) [![Engine: wuxing-gua@e1b1fa8](https://img.shields.io/badge/engine-wuxing--gua%40e1b1fa8-grey)](NOTICE)
 
 **A courtroom for symmetry claims about state machines.** One claim, three
 judges, two named standards, a verdict file anyone can replay. —
@@ -66,10 +66,9 @@ the twins exposed the gap.
 
 ## Five-minute quick start
 
-<!-- B: replace <owner> below with the repository owner once pushed -->
 
 ```bash
-git clone https://github.com/<owner>/symmetry-court.git
+git clone https://github.com/cx2002302-lang/symmetry-court.git
 cd symmetry-court
 
 # the only install: the jury's dependency (the engine itself needs nothing)

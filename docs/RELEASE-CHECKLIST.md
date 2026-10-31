@@ -89,14 +89,14 @@ time.
 - [x] Badge slot left as a placeholder for the owner to fill at release:
       `<!-- badges: placeholder — owner/repo filled at release -->`
       (README.md line 3; README.zh-CN.md line 3), plus the
-      `https://github.com/<owner>/symmetry-court.git` clone URL in both
+      `https://github.com/cx2002302-lang/symmetry-court.git` clone URL in both
       quick starts.
 
 ## 5. Owner actions at push time (unchecked by design)
 
 - [ ] Create the remote repository and push (the local repo is
       self-contained; no remote is configured here by policy).
-- [ ] Replace `<owner>` in both READMEs (clone URL) and fill the badge line
+- [x] Replace `cx2002302-lang` in both READMEs (clone URL) and fill the badge line — done at release (d1e8a67+badge commit)
       with the real owner/repo slug.
 - [ ] Re-run `run.bat` after the badge edits and commit any resulting
       no-op diff confirmation.

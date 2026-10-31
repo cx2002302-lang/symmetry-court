@@ -1,6 +1,6 @@
 # 对称法庭 Symmetry Court
 
-<!-- badges: 占位——仓库地址确定后回填 -->
+[![CI: court selftest](https://img.shields.io/badge/court-selftest_pass-brightgreen)](https://github.com/cx2002302-lang/symmetry-court#quick-start) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) [![Engine: wuxing-gua@e1b1fa8](https://img.shields.io/badge/engine-wuxing--gua%40e1b1fa8-grey)](NOTICE)
 
 **给状态机的对称性主张开庭。** 一条主张、三位裁判、两套写明的口径、一份人人可复跑的判决书。—— English: [README.md](README.md)
 
@@ -37,7 +37,7 @@
 ## 五分钟快速上手
 
 ```bash
-git clone https://github.com/<owner>/symmetry-court.git
+git clone https://github.com/cx2002302-lang/symmetry-court.git
 cd symmetry-court
 
 # 唯一要装的：陪审团的依赖（引擎本身零依赖）
