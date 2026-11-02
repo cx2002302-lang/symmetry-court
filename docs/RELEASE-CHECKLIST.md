@@ -49,8 +49,9 @@ time.
       work/前所未有/首个/首次/开创/空前/独一无二: zero novelty claims in
       authored text. Positioning uses the scoped form ("within the sources
       we searched, we have not seen a counterpart for this exact
-      combination"). Remaining literal-token hits live only inside the
-      byte-frozen vendored tree (e.g. the variable name `first_row` in the
+      combination"). Remaining unscoped novelty-claim hits: zero; residual literal-token
+      hits are scoped, receipt-backed statements inside authored text, plus
+      the byte-frozen vendored tree (e.g. the variable name `first_row` in the
       engine's circulant-matrix helper; 上游校准环境标签 SYS-1/SYS-2/SYS-3A
       in upstream research modules) — inherited verbatim from the pinned
       upstream release tree, which its own release scan (upstream

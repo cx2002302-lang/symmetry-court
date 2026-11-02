@@ -26,7 +26,9 @@ sentences.
   (every action self-loops, reward 0).
 - 4 actions = the arrow keys in the original's own numbering.
 - Rewards = the 2048 score: +4 for the only allowed merge (2+2 → 4), 0
-  otherwise (`score += merged.value`, game_manager.js L167).
+  otherwise (`score += merged.value`, game_manager.js L167). Variant boundary:
+  a move with two 2+2 merges awards +4 flat (original per-merge sum would be
+  +8); transitions identical, no verdict depends on it.
 - Variant boundaries, recorded in `meta.transcription_notes`: merge capped
   at 4 (two 4s never merge here — the original merges any equal pair);
   random spawns not collected; dead boards self-loop on every action

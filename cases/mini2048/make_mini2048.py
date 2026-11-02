@@ -198,6 +198,9 @@ TRANSCRIPTION_NOTES = [
     "(2+2 -> 4), 0 otherwise. Unlike tcp/dhcp/imap (all-zero rewards) the "
     "reward layer here carries the game's payoff; the explicit/fixed "
     "contrast therefore also has a reward-profile reading.",
+    "reward variant boundary (audit 2026-11-03): a move containing two 2+2 "
+    "merges (state [2,2;2,2]) awards +4 flat; the original L167 per-merge "
+    "sum would be +8. Transitions identical; no verdict depends on this.",
     "explicit caliber note: a board symmetry renames the direction keys "
     "element-by-element (rotating the board clockwise turns 'up' into "
     "'right'); rho(identity)=id while rho(rot90)!=id, so no single "
