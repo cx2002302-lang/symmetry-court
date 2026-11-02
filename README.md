@@ -76,7 +76,7 @@ python -X utf8 -m pip install networkx
 
 python -X utf8 -m symmetry_court list        # see the docket
 python -X utf8 -m symmetry_court arbitrate   # run the trial — a verdict table per case
-python -X utf8 -m symmetry_court compare     # gate-value A/B: naive structural merge vs the gate, per-group damage ledger
+python -X utf8 -m symmetry_court compare     # gate-value A/B: naive structural merge vs the gate, per-group damage ledger (caliber per group declaration since v2)
 python -X utf8 -m symmetry_court selftest    # replay every verdict against expected (exit 0 = green)
 ```
 
@@ -86,6 +86,19 @@ python -X utf8 -m symmetry_court selftest    # replay every verdict against expe
 Arbitrate prints a verdict table to the console and writes the full trial
 records to `verdicts/<case>.verdict.json`. Selftest is the gate: exit `0`
 means every verdict in the repository still matches its expected record.
+
+Since v2, compare dispatches the caliber per group declaration (groups
+declaring `explicit` run as declared, without `--strict`; groups declaring
+`fixed` or none run `--strict`). Across the 9-case / 32-group ledger every
+gate admission is zero-damage by construction. The `mini2048` case (2048
+merge mechanics, 2×2 variant, D4) is the explicit caliber's first
+real-system candidate docket: its "should-admit" is machine-asserted by the
+case generator (per-element map uniqueness plus the group homomorphism
+law), yet the engine's single-global-action_map design structurally rejects
+it at the tool layer — a finding of this wave, fix scheduled upstream, with
+g1/g3/g4 expected to flip on admit after the fix (see
+[docs/闸门价值对比.html](docs/闸门价值对比.html) and
+[cases/mini2048/README.md](cases/mini2048/README.md)).
 
 ### How to read a verdict
 
@@ -108,15 +121,26 @@ call, and the next section is the checklist for it.
 
 ## The docket
 
-The docket holds 3 cases (receipt: `python -X utf8 -m symmetry_court list`
-over `cases/`). Every number below is backed by the named receipt file in this
-repository — no number here comes from memory.
+The docket holds 9 cases: five incorporated from the field-trial blind-test
+project (model/groups/generator/README copied byte-identical; their verdicts
+reconcile group-by-group with field-trial's sealed truth, 15/15 groups — see
+each case's `expected.json` provenance) and four transcribed in this
+repository (`tcp`, `dhcp`, `imap`, `mini2048`). Receipt:
+`python -X utf8 -m symmetry_court list` over `cases/`. Every number below is
+backed by the named receipt file in this repository — no number here comes
+from memory.
 
 | Case | Protocol | Source | States | Twin pair | relabel | fixed | networkx (labeled) |
 |---|---|---|---|---|---|---|---|
 | `tcp` | TCP connection state machine | RFC 9293 §3.3.2 Figure 5 | 16 states, 20 transitions, 12 events | CLOSING ↔ FIN-WAIT-2 | pass (exit 0, worst_tv 0.0) | reject (exit 1, worst_tv 1.0) | not a symmetry — identity only (structure-only: yes) |
 | `dhcp` | DHCP client state machine | RFC 2131 §4.4 Figure 5 | 16 states (8 protocol + 8 padding), 18 transitions, 15 events | RENEWING ↔ REBINDING (decided by the transcription: not interchangeable) | reject (exit 1, worst_tv 1.0) | reject (exit 1, worst_tv 1.0) | not a symmetry (structure and labeled) |
 | `imap` | IMAP4rev1 connection state machine | RFC 3501 §3 + §6 (prose spec, no drawn figure) | 8 states (4 protocol + 4 padding), 11 transitions, 6 events | AUTHENTICATED ↔ SELECTED (the SELECT/CLOSE 2-cycle) | reject (exit 1, worst_tv 1.0) | reject (exit 1, worst_tv 1.0) | not a symmetry (structure and labeled) |
+| `raft-etcd` | etcd/raft single-node role state machine | etcd-io/raft `raft.go` @ `c51f010c851e` (StateType, raft.go:49-56) | 4 states (4 protocol + 0 padding), 12 cross-state transitions, 14 events | Candidate ↔ PreCandidate | reject (exit 1, worst_tv 1.0) | reject (exit 1, worst_tv 1.0) | not a symmetry (structure and labeled) |
+| `hadoop-mr-task` | Hadoop MRv2 Task state machine | apache/hadoop trunk @ `e66f40daf3cc` (`TaskStateInternal.java`:19-23) | 8 states (7 protocol + 1 padding), 18 cross-state branches, 9 events | FAILED ↔ KILLED | reject (exit 1, worst_tv 0.75) | reject (exit 1, worst_tv 1.0) | not a symmetry (structure and labeled) |
+| `k8s-pod-lifecycle` | Kubernetes Pod lifecycle (PodPhase) | kubernetes.io docs, Pod Lifecycle page | 8 states (5 protocol + 3 padding), 13 cross-state branches, 7 events | Succeeded ↔ Failed | reject (exit 1, worst_tv 1.0) | reject (exit 1, worst_tv 1.0) | not a symmetry (structure and labeled) |
+| `tls13-handshake` | TLS 1.3 handshake state machine (client + server) | RFC 8446 Appendix A (§A.1/§A.2) | 32 states (17 protocol + 15 padding), 22 cross-state branches, 18 events | c_WAIT_CERT ↔ c_WAIT_CV | reject (exit 1, worst_tv 1.0) | reject (exit 1, worst_tv 1.0) | not a symmetry (structure and labeled) |
+| `usb2-device-states` | USB 2.0 device visible state machine | USB 2.0 spec §9.1 (Figure 9-1 / Table 9-1) | 8 states (6 protocol + 2 padding), 14 cross-state branches, 8 events | Default ↔ Address | reject (exit 1, worst_tv 1.0) | reject (exit 1, worst_tv 1.0) | not a symmetry (structure and labeled) |
+| `mini2048` | 2048 merge mechanics (2×2 deterministic variant) | gabrielecirulli/2048 `js/game_manager.js` (`move()` L130-191, direction numbering L131), corroborated by Wikipedia Gameplay | 256 states (81 real + 175 padding), 4 direction keys, score rewards | rot90 with renamed keys (explicit) vs the same rotation with keys pinned (fixed) — the caliber, not the permutation, decides | reject (exit 1, worst_tv 1.0; bitstring diagnostic — see note) | reject (exit 1, worst_tv 1.0) | keys-pinned reading is not a symmetry (structure-only: yes) |
 
 Notes on the `tcp` row: the state count includes 5 padding states required by
 the engine's bit-string convention (16 total, 11 protocol states); the
@@ -133,6 +157,45 @@ The `imap` row is transcribed from RFC 3501's prose (its §3 has no figure);
 every edge cites the sentence that states it. TCP defines no payoff, so the
 case's reward layer is all zeros by design and every conclusion comes from
 the transition layer (same for `dhcp` and `imap`).
+
+Notes on the five incorporated rows (`raft-etcd` … `usb2-device-states`):
+they come from the field-trial blind-test project, copied byte-identical
+(this repo's receipts: `cases/<case>/expected.json` +
+`verdicts/<case>.verdict.json`; the networkx columns reconcile
+group-by-group with field-trial's sealed truth — `sealed/<case>.truth.json`,
+sha256 pinned in that project's `sealed/_W3_manifest.json` — 15/15 groups
+agree). `k8s-pod-lifecycle`, `tls13-handshake` and `usb2-device-states` each
+carry a pads positive control (a padding-state swap: pass under both
+standards, structure and labeled both yes — TRUE in
+`cases/<case>/expected.json`); `hadoop-mr-task`'s third group is a control
+(RUNNING ↔ KILL_WAIT, rejected); `raft-etcd`'s third group is the
+relabel-declaration contrast (same permutation, relabel reading — still
+rejected). The `hadoop-mr-task` row's relabel column shows worst_tv=0.75:
+the FAILED/KILLED swap breaks only some of the real cells — recorded as the
+data says, not a typo. The `tls13-handshake` case README (the hand-written
+doc shipped with the case) says 20 cross-state branches (a per-cell count:
+client 9 + server 11); counted per outcome branch — the same caliber as the
+other rows — it is 22 (client 10 + server 12, recomputable from
+`model.json`); this table uses the model-derived 22.
+
+Notes on the `mini2048` row: the first real-system exercise of the engine's
+**explicit** caliber (a declared per-action renaming — a board symmetry
+renames the direction keys with the cells), and the source of this
+repository's first reproduced engine finding: the vendored judge's explicit
+layer applies one declared `action_map` to every closed-group element
+*including the identity*, so on any model with pairwise-distinguishable
+actions the identity element forces the identity map and no non-trivial
+renamed-action symmetry can be admitted. The rot90/flip/D4 groups here are
+true symmetries under per-element maps (derived exhaustively and
+machine-asserted by the case generator); their explicit-caliber receipts
+(`cases/mini2048/receipts/`, engine run without `--strict`) read reject with
+`first_bad` = the identity element — expected to flip after the upstream
+per-element fix, and each `expected.json` row carries a note saying so. The
+pads swap passes on the same model (exit 0), and the table's relabel column
+for this case is the court-stamped relabel frame, which resolves to the
+bitstring judge (actions-read-as-bit-flips) on a 4-action/8-bit model — a
+structural mismatch recorded as the diagnostic column. Full diagnosis with
+the verified 8-element map table: [cases/mini2048/README.md](cases/mini2048/README.md).
 
 ## Which "identical"? — three questions
 
@@ -199,6 +262,20 @@ deterministic generator. The six-step process with the ground rules is in
   case, transcribed from §4.4 Figure 5.
 - **RFC 3501** (Internet Message Access Protocol, IMAP4rev1) — source of the
   `imap` case, transcribed from §3 (states) and §6 (per-state commands).
+- **etcd-io/raft** (`raft.go`, pinned `c51f010c851e`) — source of the
+  `raft-etcd` case, transcribed from the StateType enum and the step-function
+  family (raft.go:49-56 et al.).
+- **apache/hadoop** (trunk @ `e66f40daf3cc`) — source of the `hadoop-mr-task`
+  case, transcribed from the state-machine factory in `TaskStateInternal.java`.
+- **Kubernetes official docs** (Pod Lifecycle page) — source of the
+  `k8s-pod-lifecycle` case, every edge citing the official wording.
+- **RFC 8446** (TLS 1.3) — source of the `tls13-handshake` case, transcribed
+  from Appendix A (§A.1/§A.2) with §4 as the normative anchor.
+- **USB 2.0 specification** (USB-IF, §9.1) — source of the
+  `usb2-device-states` case, transcribed from Figure 9-1 and Table 9-1.
+- **the field-trial blind-test project** — transcription and two-round blind
+  verification for the five cases above; the sealed-truth reconciliation is
+  recorded in each case's `expected.json` provenance.
 
 On positioning, stated plainly: within the sources we searched, we have not
 seen a counterpart for this exact combination — public-standard state

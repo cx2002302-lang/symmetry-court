@@ -1,0 +1,66 @@
+{
+ "case": "hadoop-mr-task",
+ "provenance": {
+  "gate": "vendored wuxing_gua check, caliber per group declaration (compare v2): groups declaring semantics.action=explicit with a valid action_map run as declared (no --strict); groups declaring fixed or no declaration run --strict (live run)",
+  "naive_arm": "structure-only edge-set invariance proxy (see module docstring)",
+  "damage": "cell-by-cell ledger over model trans, same caliber as the gate arm per group (explicit groups: events renamed per the declared action_map; others: event names pinned); fixed-caliber damage kept per row in broken_real_cells_fixed for contrast"
+ },
+ "summary": {
+  "case": "hadoop-mr-task",
+  "n_states": 8,
+  "n_actions": 9,
+  "n_groups": 3,
+  "naive_admits": 0,
+  "naive_harmful_admits": 0,
+  "naive_broken_real_cells": 0,
+  "gate_admits": 0,
+  "gate_admitted_broken_cells": 0,
+  "gate_saved_merges": 0,
+  "gate_explicit_groups": 0,
+  "gate_total_seconds_rounded": 0.5
+ },
+ "rows": [
+  {
+   "group": "g1_claim_failed_killed_swap_fixed.json",
+   "claim": "相同输入分片的 map/reduce 任务在任意 worker 上（重）执行结果等价——primary 与 backup 执行可互换，任一次成功即算完成；任务失败后可在任何其他 worker 上重跑顶替。（W1 dossier case-02 symmetric_claim 原文） 终态级类比（被告主张）：FAILED 与 KILLED 都是任务终局，若'失败与被杀对任务等价、重跑顶替语义相同'成立，则此对换应保持系统行为；两态的注册事件集不同（FAILED 7 个 vs KILLED 4 个）且前驱事件不同，裁决交给工具与独立基准。",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "gate_verdict": "reject",
+   "gate_admits": false,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 17,
+   "real_cells": 48,
+   "would_be_orbits_if_merged": 7,
+   "compression_if_true": 1.143,
+   "gate_saved_this_merge": false
+  },
+  {
+   "group": "g2_control_new_scheduled_swap_fixed.json",
+   "claim": "对照主张：NEW（已创建未调度）与 SCHEDULED（已调度待 launch）是流水线相邻阶段，若主张'调度前后等价可互换'则此对换应保持行为；两态事件集不同（NEW 有 T_RECOVER，SCHEDULED 无），判别交由工具/基准。",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "gate_verdict": "reject",
+   "gate_admits": false,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 14,
+   "real_cells": 48,
+   "would_be_orbits_if_merged": 7,
+   "compression_if_true": 1.143,
+   "gate_saved_this_merge": false
+  },
+  {
+   "group": "g3_control_running_killwait_swap_fixed.json",
+   "claim": "对照主张：RUNNING（执行中）与 KILL_WAIT（等待被杀确认）若等价可互换，则'运行与等待死亡无区别'；两态的自环/完成事件结构差异显著，判别交由工具/基准。",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "gate_verdict": "reject",
+   "gate_admits": false,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 11,
+   "real_cells": 48,
+   "would_be_orbits_if_merged": 7,
+   "compression_if_true": 1.143,
+   "gate_saved_this_merge": false
+  }
+ ]
+}

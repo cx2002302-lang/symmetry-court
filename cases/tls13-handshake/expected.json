@@ -1,0 +1,67 @@
+{
+ "case": "tls13-handshake",
+ "provenance": {
+  "recorded": "2026-11-02T17:32:19Z, observed from a live three-way arbitration run (`python -X utf8 -m symmetry_court arbitrate --emit-expected-template`; receipt: verdicts/tls13-handshake.verdict.json); the gate (`python -X utf8 -m symmetry_court selftest`) replays the case and compares these rows field-by-field. Case incorporated byte-identical from the field-trial blind-test project (model + groups + generator + README; the generator's --check byte-identity passes in this repository).",
+  "networkx_source": "the networkx columns carry the field-trial sealed truth's corresponding values for this case (field-trial sealed/tls13-handshake.truth.json, whose sha256 is pinned in that project's sealed/_W3_manifest.json; the sealed file's recorded model/group sha256s match the copied case files byte-for-byte, so audit can replay the sealed check on exactly these inputs). Reconciled three ways before pinning: court juror (direct edge-set algebra + networkx VF2 membership), a fresh independent recomputation over the transcribed model, and the sealed automorphism facts (labeled_symmetry <-> the sealed per-element fixed check passes_fixed; structure_symmetry <-> the sealed structural-order / fixed-elements / filler-class facts). All three agreed on every group.",
+  "reading_guide": "relabel row = actions may be renamed along with states (diagnostic contrast reading); fixed row = event names pinned (the protocol-true reading, declared in each group file); networkx columns = independent juror"
+ },
+ "groups": {
+  "g1_claim_waitcert_waitcv_swap_fixed": {
+   "claim": "supported_groups 支持集合内的任意 named group（如 x25519 <-> secp256r1 <-> ffdhe2048）在握手状态机层面可互换：server 在客户端支持集合内任选其一，客户端对任一群走同一状态机；换群只换 key_share 载荷，不换状态迁移结构。（互换维度=同侧内的群参数，非 client/server 两侧互换。）（W1 dossier case-04 symmetric_claim 原文） 状态级类比（被告主张）：'换载荷不换结构'的最近类比=证书层两个等待子步（c_WAIT_CERT / c_WAIT_CV）等价可互换——它们只差下一报文是 Certificate 还是 CertificateVerify；若合并二者不是协议错误，此对换应保持行为。注意：群参数本身不出现在状态里，本置换是该主张可做的最强状态级检验，裁决交工具/基准。",
+   "relabel": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "generalized"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict"
+   },
+   "networkx": {
+    "structure_symmetry": false,
+    "labeled_symmetry": false
+   }
+  },
+  "g2_control_crossside_waitcert_swap_fixed": {
+   "claim": "对照主张：Appendix A 两侧图示形似镜像（两侧都有 WAIT_CERT），若主张'同名等待态跨侧等价'则此对换应保持行为；两侧协议角色不同（客户端收证书 vs 服务端验客户端证书），判别交工具/基准。",
+   "relabel": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "generalized"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict"
+   },
+   "networkx": {
+    "structure_symmetry": false,
+    "labeled_symmetry": false
+   }
+  },
+  "g3_pads_swap_fixed": {
+   "claim": "正控对照：填充哑态 filler_17/filler_18 行完全相同（全事件自环 0.0、不引用真实事件语义），对换在 fixed 口径下是真对称；检验工具对平凡真对称的放行（rung 1c pads 惯例）。",
+   "relabel": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "generalized"
+   },
+   "fixed": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "strict"
+   },
+   "networkx": {
+    "structure_symmetry": true,
+    "labeled_symmetry": true
+   }
+  }
+ }
+}

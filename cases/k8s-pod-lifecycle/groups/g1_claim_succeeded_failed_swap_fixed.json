@@ -1,0 +1,34 @@
+{
+ "n_states": 8,
+ "elements": [
+  [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  [
+   0,
+   1,
+   3,
+   2,
+   4,
+   5,
+   6,
+   7
+  ]
+ ],
+ "semantics": {
+  "action": "fixed"
+ },
+ "meta": {
+  "claim": "同一 Deployment 模板产出的 Pod 副本可互换：Service 只按 label/端点集合做负载均衡，副本个体身份无关（副本增删只触发 EndpointSlices 更新）；任何副本可被删除并在任意节点按同一模板重建。（W1 dossier case-03 symmetric_claim 原文） 终相级类比（被告主张）：两个 terminal 相下副本替换语义等价（删除任一终态副本都触发同模板重建），若终相等价则此对换应保持系统行为；两相前驱事件不同（all_containers_succeeded vs any_container_failed），裁决交工具/基准。",
+  "construction": "order-2 对换：Succeeded(2) <-> Failed(3)",
+  "dossier_ref": "dossier/selection.json case-03-k8s-pod-lifecycle symmetric_claim",
+  "semantics_note": "控制面/节点侧外部事件 -> fixed"
+ }
+}

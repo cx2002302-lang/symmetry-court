@@ -1,9 +1,9 @@
 {
  "case": "dhcp",
  "provenance": {
-  "gate": "vendored wuxing_gua check --strict (live run)",
+  "gate": "vendored wuxing_gua check, caliber per group declaration (compare v2): groups declaring semantics.action=explicit with a valid action_map run as declared (no --strict); groups declaring fixed or no declaration run --strict (live run)",
   "naive_arm": "structure-only edge-set invariance proxy (see module docstring)",
-  "damage": "fixed-caliber cell-by-cell ledger over model trans (event names pinned)"
+  "damage": "cell-by-cell ledger over model trans, same caliber as the gate arm per group (explicit groups: events renamed per the declared action_map; others: event names pinned); fixed-caliber damage kept per row in broken_real_cells_fixed for contrast"
  },
  "summary": {
   "case": "dhcp",
@@ -16,6 +16,7 @@
   "gate_admits": 1,
   "gate_admitted_broken_cells": 0,
   "gate_saved_merges": 0,
+  "gate_explicit_groups": 0,
   "gate_total_seconds_rounded": 0.7
  },
  "rows": [

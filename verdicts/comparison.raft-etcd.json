@@ -1,0 +1,66 @@
+{
+ "case": "raft-etcd",
+ "provenance": {
+  "gate": "vendored wuxing_gua check, caliber per group declaration (compare v2): groups declaring semantics.action=explicit with a valid action_map run as declared (no --strict); groups declaring fixed or no declaration run --strict (live run)",
+  "naive_arm": "structure-only edge-set invariance proxy (see module docstring)",
+  "damage": "cell-by-cell ledger over model trans, same caliber as the gate arm per group (explicit groups: events renamed per the declared action_map; others: event names pinned); fixed-caliber damage kept per row in broken_real_cells_fixed for contrast"
+ },
+ "summary": {
+  "case": "raft-etcd",
+  "n_states": 4,
+  "n_actions": 14,
+  "n_groups": 3,
+  "naive_admits": 0,
+  "naive_harmful_admits": 0,
+  "naive_broken_real_cells": 0,
+  "gate_admits": 0,
+  "gate_admitted_broken_cells": 0,
+  "gate_saved_merges": 0,
+  "gate_explicit_groups": 0,
+  "gate_total_seconds_rounded": 0.6
+ },
+ "rows": [
+  {
+   "group": "g1_claim_cand_precand_swap_fixed.json",
+   "claim": "同一集群内、相同配置且日志前缀相同的任意两个 follower 副本在协议层面等价可互换：任一个都可通过同一选举机制胜出成为 leader 并服务同一份日志；角色归属只由日志新旧与票数决定，与节点身份无关。（W1 dossier case-01 symmetric_claim 原文） 状态级类比（被告主张）：Candidate 与 PreCandidate 是同一选举机制的两个等待角色，若主张等价可互换，则此对换置换应保持系统行为；两态的完成事件不同（MsgVoteResp vs MsgPreVoteResp），事件名钉死口径下合并它们是否为协议错误由工具与独立基准裁决。",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "gate_verdict": "reject",
+   "gate_admits": false,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 8,
+   "real_cells": 29,
+   "would_be_orbits_if_merged": 3,
+   "compression_if_true": 1.333,
+   "gate_saved_this_merge": false
+  },
+  {
+   "group": "g2_control_follower_leader_swap_fixed.json",
+   "claim": "对照主张：Follower 与 Leader 承担不同协议角色（服务日志 vs 接收复制），若把角色互换当对称即主张'领导与追随等价'；该候选与 W1 主张方向相反，用于检验工具能否把结构性不同的角色区分开。",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "gate_verdict": "reject",
+   "gate_admits": false,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 25,
+   "real_cells": 29,
+   "would_be_orbits_if_merged": 3,
+   "compression_if_true": 1.333,
+   "gate_saved_this_merge": false
+  },
+  {
+   "group": "g3_claim_twin_cand_precand_swap_relabel.json",
+   "claim": "与 g1_claim 同一置换、不同语义声明（relabel：事件名可随状态换名）。两文件读数差 = 工具判据分派（strict vs generalized）对陌生人系统的可见行为，由 W3 独立基准与 W4 盲跑对照裁决，本文件不预判胜负。",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "gate_verdict": "reject",
+   "gate_admits": false,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 8,
+   "real_cells": 29,
+   "would_be_orbits_if_merged": 3,
+   "compression_if_true": 1.333,
+   "gate_saved_this_merge": false
+  }
+ ]
+}

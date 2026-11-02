@@ -1,0 +1,26 @@
+{
+ "n_states": 4,
+ "elements": [
+  [
+   0,
+   1,
+   2,
+   3
+  ],
+  [
+   2,
+   1,
+   0,
+   3
+  ]
+ ],
+ "semantics": {
+  "action": "fixed"
+ },
+ "meta": {
+  "claim": "对照主张：Follower 与 Leader 承担不同协议角色（服务日志 vs 接收复制），若把角色互换当对称即主张'领导与追随等价'；该候选与 W1 主张方向相反，用于检验工具能否把结构性不同的角色区分开。",
+  "construction": "order-2 对换：Follower(0) <-> Leader(2)",
+  "dossier_ref": "dossier/selection.json case-01-raft-etcd（对照组）",
+  "semantics_note": "事件驱动协议 -> fixed"
+ }
+}

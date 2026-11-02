@@ -1,0 +1,34 @@
+{
+ "n_states": 8,
+ "elements": [
+  [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  [
+   0,
+   1,
+   3,
+   2,
+   4,
+   5,
+   6,
+   7
+  ]
+ ],
+ "semantics": {
+  "action": "fixed"
+ },
+ "meta": {
+  "claim": "同一设备的枚举路径 Attached -> Powered -> Default -> Address -> Configured 与所插端口、所分配地址值无关：任意可工作端口热插拔都走同一状态序列；主机按描述符（而非端口/地址实例）识别绑定设备，相同描述符的设备实例对主机等价。（W1 dossier case-05 symmetric_claim 原文） 状态级类比（被告主张）：Default（已复位未编址）与 Address（已编址未配置）两个枚举中间态等价可互换——若'地址值只是载荷、路径与端口无关'则此对换应保持行为；两态的入边事件不同（reset vs address_assigned），裁决交工具/基准。",
+  "construction": "order-2 对换：Default(2) <-> Address(3)",
+  "dossier_ref": "dossier/selection.json case-05-usb2-device-states symmetric_claim",
+  "semantics_note": "总线/主机侧事件 -> fixed"
+ }
+}

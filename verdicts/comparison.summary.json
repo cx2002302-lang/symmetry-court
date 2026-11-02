@@ -1,13 +1,14 @@
 {
  "generated": "see per-case comparison.<case>.json for provenance",
- "cases": 3,
- "groups": 11,
- "naive_admits": 4,
- "naive_harmful": 1,
- "naive_broken": 6,
- "gate_admits": 3,
+ "cases": 9,
+ "groups": 32,
+ "naive_admits": 12,
+ "naive_harmful": 5,
+ "naive_broken": 2486,
+ "gate_admits": 7,
  "gate_broken": 0,
- "gate_seconds": 1.9,
+ "gate_explicit_groups": 3,
+ "gate_seconds": 5.8,
  "gate_admitted_broken_is_zero_by_definition": "pass requires worst_tv <= 1e-9 on every cell",
  "rows": [
   {
@@ -17,7 +18,9 @@
    "gate_exit": 1,
    "broken_real_cells_fixed": 11,
    "compression_if_true": 1.067,
-   "gate_saved_this_merge": false
+   "gate_saved_this_merge": false,
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 11
   },
   {
    "case": "dhcp",
@@ -26,7 +29,9 @@
    "gate_exit": 0,
    "broken_real_cells_fixed": 0,
    "compression_if_true": 1.067,
-   "gate_saved_this_merge": false
+   "gate_saved_this_merge": false,
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 0
   },
   {
    "case": "dhcp",
@@ -35,7 +40,9 @@
    "gate_exit": 1,
    "broken_real_cells_fixed": 6,
    "compression_if_true": 1.067,
-   "gate_saved_this_merge": false
+   "gate_saved_this_merge": false,
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 6
   },
   {
    "case": "dhcp",
@@ -44,7 +51,42 @@
    "gate_exit": 1,
    "broken_real_cells_fixed": 7,
    "compression_if_true": 1.067,
-   "gate_saved_this_merge": false
+   "gate_saved_this_merge": false,
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 7
+  },
+  {
+   "case": "hadoop-mr-task",
+   "group": "g1_claim_failed_killed_swap_fixed.json",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "broken_real_cells_fixed": 17,
+   "compression_if_true": 1.143,
+   "gate_saved_this_merge": false,
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 17
+  },
+  {
+   "case": "hadoop-mr-task",
+   "group": "g2_control_new_scheduled_swap_fixed.json",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "broken_real_cells_fixed": 14,
+   "compression_if_true": 1.143,
+   "gate_saved_this_merge": false,
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 14
+  },
+  {
+   "case": "hadoop-mr-task",
+   "group": "g3_control_running_killwait_swap_fixed.json",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "broken_real_cells_fixed": 11,
+   "compression_if_true": 1.143,
+   "gate_saved_this_merge": false,
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 11
   },
   {
    "case": "imap",
@@ -53,7 +95,9 @@
    "gate_exit": 1,
    "broken_real_cells_fixed": 6,
    "compression_if_true": 1.143,
-   "gate_saved_this_merge": false
+   "gate_saved_this_merge": false,
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 6
   },
   {
    "case": "imap",
@@ -62,7 +106,9 @@
    "gate_exit": 1,
    "broken_real_cells_fixed": 7,
    "compression_if_true": 1.143,
-   "gate_saved_this_merge": false
+   "gate_saved_this_merge": false,
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 7
   },
   {
    "case": "imap",
@@ -71,7 +117,141 @@
    "gate_exit": 0,
    "broken_real_cells_fixed": 0,
    "compression_if_true": 1.143,
-   "gate_saved_this_merge": false
+   "gate_saved_this_merge": false,
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 0
+  },
+  {
+   "case": "k8s-pod-lifecycle",
+   "group": "g1_claim_succeeded_failed_swap_fixed.json",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "broken_real_cells_fixed": 9,
+   "compression_if_true": 1.143,
+   "gate_saved_this_merge": false,
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 9
+  },
+  {
+   "case": "k8s-pod-lifecycle",
+   "group": "g2_control_pending_running_swap_fixed.json",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "broken_real_cells_fixed": 8,
+   "compression_if_true": 1.143,
+   "gate_saved_this_merge": false,
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 8
+  },
+  {
+   "case": "k8s-pod-lifecycle",
+   "group": "g3_pads_swap_fixed.json",
+   "naive_structure_admits": true,
+   "gate_exit": 0,
+   "broken_real_cells_fixed": 0,
+   "compression_if_true": 1.143,
+   "gate_saved_this_merge": false,
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 0
+  },
+  {
+   "case": "mini2048",
+   "group": "g1_rot90_map.json",
+   "naive_structure_admits": true,
+   "gate_exit": 1,
+   "broken_real_cells_fixed": 740,
+   "compression_if_true": 3.657,
+   "gate_saved_this_merge": true,
+   "gate_caliber": "explicit",
+   "broken_by_gate_caliber": 500
+  },
+  {
+   "case": "mini2048",
+   "group": "g2_rot90_nomap.json",
+   "naive_structure_admits": true,
+   "gate_exit": 1,
+   "broken_real_cells_fixed": 740,
+   "compression_if_true": 3.657,
+   "gate_saved_this_merge": true,
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 740
+  },
+  {
+   "case": "mini2048",
+   "group": "g3_flip_map.json",
+   "naive_structure_admits": true,
+   "gate_exit": 1,
+   "broken_real_cells_fixed": 130,
+   "compression_if_true": 1.882,
+   "gate_saved_this_merge": true,
+   "gate_caliber": "explicit",
+   "broken_by_gate_caliber": 0
+  },
+  {
+   "case": "mini2048",
+   "group": "g4_d4_full.json",
+   "naive_structure_admits": true,
+   "gate_exit": 1,
+   "broken_real_cells_fixed": 1480,
+   "compression_if_true": 4.655,
+   "gate_saved_this_merge": true,
+   "gate_caliber": "explicit",
+   "broken_by_gate_caliber": 1240
+  },
+  {
+   "case": "mini2048",
+   "group": "g5_row_mirror_fake.json",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "broken_real_cells_fixed": 190,
+   "compression_if_true": 1.6,
+   "gate_saved_this_merge": false,
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 190
+  },
+  {
+   "case": "mini2048",
+   "group": "g6_pads.json",
+   "naive_structure_admits": true,
+   "gate_exit": 0,
+   "broken_real_cells_fixed": 0,
+   "compression_if_true": 1.004,
+   "gate_saved_this_merge": false,
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 0
+  },
+  {
+   "case": "raft-etcd",
+   "group": "g1_claim_cand_precand_swap_fixed.json",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "broken_real_cells_fixed": 8,
+   "compression_if_true": 1.333,
+   "gate_saved_this_merge": false,
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 8
+  },
+  {
+   "case": "raft-etcd",
+   "group": "g2_control_follower_leader_swap_fixed.json",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "broken_real_cells_fixed": 25,
+   "compression_if_true": 1.333,
+   "gate_saved_this_merge": false,
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 25
+  },
+  {
+   "case": "raft-etcd",
+   "group": "g3_claim_twin_cand_precand_swap_relabel.json",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "broken_real_cells_fixed": 8,
+   "compression_if_true": 1.333,
+   "gate_saved_this_merge": false,
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 8
   },
   {
    "case": "tcp",
@@ -80,7 +260,9 @@
    "gate_exit": 1,
    "broken_real_cells_fixed": 13,
    "compression_if_true": 1.067,
-   "gate_saved_this_merge": false
+   "gate_saved_this_merge": false,
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 13
   },
   {
    "case": "tcp",
@@ -89,7 +271,9 @@
    "gate_exit": 1,
    "broken_real_cells_fixed": 15,
    "compression_if_true": 1.067,
-   "gate_saved_this_merge": false
+   "gate_saved_this_merge": false,
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 15
   },
   {
    "case": "tcp",
@@ -98,7 +282,9 @@
    "gate_exit": 0,
    "broken_real_cells_fixed": 0,
    "compression_if_true": 1.067,
-   "gate_saved_this_merge": false
+   "gate_saved_this_merge": false,
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 0
   },
   {
    "case": "tcp",
@@ -107,7 +293,75 @@
    "gate_exit": 1,
    "broken_real_cells_fixed": 6,
    "compression_if_true": 1.067,
-   "gate_saved_this_merge": true
+   "gate_saved_this_merge": true,
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 6
+  },
+  {
+   "case": "tls13-handshake",
+   "group": "g1_claim_waitcert_waitcv_swap_fixed.json",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "broken_real_cells_fixed": 6,
+   "compression_if_true": 1.032,
+   "gate_saved_this_merge": false,
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 6
+  },
+  {
+   "case": "tls13-handshake",
+   "group": "g2_control_crossside_waitcert_swap_fixed.json",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "broken_real_cells_fixed": 8,
+   "compression_if_true": 1.032,
+   "gate_saved_this_merge": false,
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 8
+  },
+  {
+   "case": "tls13-handshake",
+   "group": "g3_pads_swap_fixed.json",
+   "naive_structure_admits": true,
+   "gate_exit": 0,
+   "broken_real_cells_fixed": 0,
+   "compression_if_true": 1.032,
+   "gate_saved_this_merge": false,
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 0
+  },
+  {
+   "case": "usb2-device-states",
+   "group": "g1_claim_default_address_swap_fixed.json",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "broken_real_cells_fixed": 6,
+   "compression_if_true": 1.143,
+   "gate_saved_this_merge": false,
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 6
+  },
+  {
+   "case": "usb2-device-states",
+   "group": "g2_control_attached_configured_swap_fixed.json",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "broken_real_cells_fixed": 9,
+   "compression_if_true": 1.143,
+   "gate_saved_this_merge": false,
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 9
+  },
+  {
+   "case": "usb2-device-states",
+   "group": "g3_pads_swap_fixed.json",
+   "naive_structure_admits": true,
+   "gate_exit": 0,
+   "broken_real_cells_fixed": 0,
+   "compression_if_true": 1.143,
+   "gate_saved_this_merge": false,
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 0
   }
  ]
 }

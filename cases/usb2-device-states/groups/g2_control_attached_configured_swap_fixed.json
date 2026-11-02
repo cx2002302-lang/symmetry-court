@@ -1,0 +1,34 @@
+{
+ "n_states": 8,
+ "elements": [
+  [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  [
+   4,
+   1,
+   2,
+   3,
+   0,
+   5,
+   6,
+   7
+  ]
+ ],
+ "semantics": {
+  "action": "fixed"
+ },
+ "meta": {
+  "claim": "对照主张：Attached（仅贴上未供电）与 Configured（主机可用）为枚举路径两端点，若主张'端点态等价'则此对换应保持行为；两态结构差异最大（Attached 仅 1 出边 vs Configured 2 出边），判别交工具/基准。",
+  "construction": "order-2 对换：Attached(0) <-> Configured(4)",
+  "dossier_ref": "dossier/selection.json case-05-usb2-device-states（对照组）",
+  "semantics_note": "总线/主机侧事件 -> fixed"
+ }
+}

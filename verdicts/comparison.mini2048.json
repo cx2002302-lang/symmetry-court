@@ -1,0 +1,135 @@
+{
+ "case": "mini2048",
+ "provenance": {
+  "gate": "vendored wuxing_gua check, caliber per group declaration (compare v2): groups declaring semantics.action=explicit with a valid action_map run as declared (no --strict); groups declaring fixed or no declaration run --strict (live run)",
+  "naive_arm": "structure-only edge-set invariance proxy (see module docstring)",
+  "damage": "cell-by-cell ledger over model trans, same caliber as the gate arm per group (explicit groups: events renamed per the declared action_map; others: event names pinned); fixed-caliber damage kept per row in broken_real_cells_fixed for contrast"
+ },
+ "summary": {
+  "case": "mini2048",
+  "n_states": 256,
+  "n_actions": 4,
+  "n_groups": 6,
+  "naive_admits": 5,
+  "naive_harmful_admits": 4,
+  "naive_broken_real_cells": 2480,
+  "gate_admits": 1,
+  "gate_admitted_broken_cells": 0,
+  "gate_saved_merges": 4,
+  "gate_explicit_groups": 3,
+  "gate_total_seconds_rounded": 1.2
+ },
+ "rows": [
+  {
+   "group": "g1_rot90_map.json",
+   "claim": "defendant A: rotating the board 90 degrees clockwise and renaming the direction keys with it (up->right->down->left->up) preserves the game exactly -- the direction keys are bound to board coordinates, so the true symmetry carries its own key renaming; declared under the explicit caliber with the rot90 generator's action map",
+   "naive_structure_admits": true,
+   "gate_exit": 1,
+   "gate_verdict": "reject",
+   "gate_admits": false,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 740,
+   "real_cells": 1024,
+   "would_be_orbits_if_merged": 70,
+   "compression_if_true": 3.657,
+   "gate_saved_this_merge": true,
+   "gate_strict": false,
+   "damage_caliber": "explicit",
+   "declared_action_map": [
+    1,
+    2,
+    3,
+    0
+   ],
+   "broken_real_cells_declared": 500
+  },
+  {
+   "group": "g2_rot90_nomap.json",
+   "claim": "defendant B: the same 90-degree rotation with the direction keys PINNED (up must stay up) -- the naive-intuition claim that 'the board looks the same rotated', filed deliberately under the fixed caliber to show it is the key renaming, not the state permutation, that makes defendant A true",
+   "naive_structure_admits": true,
+   "gate_exit": 1,
+   "gate_verdict": "reject",
+   "gate_admits": false,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 740,
+   "real_cells": 1024,
+   "would_be_orbits_if_merged": 70,
+   "compression_if_true": 3.657,
+   "gate_saved_this_merge": true
+  },
+  {
+   "group": "g3_flip_map.json",
+   "claim": "defendant C: mirroring the board top-bottom and swapping the vertical keys with it (up<->down, left/right unchanged) preserves the game -- the second generator of the 8-element board group, declared explicit with its derived action map",
+   "naive_structure_admits": true,
+   "gate_exit": 1,
+   "gate_verdict": "reject",
+   "gate_admits": false,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 130,
+   "real_cells": 1024,
+   "would_be_orbits_if_merged": 136,
+   "compression_if_true": 1.882,
+   "gate_saved_this_merge": true,
+   "gate_strict": false,
+   "damage_caliber": "explicit",
+   "declared_action_map": [
+    2,
+    1,
+    0,
+    3
+   ],
+   "broken_real_cells_declared": 0
+  },
+  {
+   "group": "g4_d4_full.json",
+   "claim": "defendant D: the FULL 8-element board symmetry group D4 (identity, three rotations, four reflections), each element carrying its own direction-key renaming -- the complete non-trivial positive control; if admitted, the compression reading is the orbit count",
+   "naive_structure_admits": true,
+   "gate_exit": 1,
+   "gate_verdict": "reject",
+   "gate_admits": false,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 1480,
+   "real_cells": 1024,
+   "would_be_orbits_if_merged": 55,
+   "compression_if_true": 4.655,
+   "gate_saved_this_merge": true,
+   "gate_strict": false,
+   "damage_caliber": "explicit",
+   "declared_action_map": [
+    1,
+    2,
+    3,
+    0
+   ],
+   "broken_real_cells_declared": 1240
+  },
+  {
+   "group": "g5_row_mirror_fake.json",
+   "claim": "control: mirror the top row only (cells 0<->1 swap, bottom row untouched) -- the board looks locally mirror-symmetric but this map moves one cell pair off the square's symmetry group; filed under fixed and expected to be refused",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "gate_verdict": "reject",
+   "gate_admits": false,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 190,
+   "real_cells": 1024,
+   "would_be_orbits_if_merged": 160,
+   "compression_if_true": 1.6,
+   "gate_saved_this_merge": false
+  },
+  {
+   "group": "g6_pads.json",
+   "claim": "positive control: padding states 3 and 11 have byte-identical rows (every action self-loops, reward 0), so the swap is a genuine symmetry under the pinned-key reading and should be admitted everywhere",
+   "naive_structure_admits": true,
+   "gate_exit": 0,
+   "gate_verdict": "pass",
+   "gate_admits": true,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 0,
+   "real_cells": 1024,
+   "would_be_orbits_if_merged": 255,
+   "compression_if_true": 1.004,
+   "gate_saved_this_merge": false
+  }
+ ]
+}

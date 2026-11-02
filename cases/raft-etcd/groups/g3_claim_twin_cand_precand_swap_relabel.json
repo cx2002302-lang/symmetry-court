@@ -1,0 +1,26 @@
+{
+ "n_states": 4,
+ "elements": [
+  [
+   0,
+   1,
+   2,
+   3
+  ],
+  [
+   0,
+   3,
+   2,
+   1
+  ]
+ ],
+ "semantics": {
+  "action": "relabel"
+ },
+ "meta": {
+  "claim": "与 g1_claim 同一置换、不同语义声明（relabel：事件名可随状态换名）。两文件读数差 = 工具判据分派（strict vs generalized）对陌生人系统的可见行为，由 W3 独立基准与 W4 盲跑对照裁决，本文件不预判胜负。",
+  "construction": "order-2 对换：Candidate(1) <-> PreCandidate(3)；semantics=relabel",
+  "dossier_ref": "dossier/selection.json case-01-raft-etcd（语义分派对照）",
+  "semantics_note": "刻意反口径声明（事件类系统本应 fixed），用于暴露判据分派差异"
+ }
+}

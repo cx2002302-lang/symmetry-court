@@ -1,0 +1,453 @@
+{
+ "case": "usb2-device-states",
+ "generated_utc": "2026-11-02T18:16:02Z",
+ "tools": {
+  "engine": {
+   "name": "wuxing_gua",
+   "version": "wuxing_gua 1.0.0",
+   "location": "vendored/wuxing_gua",
+   "provenance": "pinned source revision + sha256 manifest in NOTICE",
+   "invocation": "python -X utf8 -m wuxing_gua check --trans <model> --group <group> [--strict]; cwd=vendored/; PYTHONDONTWRITEBYTECODE=1"
+  },
+  "networkx": "3.6.1",
+  "python": "3.12.10"
+ },
+ "model": {
+  "path": "cases\\usb2-device-states\\model.json",
+  "n_bits": 3,
+  "n_states": 8,
+  "n_actions": 8,
+  "source_system": "USB 2.0 Specification Chapter 9 device visible state machine (Figure 9-1 / Table 9-1), transcribed by field-trial W2 from the official USB-IF package",
+  "source_citation": [
+   "Universal Serial Bus Specification Revision 2.0（USB-IF 官方包 usb_20_20250603.zip -> usb_20_20240927/usb_20.pdf;",
+   " W1 快照 dossier/sources/usb20/；来源页 https://www.usb.org/document-library/usb-20-specification）：",
+   "  - §9.1 USB Device States（doc p.239）",
+   "  - §9.1.1 Visible Device States（doc p.239）+ §9.1.1 note（reset signaling 句）",
+   "  - Figure 9-1 Device State Diagram（doc p.240 = PDF p.268；W2 本会话 pdftotext -layout + PyMuPDF 渲染 PNG 逐箭头目视核验）",
+   "  - Table 9-1 Visible Device States（doc p.240-241；6 态 Yes/No/-- 矩阵 + '-- Other attributes are not significant'）",
+   "  - §9.1.1.1 Attached / §9.1.1.2 Powered（VBUS applied 句、power source change 回落句）/ §9.1.1.3 Default（reset 句）/",
+   "    §9.1.1.4 Address（unique address 句）/ §9.1.1.5 Configured（SetConfiguration() non-zero 句）/ §9.1.1.6 Suspended（bus inactivity 句、",
+   "    bus activity 恢复句、selective suspend 句）（doc p.241-242）",
+   "  - 本地快照全文 usb_20_spec.txt（W1 pdftotext 抽取，30360 行；W2 复用并 -layout 重抽 §9.1 区域）"
+  ]
+ },
+ "groups": {
+  "g1_claim_default_address_swap_fixed": {
+   "group_file": "groups/g1_claim_default_address_swap_fixed.json",
+   "declared_semantics": {
+    "action": "fixed"
+   },
+   "claim": "同一设备的枚举路径 Attached -> Powered -> Default -> Address -> Configured 与所插端口、所分配地址值无关：任意可工作端口热插拔都走同一状态序列；主机按描述符（而非端口/地址实例）识别绑定设备，相同描述符的设备实例对主机等价。（W1 dossier case-05 symmetric_claim 原文） 状态级类比（被告主张）：Default（已复位未编址）与 Address（已编址未配置）两个枚举中间态等价可互换——若'地址值只是载荷、路径与端口无关'则此对换应保持行为；两态的入边事件不同（reset vs address_assigned），裁决交工具/基准。",
+   "order_engine_reported": 2,
+   "relabel": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "generalized",
+    "error": null,
+    "reason": "转移等变层失败：max TV=inf（含非位置置换元素） > tol=1e-09（1/2 个受检元素不过）；奖励剖面层失败：同轨道剖面不同 1/1 对（判据 n_bad=0 零容忍）",
+    "semantics": {
+     "action": "relabel",
+     "judge": "generalized",
+     "declared": true,
+     "assumed": false,
+     "source": "group_file"
+    },
+    "command": [
+     "python",
+     "-X",
+     "utf8",
+     "-m",
+     "wuxing_gua",
+     "check",
+     "--trans",
+     "cases\\usb2-device-states\\model.json",
+     "--group",
+     "<court_tmp>\\g1_claim_default_address_swap_fixed.relabel.json"
+    ],
+    "stderr_tail": "",
+    "frame": "relabel",
+    "stamp_note": "court-stamped relabel copy used (original declaration: 'fixed')"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict",
+    "error": null,
+    "reason": "转移等变层失败：max TV=1 > tol=1e-09（1/2 个受检元素不过）；奖励剖面层失败：同轨道剖面不同 1/1 对（判据 n_bad=0 零容忍）",
+    "semantics": {
+     "action": "fixed",
+     "judge": "strict",
+     "declared": true,
+     "assumed": false,
+     "source": "flag_strict"
+    },
+    "command": [
+     "python",
+     "-X",
+     "utf8",
+     "-m",
+     "wuxing_gua",
+     "check",
+     "--trans",
+     "cases\\usb2-device-states\\model.json",
+     "--group",
+     "cases\\usb2-device-states\\groups\\g1_claim_default_address_swap_fixed.json",
+     "--strict"
+    ],
+    "stderr_tail": "",
+    "frame": "fixed",
+    "stamp_note": "original group file, --strict flag (fixed frame)"
+   },
+   "networkx": {
+    "structure_symmetry": false,
+    "labeled_symmetry": false,
+    "n_elements": 2,
+    "n_unique_elements": 2,
+    "n_nontrivial": 1,
+    "per_element": [
+     {
+      "element": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7
+      ],
+      "is_identity": true,
+      "structural": true,
+      "labeled": true,
+      "nx_vf2_membership_structural": true,
+      "nx_vf2_membership_labeled": true
+     },
+     {
+      "element": [
+       0,
+       1,
+       3,
+       2,
+       4,
+       5,
+       6,
+       7
+      ],
+      "is_identity": false,
+      "structural": false,
+      "labeled": false,
+      "nx_vf2_membership_structural": false,
+      "nx_vf2_membership_labeled": false
+     }
+    ],
+    "per_element_truncated": false,
+    "method": "primary=direct edge-set check (O(E), hand-checkable); cross-check=networkx VF2 automorphism-set membership (independent implementation)",
+    "method_conflicts": [],
+    "crosscheck_status": "ok",
+    "scope": "full model (all n_states=8, padding included)",
+    "n_autos_structure": 2,
+    "n_autos_labeled": 2,
+    "autos_truncated": false,
+    "autos_skipped_reason": null,
+    "structural_pad_states": [
+     6,
+     7
+    ],
+    "n_autos_structure_nonpad": 1,
+    "n_autos_labeled_nonpad": 1,
+    "autos_nonpad_scope": "subgraph over the 6 non-pad states (structural pads excluded; a pad state = every action single self-loop successor with r=0, the same rule the engine's pad-aware mode uses)"
+   },
+   "consistency": {
+    "relabel_vs_structure": "agree",
+    "fixed_vs_labeled": "agree",
+    "arms_differ": false,
+    "ruling_code": "agree",
+    "ruling": "all columns agree: engine (both standards) and networkx (both scopes) say 'reject' for this group",
+    "binding_verdict": "reject"
+   }
+  },
+  "g2_control_attached_configured_swap_fixed": {
+   "group_file": "groups/g2_control_attached_configured_swap_fixed.json",
+   "declared_semantics": {
+    "action": "fixed"
+   },
+   "claim": "对照主张：Attached（仅贴上未供电）与 Configured（主机可用）为枚举路径两端点，若主张'端点态等价'则此对换应保持行为；两态结构差异最大（Attached 仅 1 出边 vs Configured 2 出边），判别交工具/基准。",
+   "order_engine_reported": 2,
+   "relabel": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "generalized",
+    "error": null,
+    "reason": "转移等变层失败：max TV=inf（含非位置置换元素） > tol=1e-09（1/2 个受检元素不过）；奖励剖面层失败：同轨道剖面不同 1/1 对（判据 n_bad=0 零容忍）",
+    "semantics": {
+     "action": "relabel",
+     "judge": "generalized",
+     "declared": true,
+     "assumed": false,
+     "source": "group_file"
+    },
+    "command": [
+     "python",
+     "-X",
+     "utf8",
+     "-m",
+     "wuxing_gua",
+     "check",
+     "--trans",
+     "cases\\usb2-device-states\\model.json",
+     "--group",
+     "<court_tmp>\\g2_control_attached_configured_swap_fixed.relabel.json"
+    ],
+    "stderr_tail": "",
+    "frame": "relabel",
+    "stamp_note": "court-stamped relabel copy used (original declaration: 'fixed')"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict",
+    "error": null,
+    "reason": "转移等变层失败：max TV=1 > tol=1e-09（1/2 个受检元素不过）；奖励剖面层失败：同轨道剖面不同 1/1 对（判据 n_bad=0 零容忍）",
+    "semantics": {
+     "action": "fixed",
+     "judge": "strict",
+     "declared": true,
+     "assumed": false,
+     "source": "flag_strict"
+    },
+    "command": [
+     "python",
+     "-X",
+     "utf8",
+     "-m",
+     "wuxing_gua",
+     "check",
+     "--trans",
+     "cases\\usb2-device-states\\model.json",
+     "--group",
+     "cases\\usb2-device-states\\groups\\g2_control_attached_configured_swap_fixed.json",
+     "--strict"
+    ],
+    "stderr_tail": "",
+    "frame": "fixed",
+    "stamp_note": "original group file, --strict flag (fixed frame)"
+   },
+   "networkx": {
+    "structure_symmetry": false,
+    "labeled_symmetry": false,
+    "n_elements": 2,
+    "n_unique_elements": 2,
+    "n_nontrivial": 1,
+    "per_element": [
+     {
+      "element": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7
+      ],
+      "is_identity": true,
+      "structural": true,
+      "labeled": true,
+      "nx_vf2_membership_structural": true,
+      "nx_vf2_membership_labeled": true
+     },
+     {
+      "element": [
+       4,
+       1,
+       2,
+       3,
+       0,
+       5,
+       6,
+       7
+      ],
+      "is_identity": false,
+      "structural": false,
+      "labeled": false,
+      "nx_vf2_membership_structural": false,
+      "nx_vf2_membership_labeled": false
+     }
+    ],
+    "per_element_truncated": false,
+    "method": "primary=direct edge-set check (O(E), hand-checkable); cross-check=networkx VF2 automorphism-set membership (independent implementation)",
+    "method_conflicts": [],
+    "crosscheck_status": "ok",
+    "scope": "full model (all n_states=8, padding included)",
+    "n_autos_structure": 2,
+    "n_autos_labeled": 2,
+    "autos_truncated": false,
+    "autos_skipped_reason": null,
+    "structural_pad_states": [
+     6,
+     7
+    ],
+    "n_autos_structure_nonpad": 1,
+    "n_autos_labeled_nonpad": 1,
+    "autos_nonpad_scope": "subgraph over the 6 non-pad states (structural pads excluded; a pad state = every action single self-loop successor with r=0, the same rule the engine's pad-aware mode uses)"
+   },
+   "consistency": {
+    "relabel_vs_structure": "agree",
+    "fixed_vs_labeled": "agree",
+    "arms_differ": false,
+    "ruling_code": "agree",
+    "ruling": "all columns agree: engine (both standards) and networkx (both scopes) say 'reject' for this group",
+    "binding_verdict": "reject"
+   }
+  },
+  "g3_pads_swap_fixed": {
+   "group_file": "groups/g3_pads_swap_fixed.json",
+   "declared_semantics": {
+    "action": "fixed"
+   },
+   "claim": "正控对照：填充哑态 filler_6/filler_7 行完全相同（全事件自环 0.0、不引用真实事件语义），对换在 fixed 口径下是真对称；检验工具对平凡真对称的放行（rung 1c pads 惯例）。",
+   "order_engine_reported": 2,
+   "relabel": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "generalized",
+    "error": null,
+    "reason": "两层判据均通过：转移等变（max TV=0.00e+00 ≤ tol=1e-09）+ 奖励剖面（n_bad=0）",
+    "semantics": {
+     "action": "relabel",
+     "judge": "generalized",
+     "declared": true,
+     "assumed": false,
+     "source": "group_file"
+    },
+    "command": [
+     "python",
+     "-X",
+     "utf8",
+     "-m",
+     "wuxing_gua",
+     "check",
+     "--trans",
+     "cases\\usb2-device-states\\model.json",
+     "--group",
+     "<court_tmp>\\g3_pads_swap_fixed.relabel.json"
+    ],
+    "stderr_tail": "",
+    "frame": "relabel",
+    "stamp_note": "court-stamped relabel copy used (original declaration: 'fixed')"
+   },
+   "fixed": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "strict",
+    "error": null,
+    "reason": "两层判据均通过：转移等变（max TV=0.00e+00 ≤ tol=1e-09）+ 奖励剖面（n_bad=0）",
+    "semantics": {
+     "action": "fixed",
+     "judge": "strict",
+     "declared": true,
+     "assumed": false,
+     "source": "flag_strict"
+    },
+    "command": [
+     "python",
+     "-X",
+     "utf8",
+     "-m",
+     "wuxing_gua",
+     "check",
+     "--trans",
+     "cases\\usb2-device-states\\model.json",
+     "--group",
+     "cases\\usb2-device-states\\groups\\g3_pads_swap_fixed.json",
+     "--strict"
+    ],
+    "stderr_tail": "",
+    "frame": "fixed",
+    "stamp_note": "original group file, --strict flag (fixed frame)"
+   },
+   "networkx": {
+    "structure_symmetry": true,
+    "labeled_symmetry": true,
+    "n_elements": 2,
+    "n_unique_elements": 2,
+    "n_nontrivial": 1,
+    "per_element": [
+     {
+      "element": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7
+      ],
+      "is_identity": true,
+      "structural": true,
+      "labeled": true,
+      "nx_vf2_membership_structural": true,
+      "nx_vf2_membership_labeled": true
+     },
+     {
+      "element": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       7,
+       6
+      ],
+      "is_identity": false,
+      "structural": true,
+      "labeled": true,
+      "nx_vf2_membership_structural": true,
+      "nx_vf2_membership_labeled": true
+     }
+    ],
+    "per_element_truncated": false,
+    "method": "primary=direct edge-set check (O(E), hand-checkable); cross-check=networkx VF2 automorphism-set membership (independent implementation)",
+    "method_conflicts": [],
+    "crosscheck_status": "ok",
+    "scope": "full model (all n_states=8, padding included)",
+    "n_autos_structure": 2,
+    "n_autos_labeled": 2,
+    "autos_truncated": false,
+    "autos_skipped_reason": null,
+    "structural_pad_states": [
+     6,
+     7
+    ],
+    "n_autos_structure_nonpad": 1,
+    "n_autos_labeled_nonpad": 1,
+    "autos_nonpad_scope": "subgraph over the 6 non-pad states (structural pads excluded; a pad state = every action single self-loop successor with r=0, the same rule the engine's pad-aware mode uses)"
+   },
+   "consistency": {
+    "relabel_vs_structure": "agree",
+    "fixed_vs_labeled": "agree",
+    "arms_differ": false,
+    "ruling_code": "agree",
+    "ruling": "all columns agree: engine (both standards) and networkx (both scopes) say 'pass' for this group",
+    "binding_verdict": "pass"
+   }
+  }
+ },
+ "group_errors": [],
+ "rollup": {
+  "groups": 3,
+  "group_errors": 0,
+  "ruling_codes": {
+   "agree": 3
+  },
+  "all_consistent_pairs": true
+ }
+}

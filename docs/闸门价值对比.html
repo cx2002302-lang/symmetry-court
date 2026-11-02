@@ -32,7 +32,7 @@
 
 <header>
   <h1>闸门价值对比：用 vs 不用</h1>
-  <div class="tag">8 个真实系统 · 26 个合并主张 · 同一份数据跑两种决策方式（数字全部回源 comparison.*.json）</div>
+  <div class="tag">9 个真实系统 · 32 个合并主张 · 同一份数据跑两种决策方式（闸门臂按群声明分派口径 · 数字全部回源 comparison.*.json）</div>
 </header>
 
 <section>
@@ -46,10 +46,11 @@
     <text x="190" y="148" text-anchor="middle" font-size="12" fill="#55566b">结构直觉代理：边集不变性判定</text>
     <text x="190" y="168" text-anchor="middle" font-size="12" fill="#55566b">＝networkx 不带标签口径的同类做法</text>
     <rect x="560" y="60" width="300" height="120" rx="12" fill="#ecfdf5" stroke="#059669" stroke-width="2"/>
-    <text x="710" y="95" text-anchor="middle" font-size="16" font-weight="bold" fill="#065f46">用闸（闸门臂）</text>
-    <text x="710" y="122" text-anchor="middle" font-size="13" fill="#1a1a2e">check --strict 逐格对账后才放行</text>
-    <text x="710" y="148" text-anchor="middle" font-size="12" fill="#55566b">内嵌 wuxing_gua 引擎 · 事件名钉死口径</text>
-    <text x="710" y="168" text-anchor="middle" font-size="12" fill="#55566b">真群给压缩读数，假群拒答并指出错在哪</text>
+    <text x="710" y="88" text-anchor="middle" font-size="16" font-weight="bold" fill="#065f46">用闸（闸门臂）</text>
+    <text x="710" y="115" text-anchor="middle" font-size="13" fill="#1a1a2e">check 按群声明口径逐格对账后才放行</text>
+    <text x="710" y="137" text-anchor="middle" font-size="12" fill="#55566b">内嵌 wuxing_gua 引擎 · fixed 群钉死事件名（--strict）</text>
+    <text x="710" y="155" text-anchor="middle" font-size="12" fill="#55566b">explicit 群按声明映射改名事件（compare v2）</text>
+    <text x="710" y="173" text-anchor="middle" font-size="12" fill="#55566b">真群给压缩读数，假群拒答并指出错在哪</text>
     <text x="450" y="30" text-anchor="middle" font-size="15" font-weight="bold">同一批合并主张 → 两种决策 → 量代价差</text>
     <line x1="350" y1="120" x2="550" y2="120" stroke="#55566b" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#a)"/>
     <text x="450" y="110" text-anchor="middle" font-size="12" fill="#55566b">对比指标</text>
@@ -58,8 +59,8 @@
 </section>
 
 <section>
-  <h2>核心结果：朴素臂的 7 次放行里，1 次是静默破坏</h2>
-  <div class="lead">8 案 26 群。朴素臂（只看结构）共放行 <b>7</b> 次合并——其中 <b>6 次恰好安全</b>（填充态对换，压缩 1.03–1.14×），<b>1 次是陷阱</b>：TCP 孪生对（FIN-WAIT-2 ↔ CLOSING）。闸门臂全部拦对放对，总耗时约 <b>4 秒</b>量级（26 群 8 案，单机实测求和，精确值见 json）。</div>
+  <h2>核心结果：朴素臂的 12 次放行里，2 次合并会真改行为</h2>
+  <div class="lead">9 案 32 群（compare v2：闸门臂按各群声明口径对账，见下方"口径尊重"节）。朴素臂（只看结构）共放行 <b>12</b> 次合并——其中 <b>7 次恰好安全</b>（填充态对换，压缩 1.004–1.143×），<b>1 次是陷阱</b>：TCP 孪生对（FIN-WAIT-2 ↔ CLOSING，6 格）；另有 <b>4 次</b>是 2048 案按声明口径的放行，闸门全部拒答——其中 1 次拒得对（键钉死旋转，740 格），3 次拒因引擎 explicit 层的群文件单映射局限（下节详述）。闸门臂放行 <b>7</b> 次全部零破坏，总耗时约 <b>9.4 秒</b>（32 群 9 案，单机实测求和，精确值见 json）。</div>
   <svg viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg">
     <!-- TCP 放大镜 -->
     <rect x="30" y="30" width="840" height="120" rx="12" fill="#fef2f2" stroke="#dc2626" stroke-width="2"/>
@@ -71,18 +72,18 @@
     <text x="700" y="132" font-size="13" fill="#059669" font-weight="bold">用闸：exit 1 拒答（≈0.2 秒）</text>
     <!-- 汇总条 -->
     <g font-size="14">
-      <text x="60" y="196" fill="#1a1a2e" font-weight="bold">两臂总分（8 案 26 群）</text>
-      <text x="60" y="228" fill="#92400e">朴素臂：放行 7 · 有害 1 · 破坏 6 格 · 无从得知自己错了</text>
-      <text x="60" y="258" fill="#065f46">闸门臂：放行 6（全部安全，压缩照拿）· 拦下 20 · 放行群破坏格 0（判据性质）</text>
-      <text x="60" y="286" fill="#55566b" font-size="12.5">闸门成本：26 群 × check 共约 4 秒（单机量级）——一次静默错误协议实现的排查成本通常以人天计</text>
+      <text x="60" y="196" fill="#1a1a2e" font-weight="bold">两臂总分（9 案 32 群）</text>
+      <text x="60" y="228" fill="#92400e">朴素臂：放行 12 · 真破坏 2 次（TCP 孪生 6 格 + 2048 键钉死旋转 740 格）· 无从得知自己错了</text>
+      <text x="60" y="258" fill="#065f46">闸门臂：放行 7（全部安全，压缩照拿）· 拦下 25（22 次拦对 + 3 次拒于口径局限，见下节）· 放行群破坏格 0（判据性质）</text>
+      <text x="60" y="286" fill="#55566b" font-size="12.5">闸门成本：32 群 × check 共约 9 秒（单机量级，实测求和 9.4 秒）——一次静默错误协议实现的排查成本通常以人天计</text>
     </g>
   </svg>
-  <div class="ok"><b>一句话：闸门不是每次都救命——它救的正是"结构一样、事件不一样"这一类你用眼睛和结构工具都看不出的坑；其余时候它花几秒钟给你一张"压缩无害"的收据。</b></div>
+  <div class="ok"><b>一句话：闸门不是每次都救命——它救的正是"结构一样、事件不一样"这一类你用眼睛和结构工具都看不出的坑；其余时候它花几秒钟给你一张"压缩无害"的收据。（它也会误拒：mini2048 案当场抓到一次，见下节——误拒同样公开记录，不藏。）</b></div>
 </section>
 
 <section>
   <h2>逐案明细</h2>
-  <div class="lead">法庭三案（本仓 cases/，收据 verdicts/comparison.*.json）＋ 实战盲测五案（field-trial 项目案卷，同格式复跑）。</div>
+  <div class="lead">法庭三案（本仓 cases/，收据 verdicts/comparison.*.json）＋ 实战盲测五案（field-trial 项目案卷，同格式复跑）＋ 2048 候选案 mini2048（六群，explicit 口径首个真实系统样本）。</div>
   <table>
     <tr><th>案（系统）</th><th>群（主张）</th><th>朴素臂</th><th>闸门</th><th>破坏格</th><th>压缩读数(若真)</th></tr>
     <tr><td rowspan="4">tcp<br>RFC 9293</td><td>swap（孪生对）</td><td class="bad">合并 ⚠️</td><td class="good">拒答 ✓</td><td class="bad">6</td><td>—</td></tr>
@@ -111,19 +112,34 @@
     <tr><td rowspan="2">usb2<br>官方规范</td><td>default_address（主张）</td><td>不合并</td><td class="good">拒答</td><td>6</td><td>—</td></tr>
     <tr><td>attached_configured（对照）</td><td>不合并</td><td class="good">拒答</td><td>9</td><td>—</td></tr>
     <tr><td>usb·pads</td><td>pads</td><td>合并</td><td class="good">放行</td><td>0</td><td>1.143×</td></tr>
+    <tr><td rowspan="6">mini2048<br>gabrielecirulli/2048<br>2×2 确定性变体</td><td>g1 rot90+改名方向键（explicit）</td><td>合并</td><td class="good">拒答（口径局限）</td><td>500*</td><td>3.657×‡</td></tr>
+    <tr><td>g2 rot90 键钉死（fixed）</td><td>合并</td><td class="good">拒答 ✓</td><td>740</td><td>3.657×‡</td></tr>
+    <tr><td>g3 翻转+改名方向键（explicit）</td><td>合并</td><td class="good">拒答（口径局限）</td><td>0*</td><td>1.882×‡</td></tr>
+    <tr><td>g4 全 D4（explicit）</td><td>合并</td><td class="good">拒答（口径局限）</td><td>1240*</td><td>4.655×‡</td></tr>
+    <tr><td>g5 单排镜像假群（fixed 对照）</td><td>不合并</td><td class="good">拒答 ✓</td><td>190</td><td>—</td></tr>
+    <tr><td>g6 pads（填充态对换）</td><td>合并</td><td class="good">放行 ✓</td><td>0</td><td>1.004×</td></tr>
   </table>
-  <div class="note"><b>诚实声明（三条）</b>：① 朴素臂是<b>决策方式的代理</b>（"结构像就合并"），不是某个具体第三方工具——但这正是 networkx 不带标签口径的同类做法，TCP 孪生案里它确实判"可换"；② "破坏格"按事件名钉死口径逐格对账计（合并后行为会改变的 (状态×事件) 数），协议类案卷奖励全零，判定全在转移层；③ 闸门放行群破坏格恒为 0 是<b>判据的数学性质</b>（pass 要求逐格 TV≤1e-9），不是本次运行的巧合。闸门耗时为单机量级记录，精确值在 comparison.*.json。</div>
+  <div class="note"><b>诚实声明（四条）</b>：① 朴素臂是<b>决策方式的代理</b>（"结构像就合并"），不是某个具体第三方工具——但这正是 networkx 不带标签口径的同类做法，TCP 孪生案里它确实判"可换"；② "破坏格"按<b>该群声明口径</b>逐格对账计（合并后行为会改变的 (状态×事件) 数）：带 * 的行是 explicit 群按其声明映射改名事件后对账（fixed 口径对照数在 comparison.mini2048.json 的 broken_real_cells_fixed：g1=740、g3=130、g4=1480），其余行按事件名钉死口径；协议类案卷奖励全零，判定全在转移层；③ 闸门放行群破坏格恒为 0 是<b>判据的数学性质</b>（pass 要求逐格 TV≤1e-9），不是本次运行的巧合。闸门耗时为单机量级记录，精确值在 comparison.*.json；④ mini2048 的 g1/g4 对账数（500/1240）是"把 rot90 的声明映射强加给闭包群每个元素"的对账结果——群文件格式表达不了逐元素映射，照文件执行会改这么多格；而生成元配自己的映射时逐格对账为 0（rot90 元素通过引擎等变检验、g3 全群 0 格为证），详见下节。带 ‡ 的压缩读数是"上游修复翻案放行后"的轨道读数，非本次放行（mini2048 本次仅 g6 放行）。</div>
 </section>
 
 <section>
   <h2>怎么复跑</h2>
-  <div class="lead">compare 已是法庭正式子命令（纯标准库）：</div>
-  <pre style="background:#0f172a;color:#e2e8f0;border-radius:10px;padding:16px 18px;font-size:13.5px;overflow-x:auto;"># 法庭自有三案
+  <div class="lead">compare 已是法庭正式子命令（纯标准库；v2 起按群声明分派口径：explicit 群原样跑、fixed/无声明群 --strict）：</div>
+  <pre style="background:#0f172a;color:#e2e8f0;border-radius:10px;padding:16px 18px;font-size:13.5px;overflow-x:auto;"># 法庭自有九案（含 mini2048 与收编五案）
 python -X utf8 -m symmetry_court compare
 
-# 任意同格式案卷集（例：实战盲测五案）
+# 任意同格式案卷集（例：实战盲测五案的原始目录）
 python -X utf8 -m symmetry_court compare --root &lt;cases目录&gt; --out &lt;输出目录&gt;</pre>
   <div class="lead" style="margin-top:10px">退出码 0 = 对比完成且「放行群零破坏、拒答群全部有据」一致性成立。逐案收据：<code>verdicts/comparison.&lt;case&gt;.json</code>；汇总：<code>verdicts/comparison.summary.json</code>。</div>
+</section>
+
+<section>
+  <h2>2048 正控尝试击穿 explicit 口径的群文件单映射局限</h2>
+  <div class="lead">新增 <code>mini2048</code> 案（2048 合并机制 2×2 确定性变体：256 态 = 81 真态 + 175 补位、4 方向键，6 群）后重跑 compare：台账现为 <b>9 案 32 群</b>，朴素臂放行 <b>12</b>（闸门拒答其中 5：TCP 孪生对 + mini2048 的 g1/g2/g3/g4），闸门放行 <b>7</b>（放行群破坏格 0，判据性质），一致性 PASS。总耗时约 <b>9.4 秒</b>（32 群单机实测求和，精确值见 <code>verdicts/comparison.summary.json</code>）。<b>8 旧案收据数值零漂移</b>（剥离计时/环境字段后逐字段核对：唯一差异 = compare v2 新增 <code>gate_explicit_groups</code> 字段；本页更新时独立复核确认）。</div>
+  <div class="lead" style="margin-top:8px"><b>compare v2 的口径尊重</b>：旧版闸门臂无条件 <code>--strict</code>，对 explicit 声明群是错误覆盖。v2 改为按群声明分派：声明 explicit（含合法 action_map）→ 不加 <code>--strict</code> 原样跑，损害台账按其声明映射改名事件后对账（上表带 * 行）；声明 fixed 或无声明 → 维持 <code>--strict</code>。声明口径下放行 = 逐格零误差，放行群破坏格 0 依旧是判据性质。</div>
+  <div class="lead" style="margin-top:8px"><b>为什么 2048 的 D4 是真对称</b>：棋盘转 90° 后按"改了名的方向键"玩，游戏一毫不差——状态置换 π 与方向键改名 ρ(π) 一一配对，π ↦ ρ(π) 满足群同态律。8 个 (π, ρ(π)) 配对由案卷生成器在 24 个动作双射中穷举推导并机器断言（唯一性 + 同态律，每次 <code>make --check</code> 重验）。这是 explicit 口径的第一个真实系统样本，也是"放行方向"的第一个非平凡真对称<b>候选</b>案卷。</div>
+  <div class="lead" style="margin-top:8px"><b>工具层为什么拒它</b>：vendored 判官的 explicit 层把<b>一个</b>声明的 <code>action_map</code> 用于闭包群<b>每一个</b>元素——含恒等元。恒等元在 ρ≠id 时必挂（<code>dist(s,a) = dist(s, ρ(a))</code> 对所有 s,a 成立强制 ρ = 恒等），而闭包必含恒等元，所以任何非平凡"动作改名"对称在工具层结构性不可能放行。实测指纹（收据 <code>cases/mini2048/receipts/</code>，引擎不带 --strict）：g1 拒于恒等元（3/4 元素不过，唯一通过者恰是 rot90 本身）、g3 拒于恒等元（1/2）、g4 拒于恒等元（7/8）；恒等元对照实验双向互证——同一群文件把声明映射换成恒等后 first_bad 变为 rot90，排除"映射选错了"。同模型 g6_pads 照常放行（排除模型坏损），g2（键钉死，740 格）/g5（假群）照常拒答（判官对真该拒的照样拒）。<b>g3 的声明口径逐格对账 = 0 破坏仍被拒</b>，是这条局限最干净的单点证据。</div>
+  <div class="lead" style="margin-top:8px"><b>翻案钩子（第 37 波）</b>：修复归上游 wuxing-gua（逐元素 action_maps，或由生成元映射按同态律 ρ(gh)=ρ(g)∘ρ(h) 推导并验证）；修复后 g1/g3/g4 预期翻案放行——g4 全 D4 的压缩读数 <b>4.655×</b>（55 轨道）、g1/g2（C4）<b>3.657×</b>、g3 <b>1.882×</b>——g2/g5 维持拒答、g6 维持放行。届时上表三行"拒答（口径局限）"改"放行 ✓"、本节改一句即可。定性、诊断与 8 元素映射表：<code>cases/mini2048/README.md</code>（双语）；法庭判决：<code>verdicts/mini2048.verdict.json</code>。</div>
 </section>
 
 <footer>

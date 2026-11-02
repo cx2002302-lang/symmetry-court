@@ -1,0 +1,447 @@
+{
+ "case": "hadoop-mr-task",
+ "generated_utc": "2026-11-02T18:13:15Z",
+ "tools": {
+  "engine": {
+   "name": "wuxing_gua",
+   "version": "wuxing_gua 1.0.0",
+   "location": "vendored/wuxing_gua",
+   "provenance": "pinned source revision + sha256 manifest in NOTICE",
+   "invocation": "python -X utf8 -m wuxing_gua check --trans <model> --group <group> [--strict]; cwd=vendored/; PYTHONDONTWRITEBYTECODE=1"
+  },
+  "networkx": "3.6.1",
+  "python": "3.12.10"
+ },
+ "model": {
+  "path": "cases\\hadoop-mr-task\\model.json",
+  "n_bits": 3,
+  "n_states": 8,
+  "n_actions": 9,
+  "source_system": "apache/hadoop MRv2 TaskImpl declarative state machine (TaskStateInternal), transcribed by field-trial W2 from pinned public source",
+  "source_citation": [
+   "apache/hadoop trunk @ e66f40daf3cc4ebbb5164cec1ce54b71eddec8a4（git ls-remote refs/heads/trunk, 2026-10-31）：",
+   "  - hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/main/java/org/apache/hadoop/mapreduce/v2/app/job/TaskStateInternal.java:19-23（7 值枚举, line 22）",
+   "  - .../job/event/TaskEventType.java:24-41（9 事件: T_KILL:27, T_SCHEDULE:30, T_RECOVER:31, T_ADD_SPEC_ATTEMPT:34, T_ATTEMPT_LAUNCHED:37, T_ATTEMPT_COMMIT_PENDING:38, T_ATTEMPT_FAILED:39, T_ATTEMPT_SUCCEEDED:40, T_ATTEMPT_KILLED:41）",
+   "  - .../job/impl/TaskImpl.java:154-273 stateMachineFactory（24 个 addTransition 行: 163,165,167,176,178,180,182,188,190,193,195,198,201,205,209,213,217,222,231,234,237,241,249,266）",
+   "  - hadoop-yarn-project/hadoop-yarn/hadoop-yarn-common/src/main/java/org/apache/hadoop/yarn/state/StateMachineFactory.java:305（未注册 (态,事件) 抛 InvalidStateTransitionException）",
+   "  - 本地留档 _scratch/sources/hadoop/（jsdelivr CDN 抓取，trunk SHA 经 git ls-remote 核对）",
+   "论文（仅作主张来源）: Dean & Ghemawat, MapReduce, OSDI'04, §3.3/§3.6（W1 快照 dossier/sources/mapreduce-osdi04.pdf）"
+  ]
+ },
+ "groups": {
+  "g1_claim_failed_killed_swap_fixed": {
+   "group_file": "groups/g1_claim_failed_killed_swap_fixed.json",
+   "declared_semantics": {
+    "action": "fixed"
+   },
+   "claim": "相同输入分片的 map/reduce 任务在任意 worker 上（重）执行结果等价——primary 与 backup 执行可互换，任一次成功即算完成；任务失败后可在任何其他 worker 上重跑顶替。（W1 dossier case-02 symmetric_claim 原文） 终态级类比（被告主张）：FAILED 与 KILLED 都是任务终局，若'失败与被杀对任务等价、重跑顶替语义相同'成立，则此对换应保持系统行为；两态的注册事件集不同（FAILED 7 个 vs KILLED 4 个）且前驱事件不同，裁决交给工具与独立基准。",
+   "order_engine_reported": 2,
+   "relabel": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 0.75,
+    "judge": "generalized",
+    "error": null,
+    "reason": "转移等变层失败：max TV=0.75 > tol=1e-09（1/2 个受检元素不过）；奖励剖面层失败：同轨道剖面不同 1/1 对（判据 n_bad=0 零容忍）",
+    "semantics": {
+     "action": "relabel",
+     "judge": "generalized",
+     "declared": true,
+     "assumed": false,
+     "source": "group_file"
+    },
+    "command": [
+     "python",
+     "-X",
+     "utf8",
+     "-m",
+     "wuxing_gua",
+     "check",
+     "--trans",
+     "cases\\hadoop-mr-task\\model.json",
+     "--group",
+     "<court_tmp>\\g1_claim_failed_killed_swap_fixed.relabel.json"
+    ],
+    "stderr_tail": "",
+    "frame": "relabel",
+    "stamp_note": "court-stamped relabel copy used (original declaration: 'fixed')"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict",
+    "error": null,
+    "reason": "转移等变层失败：max TV=1 > tol=1e-09（1/2 个受检元素不过）；奖励剖面层失败：同轨道剖面不同 1/1 对（判据 n_bad=0 零容忍）",
+    "semantics": {
+     "action": "fixed",
+     "judge": "strict",
+     "declared": true,
+     "assumed": false,
+     "source": "flag_strict"
+    },
+    "command": [
+     "python",
+     "-X",
+     "utf8",
+     "-m",
+     "wuxing_gua",
+     "check",
+     "--trans",
+     "cases\\hadoop-mr-task\\model.json",
+     "--group",
+     "cases\\hadoop-mr-task\\groups\\g1_claim_failed_killed_swap_fixed.json",
+     "--strict"
+    ],
+    "stderr_tail": "",
+    "frame": "fixed",
+    "stamp_note": "original group file, --strict flag (fixed frame)"
+   },
+   "networkx": {
+    "structure_symmetry": false,
+    "labeled_symmetry": false,
+    "n_elements": 2,
+    "n_unique_elements": 2,
+    "n_nontrivial": 1,
+    "per_element": [
+     {
+      "element": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7
+      ],
+      "is_identity": true,
+      "structural": true,
+      "labeled": true,
+      "nx_vf2_membership_structural": true,
+      "nx_vf2_membership_labeled": true
+     },
+     {
+      "element": [
+       0,
+       1,
+       2,
+       3,
+       6,
+       5,
+       4,
+       7
+      ],
+      "is_identity": false,
+      "structural": false,
+      "labeled": false,
+      "nx_vf2_membership_structural": false,
+      "nx_vf2_membership_labeled": false
+     }
+    ],
+    "per_element_truncated": false,
+    "method": "primary=direct edge-set check (O(E), hand-checkable); cross-check=networkx VF2 automorphism-set membership (independent implementation)",
+    "method_conflicts": [],
+    "crosscheck_status": "ok",
+    "scope": "full model (all n_states=8, padding included)",
+    "n_autos_structure": 1,
+    "n_autos_labeled": 1,
+    "autos_truncated": false,
+    "autos_skipped_reason": null,
+    "structural_pad_states": [
+     7
+    ],
+    "n_autos_structure_nonpad": 1,
+    "n_autos_labeled_nonpad": 1,
+    "autos_nonpad_scope": "subgraph over the 7 non-pad states (structural pads excluded; a pad state = every action single self-loop successor with r=0, the same rule the engine's pad-aware mode uses)"
+   },
+   "consistency": {
+    "relabel_vs_structure": "agree",
+    "fixed_vs_labeled": "agree",
+    "arms_differ": false,
+    "ruling_code": "agree",
+    "ruling": "all columns agree: engine (both standards) and networkx (both scopes) say 'reject' for this group",
+    "binding_verdict": "reject"
+   }
+  },
+  "g2_control_new_scheduled_swap_fixed": {
+   "group_file": "groups/g2_control_new_scheduled_swap_fixed.json",
+   "declared_semantics": {
+    "action": "fixed"
+   },
+   "claim": "对照主张：NEW（已创建未调度）与 SCHEDULED（已调度待 launch）是流水线相邻阶段，若主张'调度前后等价可互换'则此对换应保持行为；两态事件集不同（NEW 有 T_RECOVER，SCHEDULED 无），判别交由工具/基准。",
+   "order_engine_reported": 2,
+   "relabel": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "generalized",
+    "error": null,
+    "reason": "转移等变层失败：max TV=inf（含非位置置换元素） > tol=1e-09（1/2 个受检元素不过）；奖励剖面层失败：同轨道剖面不同 1/1 对（判据 n_bad=0 零容忍）",
+    "semantics": {
+     "action": "relabel",
+     "judge": "generalized",
+     "declared": true,
+     "assumed": false,
+     "source": "group_file"
+    },
+    "command": [
+     "python",
+     "-X",
+     "utf8",
+     "-m",
+     "wuxing_gua",
+     "check",
+     "--trans",
+     "cases\\hadoop-mr-task\\model.json",
+     "--group",
+     "<court_tmp>\\g2_control_new_scheduled_swap_fixed.relabel.json"
+    ],
+    "stderr_tail": "",
+    "frame": "relabel",
+    "stamp_note": "court-stamped relabel copy used (original declaration: 'fixed')"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict",
+    "error": null,
+    "reason": "转移等变层失败：max TV=1 > tol=1e-09（1/2 个受检元素不过）；奖励剖面层失败：同轨道剖面不同 1/1 对（判据 n_bad=0 零容忍）",
+    "semantics": {
+     "action": "fixed",
+     "judge": "strict",
+     "declared": true,
+     "assumed": false,
+     "source": "flag_strict"
+    },
+    "command": [
+     "python",
+     "-X",
+     "utf8",
+     "-m",
+     "wuxing_gua",
+     "check",
+     "--trans",
+     "cases\\hadoop-mr-task\\model.json",
+     "--group",
+     "cases\\hadoop-mr-task\\groups\\g2_control_new_scheduled_swap_fixed.json",
+     "--strict"
+    ],
+    "stderr_tail": "",
+    "frame": "fixed",
+    "stamp_note": "original group file, --strict flag (fixed frame)"
+   },
+   "networkx": {
+    "structure_symmetry": false,
+    "labeled_symmetry": false,
+    "n_elements": 2,
+    "n_unique_elements": 2,
+    "n_nontrivial": 1,
+    "per_element": [
+     {
+      "element": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7
+      ],
+      "is_identity": true,
+      "structural": true,
+      "labeled": true,
+      "nx_vf2_membership_structural": true,
+      "nx_vf2_membership_labeled": true
+     },
+     {
+      "element": [
+       1,
+       0,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7
+      ],
+      "is_identity": false,
+      "structural": false,
+      "labeled": false,
+      "nx_vf2_membership_structural": false,
+      "nx_vf2_membership_labeled": false
+     }
+    ],
+    "per_element_truncated": false,
+    "method": "primary=direct edge-set check (O(E), hand-checkable); cross-check=networkx VF2 automorphism-set membership (independent implementation)",
+    "method_conflicts": [],
+    "crosscheck_status": "ok",
+    "scope": "full model (all n_states=8, padding included)",
+    "n_autos_structure": 1,
+    "n_autos_labeled": 1,
+    "autos_truncated": false,
+    "autos_skipped_reason": null,
+    "structural_pad_states": [
+     7
+    ],
+    "n_autos_structure_nonpad": 1,
+    "n_autos_labeled_nonpad": 1,
+    "autos_nonpad_scope": "subgraph over the 7 non-pad states (structural pads excluded; a pad state = every action single self-loop successor with r=0, the same rule the engine's pad-aware mode uses)"
+   },
+   "consistency": {
+    "relabel_vs_structure": "agree",
+    "fixed_vs_labeled": "agree",
+    "arms_differ": false,
+    "ruling_code": "agree",
+    "ruling": "all columns agree: engine (both standards) and networkx (both scopes) say 'reject' for this group",
+    "binding_verdict": "reject"
+   }
+  },
+  "g3_control_running_killwait_swap_fixed": {
+   "group_file": "groups/g3_control_running_killwait_swap_fixed.json",
+   "declared_semantics": {
+    "action": "fixed"
+   },
+   "claim": "对照主张：RUNNING（执行中）与 KILL_WAIT（等待被杀确认）若等价可互换，则'运行与等待死亡无区别'；两态的自环/完成事件结构差异显著，判别交由工具/基准。",
+   "order_engine_reported": 2,
+   "relabel": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "generalized",
+    "error": null,
+    "reason": "转移等变层失败：max TV=inf（含非位置置换元素） > tol=1e-09（1/2 个受检元素不过）；奖励剖面层失败：同轨道剖面不同 1/1 对（判据 n_bad=0 零容忍）",
+    "semantics": {
+     "action": "relabel",
+     "judge": "generalized",
+     "declared": true,
+     "assumed": false,
+     "source": "group_file"
+    },
+    "command": [
+     "python",
+     "-X",
+     "utf8",
+     "-m",
+     "wuxing_gua",
+     "check",
+     "--trans",
+     "cases\\hadoop-mr-task\\model.json",
+     "--group",
+     "<court_tmp>\\g3_control_running_killwait_swap_fixed.relabel.json"
+    ],
+    "stderr_tail": "",
+    "frame": "relabel",
+    "stamp_note": "court-stamped relabel copy used (original declaration: 'fixed')"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict",
+    "error": null,
+    "reason": "转移等变层失败：max TV=1 > tol=1e-09（1/2 个受检元素不过）；奖励剖面层失败：同轨道剖面不同 1/1 对（判据 n_bad=0 零容忍）",
+    "semantics": {
+     "action": "fixed",
+     "judge": "strict",
+     "declared": true,
+     "assumed": false,
+     "source": "flag_strict"
+    },
+    "command": [
+     "python",
+     "-X",
+     "utf8",
+     "-m",
+     "wuxing_gua",
+     "check",
+     "--trans",
+     "cases\\hadoop-mr-task\\model.json",
+     "--group",
+     "cases\\hadoop-mr-task\\groups\\g3_control_running_killwait_swap_fixed.json",
+     "--strict"
+    ],
+    "stderr_tail": "",
+    "frame": "fixed",
+    "stamp_note": "original group file, --strict flag (fixed frame)"
+   },
+   "networkx": {
+    "structure_symmetry": false,
+    "labeled_symmetry": false,
+    "n_elements": 2,
+    "n_unique_elements": 2,
+    "n_nontrivial": 1,
+    "per_element": [
+     {
+      "element": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7
+      ],
+      "is_identity": true,
+      "structural": true,
+      "labeled": true,
+      "nx_vf2_membership_structural": true,
+      "nx_vf2_membership_labeled": true
+     },
+     {
+      "element": [
+       0,
+       1,
+       5,
+       3,
+       4,
+       2,
+       6,
+       7
+      ],
+      "is_identity": false,
+      "structural": false,
+      "labeled": false,
+      "nx_vf2_membership_structural": false,
+      "nx_vf2_membership_labeled": false
+     }
+    ],
+    "per_element_truncated": false,
+    "method": "primary=direct edge-set check (O(E), hand-checkable); cross-check=networkx VF2 automorphism-set membership (independent implementation)",
+    "method_conflicts": [],
+    "crosscheck_status": "ok",
+    "scope": "full model (all n_states=8, padding included)",
+    "n_autos_structure": 1,
+    "n_autos_labeled": 1,
+    "autos_truncated": false,
+    "autos_skipped_reason": null,
+    "structural_pad_states": [
+     7
+    ],
+    "n_autos_structure_nonpad": 1,
+    "n_autos_labeled_nonpad": 1,
+    "autos_nonpad_scope": "subgraph over the 7 non-pad states (structural pads excluded; a pad state = every action single self-loop successor with r=0, the same rule the engine's pad-aware mode uses)"
+   },
+   "consistency": {
+    "relabel_vs_structure": "agree",
+    "fixed_vs_labeled": "agree",
+    "arms_differ": false,
+    "ruling_code": "agree",
+    "ruling": "all columns agree: engine (both standards) and networkx (both scopes) say 'reject' for this group",
+    "binding_verdict": "reject"
+   }
+  }
+ },
+ "group_errors": [],
+ "rollup": {
+  "groups": 3,
+  "group_errors": 0,
+  "ruling_codes": {
+   "agree": 3
+  },
+  "all_consistent_pairs": true
+ }
+}

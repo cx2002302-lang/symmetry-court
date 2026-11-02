@@ -1,0 +1,34 @@
+{
+ "n_states": 8,
+ "elements": [
+  [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   7,
+   6
+  ]
+ ],
+ "semantics": {
+  "action": "fixed"
+ },
+ "meta": {
+  "claim": "正控对照：填充哑态 filler_6/filler_7 行完全相同（全事件自环 0.0、不引用真实事件语义），对换在 fixed 口径下是真对称；检验工具对平凡真对称的放行（rung 1c pads 惯例）。",
+  "construction": "order-2 对换：filler_6(6) <-> filler_7(7)",
+  "dossier_ref": "dossier/selection.json case-05-usb2-device-states（正控组）",
+  "semantics_note": "padding 行不引用事件 -> fixed 下亦真对称"
+ }
+}

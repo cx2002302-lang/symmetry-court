@@ -1,0 +1,67 @@
+{
+ "case": "k8s-pod-lifecycle",
+ "provenance": {
+  "recorded": "2026-11-02T17:28:27Z, observed from a live three-way arbitration run (`python -X utf8 -m symmetry_court arbitrate --emit-expected-template`; receipt: verdicts/k8s-pod-lifecycle.verdict.json); the gate (`python -X utf8 -m symmetry_court selftest`) replays the case and compares these rows field-by-field. Case incorporated byte-identical from the field-trial blind-test project (model + groups + generator + README; the generator's --check byte-identity passes in this repository).",
+  "networkx_source": "the networkx columns carry the field-trial sealed truth's corresponding values for this case (field-trial sealed/k8s-pod-lifecycle.truth.json, whose sha256 is pinned in that project's sealed/_W3_manifest.json; the sealed file's recorded model/group sha256s match the copied case files byte-for-byte, so audit can replay the sealed check on exactly these inputs). Reconciled three ways before pinning: court juror (direct edge-set algebra + networkx VF2 membership), a fresh independent recomputation over the transcribed model, and the sealed automorphism facts (labeled_symmetry <-> the sealed per-element fixed check passes_fixed; structure_symmetry <-> the sealed structural-order / fixed-elements / filler-class facts). All three agreed on every group.",
+  "reading_guide": "relabel row = actions may be renamed along with states (diagnostic contrast reading); fixed row = event names pinned (the protocol-true reading, declared in each group file); networkx columns = independent juror"
+ },
+ "groups": {
+  "g1_claim_succeeded_failed_swap_fixed": {
+   "claim": "同一 Deployment 模板产出的 Pod 副本可互换：Service 只按 label/端点集合做负载均衡，副本个体身份无关（副本增删只触发 EndpointSlices 更新）；任何副本可被删除并在任意节点按同一模板重建。（W1 dossier case-03 symmetric_claim 原文） 终相级类比（被告主张）：两个 terminal 相下副本替换语义等价（删除任一终态副本都触发同模板重建），若终相等价则此对换应保持系统行为；两相前驱事件不同（all_containers_succeeded vs any_container_failed），裁决交工具/基准。",
+   "relabel": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "generalized"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict"
+   },
+   "networkx": {
+    "structure_symmetry": false,
+    "labeled_symmetry": false
+   }
+  },
+  "g2_control_pending_running_swap_fixed": {
+   "claim": "对照主张：文档 lifecycle 句给出 Pending→Running 的方向性（'starting in the Pending phase, moving through Running'），若主张两相无序等价则此对换应保持行为；判别交工具/基准。",
+   "relabel": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "generalized"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict"
+   },
+   "networkx": {
+    "structure_symmetry": false,
+    "labeled_symmetry": false
+   }
+  },
+  "g3_pads_swap_fixed": {
+   "claim": "正控对照：两个填充哑态 filler_5/filler_6 行完全相同（全事件自环 0.0、不引用真实事件语义），对换在 fixed 口径下是货真价实的对称；用于检验工具对'平凡真对称'的放行行为（参照工具仓 rung 1c pads 惯例）。",
+   "relabel": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "generalized"
+   },
+   "fixed": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "strict"
+   },
+   "networkx": {
+    "structure_symmetry": true,
+    "labeled_symmetry": true
+   }
+  }
+ }
+}

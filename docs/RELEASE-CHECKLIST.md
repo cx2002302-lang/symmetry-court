@@ -101,3 +101,7 @@ time.
 - [ ] Re-run `run.bat` after the badge edits and commit any resulting
       no-op diff confirmation.
 - [ ] Tag the release (suggested: `v0.1.0`).
+
+## 6. Wave addendum — 2026-11-03 (integration close-out, docket 9 cases / 32 groups)
+
+- [x] 2026-11-03: full replay green — `python -X utf8 -m symmetry_court selftest` → exit 0, `SELFTEST PASS（重放契约字段 320 个）` (9 cases, incl. `mini2048` 60 fields); `arbitrate` → 9/9 verdicts written; `compare` (v2, caliber per group declaration) → 9 cases / 32 groups, 闸门价值一致性 PASS (gate admits 7, all zero-damage; old-8 per-case receipts zero-drift modulo gate seconds); smoke docket 40 fields PASS + `make_tcp_smoke.py --check` byte-identity OK; vendored 30/30 NOTICE sha256 unchanged; banned-vocabulary / internal-name greps clean in authored text (`docs/nontrivial-admit.md` records the `mini2048` finding: explicit caliber's first real-system sample, engine rejects pending upstream per-element-map fix).

@@ -1,0 +1,4808 @@
+{
+ "n_bits": 5,
+ "n_actions": 18,
+ "n_states": 32,
+ "goals": [
+  7,
+  16
+ ],
+ "meta": {
+  "source_system": "RFC 8446 (TLS 1.3) Appendix A client+server handshake state machines, transcribed by field-trial W2 from pinned public RFC text",
+  "source_citation": [
+   "RFC 8446 (TLS 1.3), https://www.rfc-editor.org/rfc/rfc8446.txt（2018-08 冻结文本; W1 快照 dossier/sources/rfc8446.txt,",
+   " W2 本会话对 Appendix A 6671-6768 行逐行复核）:",
+   "  - §A.1 Client 状态机图 txt:6682-6711（8 态: START, WAIT_SH, WAIT_EE, WAIT_CERT_CR, WAIT_CERT, WAIT_CV, WAIT_FINISHED, CONNECTED）",
+   "  - §A.2 Server 状态机图 txt:6729-6768（9 态: START, RECVD_CH, NEGOTIATED, WAIT_EOED, WAIT_FLIGHT2, WAIT_CERT, WAIT_CV, WAIT_FINISHED, CONNECTED）",
+   "  - §4 规范锚点（transcription_notes 逐边回引）: §4.1.2 ClientHello txt:1485; §4.1.3 HelloRetryRequest txt:1816;",
+   "    §4.2.10 Early Data txt:2893; §4.3.2 Certificate Request txt:3334; §4.4.2 Certificate txt:3535;",
+   "    §4.4.3 CertificateVerify txt:3823; §4.4.4 Finished txt:3945",
+   "  - Appendix A 自述（txt:6673-6676）: 'This appendix provides a summary of the legal state transitions... State names... have no formal meaning'",
+   "    —— 本卷以 Appendix A 图为迁移结构一手依据、§4 为关键边规范锚点（W1 风险项口径）"
+  ],
+  "variant": "event-driven-protocol-fsm",
+  "encoding": "17 个真实态（client 8 + server 9, 不交并）+ 15 个填充哑态（32=2^5）；态名前缀 c_/s_ 区分侧；填充态边不引用真实事件语义",
+  "state_names": [
+   "c_START",
+   "c_WAIT_SH",
+   "c_WAIT_EE",
+   "c_WAIT_CERT_CR",
+   "c_WAIT_CERT",
+   "c_WAIT_CV",
+   "c_WAIT_FINISHED",
+   "c_CONNECTED",
+   "s_START",
+   "s_RECVD_CH",
+   "s_NEGOTIATED",
+   "s_WAIT_EOED",
+   "s_WAIT_FLIGHT2",
+   "s_WAIT_CERT",
+   "s_WAIT_CV",
+   "s_WAIT_FINISHED",
+   "s_CONNECTED",
+   "filler_17",
+   "filler_18",
+   "filler_19",
+   "filler_20",
+   "filler_21",
+   "filler_22",
+   "filler_23",
+   "filler_24",
+   "filler_25",
+   "filler_26",
+   "filler_27",
+   "filler_28",
+   "filler_29",
+   "filler_30",
+   "filler_31"
+  ],
+  "event_names": [
+   "c_send_clienthello",
+   "c_recv_helloretryrequest",
+   "c_recv_serverhello",
+   "c_recv_encryptedextensions",
+   "c_recv_certificate",
+   "c_recv_certificaterequest",
+   "c_recv_certificateverify",
+   "c_recv_finished",
+   "s_recv_clienthello",
+   "s_send_helloretryrequest",
+   "s_select_parameters",
+   "s_send_serverhello_flight",
+   "s_recv_endofearlydata",
+   "s_client_auth_branch",
+   "s_recv_certificate_nonempty",
+   "s_recv_certificate_empty",
+   "s_recv_certificateverify",
+   "s_recv_finished"
+  ],
+  "semantics_class": "event: 18 个动作是 TLS 握手报文动作（Send/Recv/Select），名字属于协议 -> groups 必须声明 semantics {\"action\": \"fixed\"}",
+  "transcription_rules": "T1 两侧合并为一个不交并转移系统（client 8 态 + server 9 态 = 17 态, n_bits=5）；T2 条件分支→等概率占位 3 处（c_WAIT_EE 的 PSK/cert 分支、s_NEGOTIATED 的 0-RTT 分支、s_WAIT_FLIGHT2 的 auth 分支）；T3 server 的 empty/non-empty Certificate 拆为两个事件（图 6759-6764 两条不同目标箭头）；T4 s_client_auth_branch 为把配置条件事件化（图 6755 'No auth | Client auth' 分支标注）；T5 对侧事件打到本侧态 = 未注册 -1.0（跨侧无语义）；T6 奖励约定见 reward_rule。",
+  "reward_rule": "+1.0 仅两侧 'Recv Finished -> CONNECTED' 两条边（握手完成）；-1.0 为图中无箭头的未注册 (态,事件)；CONNECTED 吸收自环与填充态 0.0。奖励为转录约定非协议语义（声明）。",
+  "transcription_notes": {
+   "cell_citations": {
+    "c_START|c_send_clienthello": "RFC 8446 §A.1 (rfc8446.txt):6682-6686 'Send ClientHello' 箭头 START->WAIT_SH",
+    "c_START|c_recv_helloretryrequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（勘误 2026-10-31：原图 6682-6686 角标记法 START<----+ 的回边实自 WAIT_SH 出发，START 无此事件箭头）",
+    "c_START|c_recv_serverhello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_START 无 'c_recv_serverhello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_START|c_recv_encryptedextensions": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_START 无 'c_recv_encryptedextensions' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_START|c_recv_certificate": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_START 无 'c_recv_certificate' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_START|c_recv_certificaterequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_START 无 'c_recv_certificaterequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_START|c_recv_certificateverify": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_START 无 'c_recv_certificateverify' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_START|c_recv_finished": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_START 无 'c_recv_finished' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_START|s_recv_clienthello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_START 无 's_recv_clienthello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_START|s_send_helloretryrequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_START 无 's_send_helloretryrequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_START|s_select_parameters": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_START 无 's_select_parameters' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_START|s_send_serverhello_flight": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_START 无 's_send_serverhello_flight' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_START|s_recv_endofearlydata": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_START 无 's_recv_endofearlydata' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_START|s_client_auth_branch": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_START 无 's_client_auth_branch' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_START|s_recv_certificate_nonempty": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_START 无 's_recv_certificate_nonempty' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_START|s_recv_certificate_empty": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_START 无 's_recv_certificate_empty' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_START|s_recv_certificateverify": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_START 无 's_recv_certificateverify' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_START|s_recv_finished": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_START 无 's_recv_finished' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_SH|c_send_clienthello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_SH 无 'c_send_clienthello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_SH|c_recv_helloretryrequest": "RFC 8446 §A.1 (rfc8446.txt):6682-6686 'Recv HelloRetryRequest' 回边 WAIT_SH-->START（角标 + 于 6686 行 WAIT_SH----+，勘误自 START 自环改此）",
+    "c_WAIT_SH|c_recv_serverhello": "RFC 8446 §A.1 (rfc8446.txt):6687-6690 'Recv ServerHello' 箭头 WAIT_SH->WAIT_EE",
+    "c_WAIT_SH|c_recv_encryptedextensions": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_SH 无 'c_recv_encryptedextensions' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_SH|c_recv_certificate": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_SH 无 'c_recv_certificate' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_SH|c_recv_certificaterequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_SH 无 'c_recv_certificaterequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_SH|c_recv_certificateverify": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_SH 无 'c_recv_certificateverify' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_SH|c_recv_finished": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_SH 无 'c_recv_finished' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_SH|s_recv_clienthello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_SH 无 's_recv_clienthello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_SH|s_send_helloretryrequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_SH 无 's_send_helloretryrequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_SH|s_select_parameters": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_SH 无 's_select_parameters' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_SH|s_send_serverhello_flight": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_SH 无 's_send_serverhello_flight' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_SH|s_recv_endofearlydata": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_SH 无 's_recv_endofearlydata' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_SH|s_client_auth_branch": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_SH 无 's_client_auth_branch' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_SH|s_recv_certificate_nonempty": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_SH 无 's_recv_certificate_nonempty' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_SH|s_recv_certificate_empty": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_SH 无 's_recv_certificate_empty' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_SH|s_recv_certificateverify": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_SH 无 's_recv_certificateverify' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_SH|s_recv_finished": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_SH 无 's_recv_finished' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_EE|c_send_clienthello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_EE 无 'c_send_clienthello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_EE|c_recv_helloretryrequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_EE 无 'c_recv_helloretryrequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_EE|c_recv_serverhello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_EE 无 'c_recv_serverhello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_EE|c_recv_encryptedextensions": "RFC 8446 §A.1 (rfc8446.txt):6691-6703 'Recv EncryptedExtensions' 后 Using certificate -> WAIT_CERT_CR / Using PSK -> WAIT_FINISHED（分支为握手模式条件→等概率占位, 声明）",
+    "c_WAIT_EE|c_recv_certificate": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_EE 无 'c_recv_certificate' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_EE|c_recv_certificaterequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_EE 无 'c_recv_certificaterequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_EE|c_recv_certificateverify": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_EE 无 'c_recv_certificateverify' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_EE|c_recv_finished": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_EE 无 'c_recv_finished' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_EE|s_recv_clienthello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_EE 无 's_recv_clienthello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_EE|s_send_helloretryrequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_EE 无 's_send_helloretryrequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_EE|s_select_parameters": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_EE 无 's_select_parameters' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_EE|s_send_serverhello_flight": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_EE 无 's_send_serverhello_flight' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_EE|s_recv_endofearlydata": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_EE 无 's_recv_endofearlydata' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_EE|s_client_auth_branch": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_EE 无 's_client_auth_branch' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_EE|s_recv_certificate_nonempty": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_EE 无 's_recv_certificate_nonempty' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_EE|s_recv_certificate_empty": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_EE 无 's_recv_certificate_empty' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_EE|s_recv_certificateverify": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_EE 无 's_recv_certificateverify' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_EE|s_recv_finished": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_EE 无 's_recv_finished' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CERT_CR|c_send_clienthello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CERT_CR 无 'c_send_clienthello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CERT_CR|c_recv_helloretryrequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CERT_CR 无 'c_recv_helloretryrequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CERT_CR|c_recv_serverhello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CERT_CR 无 'c_recv_serverhello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CERT_CR|c_recv_encryptedextensions": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CERT_CR 无 'c_recv_encryptedextensions' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CERT_CR|c_recv_certificate": "RFC 8446 §A.1 (rfc8446.txt):6695-6701 'Recv Certificate' 箭头 WAIT_CERT_CR->WAIT_CV（无 CertReq 情形）; 规范依据 §4.4.2 txt:3535",
+    "c_WAIT_CERT_CR|c_recv_certificaterequest": "RFC 8446 §A.1 (rfc8446.txt):6696-6699 'Recv CertificateRequest' 箭头 WAIT_CERT_CR->WAIT_CERT; 规范依据 §4.3.2 txt:3334",
+    "c_WAIT_CERT_CR|c_recv_certificateverify": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CERT_CR 无 'c_recv_certificateverify' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CERT_CR|c_recv_finished": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CERT_CR 无 'c_recv_finished' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CERT_CR|s_recv_clienthello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CERT_CR 无 's_recv_clienthello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CERT_CR|s_send_helloretryrequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CERT_CR 无 's_send_helloretryrequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CERT_CR|s_select_parameters": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CERT_CR 无 's_select_parameters' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CERT_CR|s_send_serverhello_flight": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CERT_CR 无 's_send_serverhello_flight' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CERT_CR|s_recv_endofearlydata": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CERT_CR 无 's_recv_endofearlydata' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CERT_CR|s_client_auth_branch": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CERT_CR 无 's_client_auth_branch' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CERT_CR|s_recv_certificate_nonempty": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CERT_CR 无 's_recv_certificate_nonempty' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CERT_CR|s_recv_certificate_empty": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CERT_CR 无 's_recv_certificate_empty' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CERT_CR|s_recv_certificateverify": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CERT_CR 无 's_recv_certificateverify' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CERT_CR|s_recv_finished": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CERT_CR 无 's_recv_finished' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CERT|c_send_clienthello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CERT 无 'c_send_clienthello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CERT|c_recv_helloretryrequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CERT 无 'c_recv_helloretryrequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CERT|c_recv_serverhello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CERT 无 'c_recv_serverhello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CERT|c_recv_encryptedextensions": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CERT 无 'c_recv_encryptedextensions' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CERT|c_recv_certificate": "RFC 8446 §A.1 (rfc8446.txt):6698-6701 'Recv Certificate' 箭头 WAIT_CERT->WAIT_CV; §4.4.2 txt:3535",
+    "c_WAIT_CERT|c_recv_certificaterequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CERT 无 'c_recv_certificaterequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CERT|c_recv_certificateverify": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CERT 无 'c_recv_certificateverify' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CERT|c_recv_finished": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CERT 无 'c_recv_finished' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CERT|s_recv_clienthello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CERT 无 's_recv_clienthello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CERT|s_send_helloretryrequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CERT 无 's_send_helloretryrequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CERT|s_select_parameters": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CERT 无 's_select_parameters' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CERT|s_send_serverhello_flight": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CERT 无 's_send_serverhello_flight' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CERT|s_recv_endofearlydata": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CERT 无 's_recv_endofearlydata' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CERT|s_client_auth_branch": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CERT 无 's_client_auth_branch' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CERT|s_recv_certificate_nonempty": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CERT 无 's_recv_certificate_nonempty' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CERT|s_recv_certificate_empty": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CERT 无 's_recv_certificate_empty' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CERT|s_recv_certificateverify": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CERT 无 's_recv_certificateverify' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CERT|s_recv_finished": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CERT 无 's_recv_finished' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CV|c_send_clienthello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CV 无 'c_send_clienthello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CV|c_recv_helloretryrequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CV 无 'c_recv_helloretryrequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CV|c_recv_serverhello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CV 无 'c_recv_serverhello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CV|c_recv_encryptedextensions": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CV 无 'c_recv_encryptedextensions' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CV|c_recv_certificate": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CV 无 'c_recv_certificate' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CV|c_recv_certificaterequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CV 无 'c_recv_certificaterequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CV|c_recv_certificateverify": "RFC 8446 §A.1 (rfc8446.txt):6701-6703 'Recv CertificateVerify' 箭头 WAIT_CV->WAIT_FINISHED; §4.4.3 txt:3823",
+    "c_WAIT_CV|c_recv_finished": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CV 无 'c_recv_finished' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CV|s_recv_clienthello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CV 无 's_recv_clienthello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CV|s_send_helloretryrequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CV 无 's_send_helloretryrequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CV|s_select_parameters": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CV 无 's_select_parameters' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CV|s_send_serverhello_flight": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CV 无 's_send_serverhello_flight' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CV|s_recv_endofearlydata": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CV 无 's_recv_endofearlydata' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CV|s_client_auth_branch": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CV 无 's_client_auth_branch' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CV|s_recv_certificate_nonempty": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CV 无 's_recv_certificate_nonempty' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CV|s_recv_certificate_empty": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CV 无 's_recv_certificate_empty' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CV|s_recv_certificateverify": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CV 无 's_recv_certificateverify' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_CV|s_recv_finished": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_CV 无 's_recv_finished' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_FINISHED|c_send_clienthello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_FINISHED 无 'c_send_clienthello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_FINISHED|c_recv_helloretryrequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_FINISHED 无 'c_recv_helloretryrequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_FINISHED|c_recv_serverhello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_FINISHED 无 'c_recv_serverhello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_FINISHED|c_recv_encryptedextensions": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_FINISHED 无 'c_recv_encryptedextensions' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_FINISHED|c_recv_certificate": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_FINISHED 无 'c_recv_certificate' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_FINISHED|c_recv_certificaterequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_FINISHED 无 'c_recv_certificaterequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_FINISHED|c_recv_certificateverify": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_FINISHED 无 'c_recv_certificateverify' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_FINISHED|c_recv_finished": "RFC 8446 §A.1 (rfc8446.txt):6704-6711 'Recv Finished'（其间 [Send EndOfEarlyData]/[Send Certificate+CV]/Send Finished 为同飞行动作）-> CONNECTED; §4.4.4 txt:3945; 奖励约定：进入 CONNECTED +1.0",
+    "c_WAIT_FINISHED|s_recv_clienthello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_FINISHED 无 's_recv_clienthello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_FINISHED|s_send_helloretryrequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_FINISHED 无 's_send_helloretryrequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_FINISHED|s_select_parameters": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_FINISHED 无 's_select_parameters' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_FINISHED|s_send_serverhello_flight": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_FINISHED 无 's_send_serverhello_flight' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_FINISHED|s_recv_endofearlydata": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_FINISHED 无 's_recv_endofearlydata' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_FINISHED|s_client_auth_branch": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_FINISHED 无 's_client_auth_branch' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_FINISHED|s_recv_certificate_nonempty": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_FINISHED 无 's_recv_certificate_nonempty' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_FINISHED|s_recv_certificate_empty": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_FINISHED 无 's_recv_certificate_empty' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_FINISHED|s_recv_certificateverify": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_FINISHED 无 's_recv_certificateverify' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_WAIT_FINISHED|s_recv_finished": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_WAIT_FINISHED 无 's_recv_finished' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_CONNECTED|c_send_clienthello": "RFC 8446 §A.1 (rfc8446.txt):6711 CONNECTED 吸收（图终点无出边）→ 全事件自环 0.0",
+    "c_CONNECTED|c_recv_helloretryrequest": "RFC 8446 §A.1 (rfc8446.txt):6711 CONNECTED 吸收（图终点无出边）→ 全事件自环 0.0",
+    "c_CONNECTED|c_recv_serverhello": "RFC 8446 §A.1 (rfc8446.txt):6711 CONNECTED 吸收（图终点无出边）→ 全事件自环 0.0",
+    "c_CONNECTED|c_recv_encryptedextensions": "RFC 8446 §A.1 (rfc8446.txt):6711 CONNECTED 吸收（图终点无出边）→ 全事件自环 0.0",
+    "c_CONNECTED|c_recv_certificate": "RFC 8446 §A.1 (rfc8446.txt):6711 CONNECTED 吸收（图终点无出边）→ 全事件自环 0.0",
+    "c_CONNECTED|c_recv_certificaterequest": "RFC 8446 §A.1 (rfc8446.txt):6711 CONNECTED 吸收（图终点无出边）→ 全事件自环 0.0",
+    "c_CONNECTED|c_recv_certificateverify": "RFC 8446 §A.1 (rfc8446.txt):6711 CONNECTED 吸收（图终点无出边）→ 全事件自环 0.0",
+    "c_CONNECTED|c_recv_finished": "RFC 8446 §A.1 (rfc8446.txt):6711 CONNECTED 为图终点（吸收自环）",
+    "c_CONNECTED|s_recv_clienthello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_CONNECTED 无 's_recv_clienthello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_CONNECTED|s_send_helloretryrequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_CONNECTED 无 's_send_helloretryrequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_CONNECTED|s_select_parameters": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_CONNECTED 无 's_select_parameters' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_CONNECTED|s_send_serverhello_flight": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_CONNECTED 无 's_send_serverhello_flight' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_CONNECTED|s_recv_endofearlydata": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_CONNECTED 无 's_recv_endofearlydata' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_CONNECTED|s_client_auth_branch": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_CONNECTED 无 's_client_auth_branch' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_CONNECTED|s_recv_certificate_nonempty": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_CONNECTED 无 's_recv_certificate_nonempty' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_CONNECTED|s_recv_certificate_empty": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_CONNECTED 无 's_recv_certificate_empty' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_CONNECTED|s_recv_certificateverify": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_CONNECTED 无 's_recv_certificateverify' 出箭头; 对侧事件对本侧态亦无语义）",
+    "c_CONNECTED|s_recv_finished": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（c_CONNECTED 无 's_recv_finished' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_START|c_send_clienthello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_START 无 'c_send_clienthello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_START|c_recv_helloretryrequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_START 无 'c_recv_helloretryrequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_START|c_recv_serverhello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_START 无 'c_recv_serverhello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_START|c_recv_encryptedextensions": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_START 无 'c_recv_encryptedextensions' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_START|c_recv_certificate": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_START 无 'c_recv_certificate' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_START|c_recv_certificaterequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_START 无 'c_recv_certificaterequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_START|c_recv_certificateverify": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_START 无 'c_recv_certificateverify' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_START|c_recv_finished": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_START 无 'c_recv_finished' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_START|s_recv_clienthello": "RFC 8446 §A.2 (rfc8446.txt):6729-6732 'Recv ClientHello' 箭头 START->RECVD_CH",
+    "s_START|s_send_helloretryrequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（勘误 2026-10-31：回边实自 RECVD_CH 出发）",
+    "s_START|s_select_parameters": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_START 无 's_select_parameters' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_START|s_send_serverhello_flight": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_START 无 's_send_serverhello_flight' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_START|s_recv_endofearlydata": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_START 无 's_recv_endofearlydata' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_START|s_client_auth_branch": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_START 无 's_client_auth_branch' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_START|s_recv_certificate_nonempty": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_START 无 's_recv_certificate_nonempty' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_START|s_recv_certificate_empty": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_START 无 's_recv_certificate_empty' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_START|s_recv_certificateverify": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_START 无 's_recv_certificateverify' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_START|s_recv_finished": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_START 无 's_recv_finished' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_RECVD_CH|c_send_clienthello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_RECVD_CH 无 'c_send_clienthello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_RECVD_CH|c_recv_helloretryrequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_RECVD_CH 无 'c_recv_helloretryrequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_RECVD_CH|c_recv_serverhello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_RECVD_CH 无 'c_recv_serverhello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_RECVD_CH|c_recv_encryptedextensions": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_RECVD_CH 无 'c_recv_encryptedextensions' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_RECVD_CH|c_recv_certificate": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_RECVD_CH 无 'c_recv_certificate' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_RECVD_CH|c_recv_certificaterequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_RECVD_CH 无 'c_recv_certificaterequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_RECVD_CH|c_recv_certificateverify": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_RECVD_CH 无 'c_recv_certificateverify' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_RECVD_CH|c_recv_finished": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_RECVD_CH 无 'c_recv_finished' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_RECVD_CH|s_recv_clienthello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_RECVD_CH 无 's_recv_clienthello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_RECVD_CH|s_send_helloretryrequest": "RFC 8446 §A.2 (rfc8446.txt):6729-6732 'Send HelloRetryRequest' 回边 RECVD_CH-->START（勘误自 START 自环改此）",
+    "s_RECVD_CH|s_select_parameters": "RFC 8446 §A.2 (rfc8446.txt):6733-6735 'Select parameters' 箭头 RECVD_CH->NEGOTIATED",
+    "s_RECVD_CH|s_send_serverhello_flight": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_RECVD_CH 无 's_send_serverhello_flight' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_RECVD_CH|s_recv_endofearlydata": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_RECVD_CH 无 's_recv_endofearlydata' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_RECVD_CH|s_client_auth_branch": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_RECVD_CH 无 's_client_auth_branch' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_RECVD_CH|s_recv_certificate_nonempty": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_RECVD_CH 无 's_recv_certificate_nonempty' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_RECVD_CH|s_recv_certificate_empty": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_RECVD_CH 无 's_recv_certificate_empty' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_RECVD_CH|s_recv_certificateverify": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_RECVD_CH 无 's_recv_certificateverify' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_RECVD_CH|s_recv_finished": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_RECVD_CH 无 's_recv_finished' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_NEGOTIATED|c_send_clienthello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_NEGOTIATED 无 'c_send_clienthello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_NEGOTIATED|c_recv_helloretryrequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_NEGOTIATED 无 'c_recv_helloretryrequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_NEGOTIATED|c_recv_serverhello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_NEGOTIATED 无 'c_recv_serverhello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_NEGOTIATED|c_recv_encryptedextensions": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_NEGOTIATED 无 'c_recv_encryptedextensions' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_NEGOTIATED|c_recv_certificate": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_NEGOTIATED 无 'c_recv_certificate' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_NEGOTIATED|c_recv_certificaterequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_NEGOTIATED 无 'c_recv_certificaterequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_NEGOTIATED|c_recv_certificateverify": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_NEGOTIATED 无 'c_recv_certificateverify' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_NEGOTIATED|c_recv_finished": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_NEGOTIATED 无 'c_recv_finished' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_NEGOTIATED|s_recv_clienthello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_NEGOTIATED 无 's_recv_clienthello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_NEGOTIATED|s_send_helloretryrequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_NEGOTIATED 无 's_send_helloretryrequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_NEGOTIATED|s_select_parameters": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_NEGOTIATED 无 's_select_parameters' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_NEGOTIATED|s_send_serverhello_flight": "RFC 8446 §A.2 (rfc8446.txt):6736-6752 ServerHello...Finished 一轮飞行后 No 0-RTT -> WAIT_FLIGHT2 / 0-RTT -> WAIT_EOED（分支条件→等概率占位, 声明; §4.2.10 Early Data txt:2893）",
+    "s_NEGOTIATED|s_recv_endofearlydata": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_NEGOTIATED 无 's_recv_endofearlydata' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_NEGOTIATED|s_client_auth_branch": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_NEGOTIATED 无 's_client_auth_branch' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_NEGOTIATED|s_recv_certificate_nonempty": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_NEGOTIATED 无 's_recv_certificate_nonempty' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_NEGOTIATED|s_recv_certificate_empty": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_NEGOTIATED 无 's_recv_certificate_empty' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_NEGOTIATED|s_recv_certificateverify": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_NEGOTIATED 无 's_recv_certificateverify' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_NEGOTIATED|s_recv_finished": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_NEGOTIATED 无 's_recv_finished' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_EOED|c_send_clienthello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_EOED 无 'c_send_clienthello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_EOED|c_recv_helloretryrequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_EOED 无 'c_recv_helloretryrequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_EOED|c_recv_serverhello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_EOED 无 'c_recv_serverhello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_EOED|c_recv_encryptedextensions": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_EOED 无 'c_recv_encryptedextensions' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_EOED|c_recv_certificate": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_EOED 无 'c_recv_certificate' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_EOED|c_recv_certificaterequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_EOED 无 'c_recv_certificaterequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_EOED|c_recv_certificateverify": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_EOED 无 'c_recv_certificateverify' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_EOED|c_recv_finished": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_EOED 无 'c_recv_finished' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_EOED|s_recv_clienthello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_EOED 无 's_recv_clienthello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_EOED|s_send_helloretryrequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_EOED 无 's_send_helloretryrequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_EOED|s_select_parameters": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_EOED 无 's_select_parameters' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_EOED|s_send_serverhello_flight": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_EOED 无 's_send_serverhello_flight' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_EOED|s_recv_endofearlydata": "RFC 8446 §A.2 (rfc8446.txt):6747-6752 'Recv EndOfEarlyData' 箭头 WAIT_EOED->WAIT_FLIGHT2; §4.2.10 txt:2893",
+    "s_WAIT_EOED|s_client_auth_branch": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_EOED 无 's_client_auth_branch' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_EOED|s_recv_certificate_nonempty": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_EOED 无 's_recv_certificate_nonempty' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_EOED|s_recv_certificate_empty": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_EOED 无 's_recv_certificate_empty' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_EOED|s_recv_certificateverify": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_EOED 无 's_recv_certificateverify' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_EOED|s_recv_finished": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_EOED 无 's_recv_finished' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_FLIGHT2|c_send_clienthello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_FLIGHT2 无 'c_send_clienthello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_FLIGHT2|c_recv_helloretryrequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_FLIGHT2 无 'c_recv_helloretryrequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_FLIGHT2|c_recv_serverhello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_FLIGHT2 无 'c_recv_serverhello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_FLIGHT2|c_recv_encryptedextensions": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_FLIGHT2 无 'c_recv_encryptedextensions' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_FLIGHT2|c_recv_certificate": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_FLIGHT2 无 'c_recv_certificate' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_FLIGHT2|c_recv_certificaterequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_FLIGHT2 无 'c_recv_certificaterequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_FLIGHT2|c_recv_certificateverify": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_FLIGHT2 无 'c_recv_certificateverify' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_FLIGHT2|c_recv_finished": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_FLIGHT2 无 'c_recv_finished' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_FLIGHT2|s_recv_clienthello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_FLIGHT2 无 's_recv_clienthello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_FLIGHT2|s_send_helloretryrequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_FLIGHT2 无 's_send_helloretryrequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_FLIGHT2|s_select_parameters": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_FLIGHT2 无 's_select_parameters' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_FLIGHT2|s_send_serverhello_flight": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_FLIGHT2 无 's_send_serverhello_flight' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_FLIGHT2|s_recv_endofearlydata": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_FLIGHT2 无 's_recv_endofearlydata' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_FLIGHT2|s_client_auth_branch": "RFC 8446 §A.2 (rfc8446.txt):6754-6764 No auth -> WAIT_FINISHED / Client auth -> WAIT_CERT（服务端配置条件→等概率占位, 声明; §4.3.2 txt:3334）",
+    "s_WAIT_FLIGHT2|s_recv_certificate_nonempty": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_FLIGHT2 无 's_recv_certificate_nonempty' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_FLIGHT2|s_recv_certificate_empty": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_FLIGHT2 无 's_recv_certificate_empty' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_FLIGHT2|s_recv_certificateverify": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_FLIGHT2 无 's_recv_certificateverify' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_FLIGHT2|s_recv_finished": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_FLIGHT2 无 's_recv_finished' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_CERT|c_send_clienthello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_CERT 无 'c_send_clienthello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_CERT|c_recv_helloretryrequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_CERT 无 'c_recv_helloretryrequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_CERT|c_recv_serverhello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_CERT 无 'c_recv_serverhello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_CERT|c_recv_encryptedextensions": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_CERT 无 'c_recv_encryptedextensions' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_CERT|c_recv_certificate": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_CERT 无 'c_recv_certificate' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_CERT|c_recv_certificaterequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_CERT 无 'c_recv_certificaterequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_CERT|c_recv_certificateverify": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_CERT 无 'c_recv_certificateverify' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_CERT|c_recv_finished": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_CERT 无 'c_recv_finished' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_CERT|s_recv_clienthello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_CERT 无 's_recv_clienthello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_CERT|s_send_helloretryrequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_CERT 无 's_send_helloretryrequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_CERT|s_select_parameters": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_CERT 无 's_select_parameters' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_CERT|s_send_serverhello_flight": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_CERT 无 's_send_serverhello_flight' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_CERT|s_recv_endofearlydata": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_CERT 无 's_recv_endofearlydata' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_CERT|s_client_auth_branch": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_CERT 无 's_client_auth_branch' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_CERT|s_recv_certificate_nonempty": "RFC 8446 §A.2 (rfc8446.txt):6758-6761 'Recv Certificate' 箭头 WAIT_CERT->WAIT_CV; §4.4.2 txt:3535",
+    "s_WAIT_CERT|s_recv_certificate_empty": "RFC 8446 §A.2 (rfc8446.txt):6759-6764 'Recv empty Certificate' 箭头 WAIT_CERT->WAIT_FINISHED",
+    "s_WAIT_CERT|s_recv_certificateverify": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_CERT 无 's_recv_certificateverify' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_CERT|s_recv_finished": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_CERT 无 's_recv_finished' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_CV|c_send_clienthello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_CV 无 'c_send_clienthello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_CV|c_recv_helloretryrequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_CV 无 'c_recv_helloretryrequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_CV|c_recv_serverhello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_CV 无 'c_recv_serverhello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_CV|c_recv_encryptedextensions": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_CV 无 'c_recv_encryptedextensions' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_CV|c_recv_certificate": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_CV 无 'c_recv_certificate' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_CV|c_recv_certificaterequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_CV 无 'c_recv_certificaterequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_CV|c_recv_certificateverify": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_CV 无 'c_recv_certificateverify' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_CV|c_recv_finished": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_CV 无 'c_recv_finished' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_CV|s_recv_clienthello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_CV 无 's_recv_clienthello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_CV|s_send_helloretryrequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_CV 无 's_send_helloretryrequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_CV|s_select_parameters": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_CV 无 's_select_parameters' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_CV|s_send_serverhello_flight": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_CV 无 's_send_serverhello_flight' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_CV|s_recv_endofearlydata": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_CV 无 's_recv_endofearlydata' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_CV|s_client_auth_branch": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_CV 无 's_client_auth_branch' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_CV|s_recv_certificate_nonempty": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_CV 无 's_recv_certificate_nonempty' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_CV|s_recv_certificate_empty": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_CV 无 's_recv_certificate_empty' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_CV|s_recv_certificateverify": "RFC 8446 §A.2 (rfc8446.txt):6762-6764 'Recv CertificateVerify' 箭头 WAIT_CV->WAIT_FINISHED; §4.4.3 txt:3823",
+    "s_WAIT_CV|s_recv_finished": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_CV 无 's_recv_finished' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_FINISHED|c_send_clienthello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_FINISHED 无 'c_send_clienthello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_FINISHED|c_recv_helloretryrequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_FINISHED 无 'c_recv_helloretryrequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_FINISHED|c_recv_serverhello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_FINISHED 无 'c_recv_serverhello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_FINISHED|c_recv_encryptedextensions": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_FINISHED 无 'c_recv_encryptedextensions' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_FINISHED|c_recv_certificate": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_FINISHED 无 'c_recv_certificate' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_FINISHED|c_recv_certificaterequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_FINISHED 无 'c_recv_certificaterequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_FINISHED|c_recv_certificateverify": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_FINISHED 无 'c_recv_certificateverify' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_FINISHED|c_recv_finished": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_FINISHED 无 'c_recv_finished' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_FINISHED|s_recv_clienthello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_FINISHED 无 's_recv_clienthello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_FINISHED|s_send_helloretryrequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_FINISHED 无 's_send_helloretryrequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_FINISHED|s_select_parameters": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_FINISHED 无 's_select_parameters' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_FINISHED|s_send_serverhello_flight": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_FINISHED 无 's_send_serverhello_flight' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_FINISHED|s_recv_endofearlydata": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_FINISHED 无 's_recv_endofearlydata' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_FINISHED|s_client_auth_branch": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_FINISHED 无 's_client_auth_branch' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_FINISHED|s_recv_certificate_nonempty": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_FINISHED 无 's_recv_certificate_nonempty' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_FINISHED|s_recv_certificate_empty": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_FINISHED 无 's_recv_certificate_empty' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_FINISHED|s_recv_certificateverify": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_WAIT_FINISHED 无 's_recv_certificateverify' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_WAIT_FINISHED|s_recv_finished": "RFC 8446 §A.2 (rfc8446.txt):6765-6768 'Recv Finished' 箭头 WAIT_FINISHED->CONNECTED; §4.4.4 txt:3945; 奖励约定 +1.0",
+    "s_CONNECTED|c_send_clienthello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_CONNECTED 无 'c_send_clienthello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_CONNECTED|c_recv_helloretryrequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_CONNECTED 无 'c_recv_helloretryrequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_CONNECTED|c_recv_serverhello": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_CONNECTED 无 'c_recv_serverhello' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_CONNECTED|c_recv_encryptedextensions": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_CONNECTED 无 'c_recv_encryptedextensions' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_CONNECTED|c_recv_certificate": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_CONNECTED 无 'c_recv_certificate' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_CONNECTED|c_recv_certificaterequest": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_CONNECTED 无 'c_recv_certificaterequest' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_CONNECTED|c_recv_certificateverify": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_CONNECTED 无 'c_recv_certificateverify' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_CONNECTED|c_recv_finished": "未注册格类规则（统一 -1.0）：Appendix A 图中该 (态,事件) 组合无对应箭头（s_CONNECTED 无 'c_recv_finished' 出箭头; 对侧事件对本侧态亦无语义）",
+    "s_CONNECTED|s_recv_clienthello": "RFC 8446 §A.2 (rfc8446.txt):6768 CONNECTED 吸收（图终点无出边）→ 全事件自环 0.0",
+    "s_CONNECTED|s_send_helloretryrequest": "RFC 8446 §A.2 (rfc8446.txt):6768 CONNECTED 吸收（图终点无出边）→ 全事件自环 0.0",
+    "s_CONNECTED|s_select_parameters": "RFC 8446 §A.2 (rfc8446.txt):6768 CONNECTED 吸收（图终点无出边）→ 全事件自环 0.0",
+    "s_CONNECTED|s_send_serverhello_flight": "RFC 8446 §A.2 (rfc8446.txt):6768 CONNECTED 吸收（图终点无出边）→ 全事件自环 0.0",
+    "s_CONNECTED|s_recv_endofearlydata": "RFC 8446 §A.2 (rfc8446.txt):6768 CONNECTED 吸收（图终点无出边）→ 全事件自环 0.0",
+    "s_CONNECTED|s_client_auth_branch": "RFC 8446 §A.2 (rfc8446.txt):6768 CONNECTED 吸收（图终点无出边）→ 全事件自环 0.0",
+    "s_CONNECTED|s_recv_certificate_nonempty": "RFC 8446 §A.2 (rfc8446.txt):6768 CONNECTED 吸收（图终点无出边）→ 全事件自环 0.0",
+    "s_CONNECTED|s_recv_certificate_empty": "RFC 8446 §A.2 (rfc8446.txt):6768 CONNECTED 吸收（图终点无出边）→ 全事件自环 0.0",
+    "s_CONNECTED|s_recv_certificateverify": "RFC 8446 §A.2 (rfc8446.txt):6768 CONNECTED 吸收（图终点无出边）→ 全事件自环 0.0",
+    "s_CONNECTED|s_recv_finished": "RFC 8446 §A.2 (rfc8446.txt):6768 CONNECTED 吸收（图终点无出边）→ 全事件自环 0.0",
+    "filler_17|c_send_clienthello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_17|c_recv_helloretryrequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_17|c_recv_serverhello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_17|c_recv_encryptedextensions": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_17|c_recv_certificate": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_17|c_recv_certificaterequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_17|c_recv_certificateverify": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_17|c_recv_finished": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_17|s_recv_clienthello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_17|s_send_helloretryrequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_17|s_select_parameters": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_17|s_send_serverhello_flight": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_17|s_recv_endofearlydata": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_17|s_client_auth_branch": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_17|s_recv_certificate_nonempty": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_17|s_recv_certificate_empty": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_17|s_recv_certificateverify": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_17|s_recv_finished": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_18|c_send_clienthello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_18|c_recv_helloretryrequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_18|c_recv_serverhello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_18|c_recv_encryptedextensions": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_18|c_recv_certificate": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_18|c_recv_certificaterequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_18|c_recv_certificateverify": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_18|c_recv_finished": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_18|s_recv_clienthello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_18|s_send_helloretryrequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_18|s_select_parameters": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_18|s_send_serverhello_flight": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_18|s_recv_endofearlydata": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_18|s_client_auth_branch": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_18|s_recv_certificate_nonempty": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_18|s_recv_certificate_empty": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_18|s_recv_certificateverify": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_18|s_recv_finished": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_19|c_send_clienthello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_19|c_recv_helloretryrequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_19|c_recv_serverhello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_19|c_recv_encryptedextensions": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_19|c_recv_certificate": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_19|c_recv_certificaterequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_19|c_recv_certificateverify": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_19|c_recv_finished": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_19|s_recv_clienthello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_19|s_send_helloretryrequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_19|s_select_parameters": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_19|s_send_serverhello_flight": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_19|s_recv_endofearlydata": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_19|s_client_auth_branch": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_19|s_recv_certificate_nonempty": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_19|s_recv_certificate_empty": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_19|s_recv_certificateverify": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_19|s_recv_finished": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_20|c_send_clienthello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_20|c_recv_helloretryrequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_20|c_recv_serverhello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_20|c_recv_encryptedextensions": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_20|c_recv_certificate": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_20|c_recv_certificaterequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_20|c_recv_certificateverify": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_20|c_recv_finished": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_20|s_recv_clienthello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_20|s_send_helloretryrequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_20|s_select_parameters": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_20|s_send_serverhello_flight": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_20|s_recv_endofearlydata": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_20|s_client_auth_branch": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_20|s_recv_certificate_nonempty": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_20|s_recv_certificate_empty": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_20|s_recv_certificateverify": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_20|s_recv_finished": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_21|c_send_clienthello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_21|c_recv_helloretryrequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_21|c_recv_serverhello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_21|c_recv_encryptedextensions": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_21|c_recv_certificate": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_21|c_recv_certificaterequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_21|c_recv_certificateverify": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_21|c_recv_finished": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_21|s_recv_clienthello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_21|s_send_helloretryrequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_21|s_select_parameters": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_21|s_send_serverhello_flight": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_21|s_recv_endofearlydata": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_21|s_client_auth_branch": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_21|s_recv_certificate_nonempty": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_21|s_recv_certificate_empty": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_21|s_recv_certificateverify": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_21|s_recv_finished": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_22|c_send_clienthello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_22|c_recv_helloretryrequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_22|c_recv_serverhello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_22|c_recv_encryptedextensions": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_22|c_recv_certificate": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_22|c_recv_certificaterequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_22|c_recv_certificateverify": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_22|c_recv_finished": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_22|s_recv_clienthello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_22|s_send_helloretryrequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_22|s_select_parameters": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_22|s_send_serverhello_flight": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_22|s_recv_endofearlydata": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_22|s_client_auth_branch": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_22|s_recv_certificate_nonempty": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_22|s_recv_certificate_empty": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_22|s_recv_certificateverify": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_22|s_recv_finished": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_23|c_send_clienthello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_23|c_recv_helloretryrequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_23|c_recv_serverhello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_23|c_recv_encryptedextensions": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_23|c_recv_certificate": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_23|c_recv_certificaterequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_23|c_recv_certificateverify": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_23|c_recv_finished": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_23|s_recv_clienthello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_23|s_send_helloretryrequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_23|s_select_parameters": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_23|s_send_serverhello_flight": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_23|s_recv_endofearlydata": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_23|s_client_auth_branch": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_23|s_recv_certificate_nonempty": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_23|s_recv_certificate_empty": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_23|s_recv_certificateverify": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_23|s_recv_finished": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_24|c_send_clienthello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_24|c_recv_helloretryrequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_24|c_recv_serverhello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_24|c_recv_encryptedextensions": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_24|c_recv_certificate": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_24|c_recv_certificaterequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_24|c_recv_certificateverify": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_24|c_recv_finished": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_24|s_recv_clienthello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_24|s_send_helloretryrequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_24|s_select_parameters": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_24|s_send_serverhello_flight": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_24|s_recv_endofearlydata": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_24|s_client_auth_branch": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_24|s_recv_certificate_nonempty": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_24|s_recv_certificate_empty": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_24|s_recv_certificateverify": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_24|s_recv_finished": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_25|c_send_clienthello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_25|c_recv_helloretryrequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_25|c_recv_serverhello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_25|c_recv_encryptedextensions": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_25|c_recv_certificate": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_25|c_recv_certificaterequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_25|c_recv_certificateverify": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_25|c_recv_finished": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_25|s_recv_clienthello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_25|s_send_helloretryrequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_25|s_select_parameters": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_25|s_send_serverhello_flight": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_25|s_recv_endofearlydata": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_25|s_client_auth_branch": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_25|s_recv_certificate_nonempty": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_25|s_recv_certificate_empty": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_25|s_recv_certificateverify": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_25|s_recv_finished": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_26|c_send_clienthello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_26|c_recv_helloretryrequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_26|c_recv_serverhello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_26|c_recv_encryptedextensions": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_26|c_recv_certificate": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_26|c_recv_certificaterequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_26|c_recv_certificateverify": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_26|c_recv_finished": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_26|s_recv_clienthello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_26|s_send_helloretryrequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_26|s_select_parameters": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_26|s_send_serverhello_flight": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_26|s_recv_endofearlydata": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_26|s_client_auth_branch": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_26|s_recv_certificate_nonempty": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_26|s_recv_certificate_empty": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_26|s_recv_certificateverify": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_26|s_recv_finished": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_27|c_send_clienthello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_27|c_recv_helloretryrequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_27|c_recv_serverhello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_27|c_recv_encryptedextensions": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_27|c_recv_certificate": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_27|c_recv_certificaterequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_27|c_recv_certificateverify": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_27|c_recv_finished": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_27|s_recv_clienthello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_27|s_send_helloretryrequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_27|s_select_parameters": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_27|s_send_serverhello_flight": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_27|s_recv_endofearlydata": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_27|s_client_auth_branch": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_27|s_recv_certificate_nonempty": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_27|s_recv_certificate_empty": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_27|s_recv_certificateverify": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_27|s_recv_finished": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_28|c_send_clienthello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_28|c_recv_helloretryrequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_28|c_recv_serverhello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_28|c_recv_encryptedextensions": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_28|c_recv_certificate": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_28|c_recv_certificaterequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_28|c_recv_certificateverify": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_28|c_recv_finished": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_28|s_recv_clienthello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_28|s_send_helloretryrequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_28|s_select_parameters": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_28|s_send_serverhello_flight": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_28|s_recv_endofearlydata": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_28|s_client_auth_branch": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_28|s_recv_certificate_nonempty": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_28|s_recv_certificate_empty": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_28|s_recv_certificateverify": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_28|s_recv_finished": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_29|c_send_clienthello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_29|c_recv_helloretryrequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_29|c_recv_serverhello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_29|c_recv_encryptedextensions": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_29|c_recv_certificate": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_29|c_recv_certificaterequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_29|c_recv_certificateverify": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_29|c_recv_finished": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_29|s_recv_clienthello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_29|s_send_helloretryrequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_29|s_select_parameters": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_29|s_send_serverhello_flight": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_29|s_recv_endofearlydata": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_29|s_client_auth_branch": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_29|s_recv_certificate_nonempty": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_29|s_recv_certificate_empty": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_29|s_recv_certificateverify": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_29|s_recv_finished": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_30|c_send_clienthello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_30|c_recv_helloretryrequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_30|c_recv_serverhello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_30|c_recv_encryptedextensions": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_30|c_recv_certificate": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_30|c_recv_certificaterequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_30|c_recv_certificateverify": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_30|c_recv_finished": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_30|s_recv_clienthello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_30|s_send_helloretryrequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_30|s_select_parameters": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_30|s_send_serverhello_flight": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_30|s_recv_endofearlydata": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_30|s_client_auth_branch": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_30|s_recv_certificate_nonempty": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_30|s_recv_certificate_empty": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_30|s_recv_certificateverify": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_30|s_recv_finished": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_31|c_send_clienthello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_31|c_recv_helloretryrequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_31|c_recv_serverhello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_31|c_recv_encryptedextensions": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_31|c_recv_certificate": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_31|c_recv_certificaterequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_31|c_recv_certificateverify": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_31|c_recv_finished": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_31|s_recv_clienthello": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_31|s_send_helloretryrequest": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_31|s_select_parameters": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_31|s_send_serverhello_flight": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_31|s_recv_endofearlydata": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_31|s_client_auth_branch": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_31|s_recv_certificate_nonempty": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_31|s_recv_certificate_empty": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_31|s_recv_certificateverify": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_31|s_recv_finished": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义"
+   },
+   "not_collected": [
+    {
+     "item": "client PSK 分支与 certificate 分支的判别条件（是否持有 PSK/是否收到 CertReq）",
+     "why": "握手模式为会话条件，非 (态,事件) 维度；已等概率占位声明（c_WAIT_EE 行）"
+    },
+    {
+     "item": "server 0-RTT 有无、client auth 有无的判别条件",
+     "why": "同上（s_NEGOTIATED / s_WAIT_FLIGHT2 行）"
+    },
+    {
+     "item": "Appendix A 中 [Send EndOfEarlyData]、[Send Certificate [+ CertificateVerify]]、Send Finished、K_* 密钥计算等动作",
+     "why": "为同飞行内的动作标注而非独立状态迁移事件（图 6704-6710）；折叠进 Recv Finished 边的引证"
+    },
+    {
+     "item": "KeyUpdate / post-handshake 消息 / 会话恢复（PSK binder）后的状态重入",
+     "why": "Appendix A 图未画；§2.2/§4.6 为消息机制非相迁移"
+    },
+    {
+     "item": "alert/关闭转移（close_notify）",
+     "why": "Appendix A 图无关闭相；不虚构状态"
+    },
+    {
+     "item": "HelloRetryRequest 后中间态（部分实现有 HELLO_RETRY_REQUEST 中间态）",
+     "why": "（勘误 2026-10-31）RFC 图把 HRR 画为 WAIT_SH/RECVD_CH 指回 START 的回边（6682-6686/6729-6732），原转录误作 START 自环，已修"
+    },
+    {
+     "item": "TCP 状态机任何元素",
+     "why": "W1 风险项红线：TCP 属 symmetry-court 既有物，严禁混入"
+    }
+   ],
+   "unregistered_cell_rule": "图中无箭头的 (态,事件) 统一 -1.0；每格引证注明本态无该出箭头"
+  },
+  "regenerate": "python -X utf8 make_tls13_handshake.py",
+  "generator": "make_tls13_handshake.py（W2 转录工程师；不运行 wuxing-gua、不算真值）"
+ },
+ "trans": [
+  [
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     -1.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     1,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     -1.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     2,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     -1.0
+    ]
+   ],
+   [
+    [
+     0.5,
+     3,
+     0.0
+    ],
+    [
+     0.5,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     -1.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     3,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     -1.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     4,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     -1.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     5,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     -1.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     6,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     -1.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     -1.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     8,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     8,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     8,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     8,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     8,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     8,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     8,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     8,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     9,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     8,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     8,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     8,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     8,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     8,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     8,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     8,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     8,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     8,
+     -1.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     9,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     9,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     9,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     9,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     9,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     9,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     9,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     9,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     9,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     8,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     9,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     9,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     9,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     9,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     9,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     9,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     9,
+     -1.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     10,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     -1.0
+    ]
+   ],
+   [
+    [
+     0.5,
+     11,
+     0.0
+    ],
+    [
+     0.5,
+     12,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     -1.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     11,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     -1.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     12,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     -1.0
+    ]
+   ],
+   [
+    [
+     0.5,
+     13,
+     0.0
+    ],
+    [
+     0.5,
+     15,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     -1.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     13,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     -1.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     14,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     -1.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     15,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     16,
+     1.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     16,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     16,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     16,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     16,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     16,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     16,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     16,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     16,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     16,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     16,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     16,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     16,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     16,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     16,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     16,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     16,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     16,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     16,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     17,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     17,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     17,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     17,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     17,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     17,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     17,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     17,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     17,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     17,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     17,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     17,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     17,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     17,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     17,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     17,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     17,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     17,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     18,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     18,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     18,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     18,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     18,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     18,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     18,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     18,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     18,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     18,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     18,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     18,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     18,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     18,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     18,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     18,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     18,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     18,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     19,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     19,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     19,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     19,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     19,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     19,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     19,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     19,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     19,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     19,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     19,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     19,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     19,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     19,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     19,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     19,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     19,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     19,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     20,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     20,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     20,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     20,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     20,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     20,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     20,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     20,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     20,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     20,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     20,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     20,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     20,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     20,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     20,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     20,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     20,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     20,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     21,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     21,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     21,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     21,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     21,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     21,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     21,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     21,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     21,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     21,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     21,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     21,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     21,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     21,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     21,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     21,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     21,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     21,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     22,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     22,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     22,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     22,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     22,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     22,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     22,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     22,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     22,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     22,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     22,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     22,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     22,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     22,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     22,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     22,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     22,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     22,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     23,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     23,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     23,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     23,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     23,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     23,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     23,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     23,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     23,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     23,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     23,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     23,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     23,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     23,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     23,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     23,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     23,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     23,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     24,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     24,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     24,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     24,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     24,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     24,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     24,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     24,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     24,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     24,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     24,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     24,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     24,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     24,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     24,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     24,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     24,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     24,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     25,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     25,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     25,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     25,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     25,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     25,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     25,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     25,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     25,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     25,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     25,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     25,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     25,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     25,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     25,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     25,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     25,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     25,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     26,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     26,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     26,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     26,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     26,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     26,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     26,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     26,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     26,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     26,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     26,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     26,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     26,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     26,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     26,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     26,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     26,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     26,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     27,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     27,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     27,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     27,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     27,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     27,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     27,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     27,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     27,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     27,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     27,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     27,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     27,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     27,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     27,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     27,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     27,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     27,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     28,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     28,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     28,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     28,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     28,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     28,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     28,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     28,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     28,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     28,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     28,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     28,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     28,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     28,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     28,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     28,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     28,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     28,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     29,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     29,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     29,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     29,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     29,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     29,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     29,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     29,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     29,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     29,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     29,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     29,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     29,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     29,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     29,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     29,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     29,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     29,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     30,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     30,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     30,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     30,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     30,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     30,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     30,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     30,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     30,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     30,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     30,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     30,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     30,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     30,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     30,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     30,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     30,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     30,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     31,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     31,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     31,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     31,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     31,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     31,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     31,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     31,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     31,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     31,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     31,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     31,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     31,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     31,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     31,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     31,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     31,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     31,
+     0.0
+    ]
+   ]
+  ]
+ ]
+}

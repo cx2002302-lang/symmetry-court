@@ -1,0 +1,67 @@
+{
+ "case": "usb2-device-states",
+ "provenance": {
+  "recorded": "2026-11-02T17:28:29Z, observed from a live three-way arbitration run (`python -X utf8 -m symmetry_court arbitrate --emit-expected-template`; receipt: verdicts/usb2-device-states.verdict.json); the gate (`python -X utf8 -m symmetry_court selftest`) replays the case and compares these rows field-by-field. Case incorporated byte-identical from the field-trial blind-test project (model + groups + generator + README; the generator's --check byte-identity passes in this repository).",
+  "networkx_source": "the networkx columns carry the field-trial sealed truth's corresponding values for this case (field-trial sealed/usb2-device-states.truth.json, whose sha256 is pinned in that project's sealed/_W3_manifest.json; the sealed file's recorded model/group sha256s match the copied case files byte-for-byte, so audit can replay the sealed check on exactly these inputs). Reconciled three ways before pinning: court juror (direct edge-set algebra + networkx VF2 membership), a fresh independent recomputation over the transcribed model, and the sealed automorphism facts (labeled_symmetry <-> the sealed per-element fixed check passes_fixed; structure_symmetry <-> the sealed structural-order / fixed-elements / filler-class facts). All three agreed on every group.",
+  "reading_guide": "relabel row = actions may be renamed along with states (diagnostic contrast reading); fixed row = event names pinned (the protocol-true reading, declared in each group file); networkx columns = independent juror"
+ },
+ "groups": {
+  "g1_claim_default_address_swap_fixed": {
+   "claim": "同一设备的枚举路径 Attached -> Powered -> Default -> Address -> Configured 与所插端口、所分配地址值无关：任意可工作端口热插拔都走同一状态序列；主机按描述符（而非端口/地址实例）识别绑定设备，相同描述符的设备实例对主机等价。（W1 dossier case-05 symmetric_claim 原文） 状态级类比（被告主张）：Default（已复位未编址）与 Address（已编址未配置）两个枚举中间态等价可互换——若'地址值只是载荷、路径与端口无关'则此对换应保持行为；两态的入边事件不同（reset vs address_assigned），裁决交工具/基准。",
+   "relabel": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "generalized"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict"
+   },
+   "networkx": {
+    "structure_symmetry": false,
+    "labeled_symmetry": false
+   }
+  },
+  "g2_control_attached_configured_swap_fixed": {
+   "claim": "对照主张：Attached（仅贴上未供电）与 Configured（主机可用）为枚举路径两端点，若主张'端点态等价'则此对换应保持行为；两态结构差异最大（Attached 仅 1 出边 vs Configured 2 出边），判别交工具/基准。",
+   "relabel": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "generalized"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict"
+   },
+   "networkx": {
+    "structure_symmetry": false,
+    "labeled_symmetry": false
+   }
+  },
+  "g3_pads_swap_fixed": {
+   "claim": "正控对照：填充哑态 filler_6/filler_7 行完全相同（全事件自环 0.0、不引用真实事件语义），对换在 fixed 口径下是真对称；检验工具对平凡真对称的放行（rung 1c pads 惯例）。",
+   "relabel": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "generalized"
+   },
+   "fixed": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "strict"
+   },
+   "networkx": {
+    "structure_symmetry": true,
+    "labeled_symmetry": true
+   }
+  }
+ }
+}

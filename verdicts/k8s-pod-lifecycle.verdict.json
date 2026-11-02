@@ -1,0 +1,459 @@
+{
+ "case": "k8s-pod-lifecycle",
+ "generated_utc": "2026-11-02T18:13:17Z",
+ "tools": {
+  "engine": {
+   "name": "wuxing_gua",
+   "version": "wuxing_gua 1.0.0",
+   "location": "vendored/wuxing_gua",
+   "provenance": "pinned source revision + sha256 manifest in NOTICE",
+   "invocation": "python -X utf8 -m wuxing_gua check --trans <model> --group <group> [--strict]; cwd=vendored/; PYTHONDONTWRITEBYTECODE=1"
+  },
+  "networkx": "3.6.1",
+  "python": "3.12.10"
+ },
+ "model": {
+  "path": "cases\\k8s-pod-lifecycle\\model.json",
+  "n_bits": 3,
+  "n_states": 8,
+  "n_actions": 7,
+  "source_system": "Kubernetes official docs Pod Lifecycle (PodPhase), transcribed by field-trial W2 from pinned public docs",
+  "source_citation": [
+   "Kubernetes 官方文档 Pod Lifecycle 页: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/",
+   "  - W1 快照 dossier/sources/k8s_pod_lifecycle.html；W2 本会话（2026-10-31）WebFetch 在线抽查：5 相定义、lifecycle 句、",
+   "    node-death 句、1.27 deletion 句、PodGC 句与快照逐句一致",
+   "  - 关键原文（全部在 transcription_notes.cell_citations 逐边回引）: lifecycle 句 / Pending,Running,Succeeded,Failed,Unknown 相定义 /",
+   "    \"If a node dies or is disconnected...\" / \"Since Kubernetes 1.27, the kubelet transitions deleted Pods to a terminal phase...\" /",
+   "    \"Along with cleaning up the Pods, PodGC will also mark them as failed if they are in a non-terminal phase.\"",
+   "辅助主张来源（W1 快照，未进转录）: kubernetes.io Deployment 页、Service 页"
+  ]
+ },
+ "groups": {
+  "g1_claim_succeeded_failed_swap_fixed": {
+   "group_file": "groups/g1_claim_succeeded_failed_swap_fixed.json",
+   "declared_semantics": {
+    "action": "fixed"
+   },
+   "claim": "同一 Deployment 模板产出的 Pod 副本可互换：Service 只按 label/端点集合做负载均衡，副本个体身份无关（副本增删只触发 EndpointSlices 更新）；任何副本可被删除并在任意节点按同一模板重建。（W1 dossier case-03 symmetric_claim 原文） 终相级类比（被告主张）：两个 terminal 相下副本替换语义等价（删除任一终态副本都触发同模板重建），若终相等价则此对换应保持系统行为；两相前驱事件不同（all_containers_succeeded vs any_container_failed），裁决交工具/基准。",
+   "order_engine_reported": 2,
+   "relabel": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "generalized",
+    "error": null,
+    "reason": "转移等变层失败：max TV=inf（含非位置置换元素） > tol=1e-09（1/2 个受检元素不过）",
+    "semantics": {
+     "action": "relabel",
+     "judge": "generalized",
+     "declared": true,
+     "assumed": false,
+     "source": "group_file"
+    },
+    "command": [
+     "python",
+     "-X",
+     "utf8",
+     "-m",
+     "wuxing_gua",
+     "check",
+     "--trans",
+     "cases\\k8s-pod-lifecycle\\model.json",
+     "--group",
+     "<court_tmp>\\g1_claim_succeeded_failed_swap_fixed.relabel.json"
+    ],
+    "stderr_tail": "",
+    "frame": "relabel",
+    "stamp_note": "court-stamped relabel copy used (original declaration: 'fixed')"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict",
+    "error": null,
+    "reason": "转移等变层失败：max TV=1 > tol=1e-09（1/2 个受检元素不过）",
+    "semantics": {
+     "action": "fixed",
+     "judge": "strict",
+     "declared": true,
+     "assumed": false,
+     "source": "flag_strict"
+    },
+    "command": [
+     "python",
+     "-X",
+     "utf8",
+     "-m",
+     "wuxing_gua",
+     "check",
+     "--trans",
+     "cases\\k8s-pod-lifecycle\\model.json",
+     "--group",
+     "cases\\k8s-pod-lifecycle\\groups\\g1_claim_succeeded_failed_swap_fixed.json",
+     "--strict"
+    ],
+    "stderr_tail": "",
+    "frame": "fixed",
+    "stamp_note": "original group file, --strict flag (fixed frame)"
+   },
+   "networkx": {
+    "structure_symmetry": false,
+    "labeled_symmetry": false,
+    "n_elements": 2,
+    "n_unique_elements": 2,
+    "n_nontrivial": 1,
+    "per_element": [
+     {
+      "element": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7
+      ],
+      "is_identity": true,
+      "structural": true,
+      "labeled": true,
+      "nx_vf2_membership_structural": true,
+      "nx_vf2_membership_labeled": true
+     },
+     {
+      "element": [
+       0,
+       1,
+       3,
+       2,
+       4,
+       5,
+       6,
+       7
+      ],
+      "is_identity": false,
+      "structural": false,
+      "labeled": false,
+      "nx_vf2_membership_structural": false,
+      "nx_vf2_membership_labeled": false
+     }
+    ],
+    "per_element_truncated": false,
+    "method": "primary=direct edge-set check (O(E), hand-checkable); cross-check=networkx VF2 automorphism-set membership (independent implementation)",
+    "method_conflicts": [],
+    "crosscheck_status": "ok",
+    "scope": "full model (all n_states=8, padding included)",
+    "n_autos_structure": 6,
+    "n_autos_labeled": 6,
+    "autos_truncated": false,
+    "autos_skipped_reason": null,
+    "structural_pad_states": [
+     2,
+     3,
+     5,
+     6,
+     7
+    ],
+    "n_autos_structure_nonpad": null,
+    "n_autos_labeled_nonpad": null,
+    "autos_nonpad_scope": "not applicable (no structural pads, or real rows reference pad states)"
+   },
+   "consistency": {
+    "relabel_vs_structure": "agree",
+    "fixed_vs_labeled": "agree",
+    "arms_differ": false,
+    "ruling_code": "agree",
+    "ruling": "all columns agree: engine (both standards) and networkx (both scopes) say 'reject' for this group",
+    "binding_verdict": "reject"
+   }
+  },
+  "g2_control_pending_running_swap_fixed": {
+   "group_file": "groups/g2_control_pending_running_swap_fixed.json",
+   "declared_semantics": {
+    "action": "fixed"
+   },
+   "claim": "对照主张：文档 lifecycle 句给出 Pending→Running 的方向性（'starting in the Pending phase, moving through Running'），若主张两相无序等价则此对换应保持行为；判别交工具/基准。",
+   "order_engine_reported": 2,
+   "relabel": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "generalized",
+    "error": null,
+    "reason": "转移等变层失败：max TV=inf（含非位置置换元素） > tol=1e-09（1/2 个受检元素不过）；奖励剖面层失败：同轨道剖面不同 1/1 对（判据 n_bad=0 零容忍）",
+    "semantics": {
+     "action": "relabel",
+     "judge": "generalized",
+     "declared": true,
+     "assumed": false,
+     "source": "group_file"
+    },
+    "command": [
+     "python",
+     "-X",
+     "utf8",
+     "-m",
+     "wuxing_gua",
+     "check",
+     "--trans",
+     "cases\\k8s-pod-lifecycle\\model.json",
+     "--group",
+     "<court_tmp>\\g2_control_pending_running_swap_fixed.relabel.json"
+    ],
+    "stderr_tail": "",
+    "frame": "relabel",
+    "stamp_note": "court-stamped relabel copy used (original declaration: 'fixed')"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict",
+    "error": null,
+    "reason": "转移等变层失败：max TV=1 > tol=1e-09（1/2 个受检元素不过）；奖励剖面层失败：同轨道剖面不同 1/1 对（判据 n_bad=0 零容忍）",
+    "semantics": {
+     "action": "fixed",
+     "judge": "strict",
+     "declared": true,
+     "assumed": false,
+     "source": "flag_strict"
+    },
+    "command": [
+     "python",
+     "-X",
+     "utf8",
+     "-m",
+     "wuxing_gua",
+     "check",
+     "--trans",
+     "cases\\k8s-pod-lifecycle\\model.json",
+     "--group",
+     "cases\\k8s-pod-lifecycle\\groups\\g2_control_pending_running_swap_fixed.json",
+     "--strict"
+    ],
+    "stderr_tail": "",
+    "frame": "fixed",
+    "stamp_note": "original group file, --strict flag (fixed frame)"
+   },
+   "networkx": {
+    "structure_symmetry": false,
+    "labeled_symmetry": false,
+    "n_elements": 2,
+    "n_unique_elements": 2,
+    "n_nontrivial": 1,
+    "per_element": [
+     {
+      "element": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7
+      ],
+      "is_identity": true,
+      "structural": true,
+      "labeled": true,
+      "nx_vf2_membership_structural": true,
+      "nx_vf2_membership_labeled": true
+     },
+     {
+      "element": [
+       1,
+       0,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7
+      ],
+      "is_identity": false,
+      "structural": false,
+      "labeled": false,
+      "nx_vf2_membership_structural": false,
+      "nx_vf2_membership_labeled": false
+     }
+    ],
+    "per_element_truncated": false,
+    "method": "primary=direct edge-set check (O(E), hand-checkable); cross-check=networkx VF2 automorphism-set membership (independent implementation)",
+    "method_conflicts": [],
+    "crosscheck_status": "ok",
+    "scope": "full model (all n_states=8, padding included)",
+    "n_autos_structure": 6,
+    "n_autos_labeled": 6,
+    "autos_truncated": false,
+    "autos_skipped_reason": null,
+    "structural_pad_states": [
+     2,
+     3,
+     5,
+     6,
+     7
+    ],
+    "n_autos_structure_nonpad": null,
+    "n_autos_labeled_nonpad": null,
+    "autos_nonpad_scope": "not applicable (no structural pads, or real rows reference pad states)"
+   },
+   "consistency": {
+    "relabel_vs_structure": "agree",
+    "fixed_vs_labeled": "agree",
+    "arms_differ": false,
+    "ruling_code": "agree",
+    "ruling": "all columns agree: engine (both standards) and networkx (both scopes) say 'reject' for this group",
+    "binding_verdict": "reject"
+   }
+  },
+  "g3_pads_swap_fixed": {
+   "group_file": "groups/g3_pads_swap_fixed.json",
+   "declared_semantics": {
+    "action": "fixed"
+   },
+   "claim": "正控对照：两个填充哑态 filler_5/filler_6 行完全相同（全事件自环 0.0、不引用真实事件语义），对换在 fixed 口径下是货真价实的对称；用于检验工具对'平凡真对称'的放行行为（参照工具仓 rung 1c pads 惯例）。",
+   "order_engine_reported": 2,
+   "relabel": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "generalized",
+    "error": null,
+    "reason": "两层判据均通过：转移等变（max TV=0.00e+00 ≤ tol=1e-09）+ 奖励剖面（n_bad=0）",
+    "semantics": {
+     "action": "relabel",
+     "judge": "generalized",
+     "declared": true,
+     "assumed": false,
+     "source": "group_file"
+    },
+    "command": [
+     "python",
+     "-X",
+     "utf8",
+     "-m",
+     "wuxing_gua",
+     "check",
+     "--trans",
+     "cases\\k8s-pod-lifecycle\\model.json",
+     "--group",
+     "<court_tmp>\\g3_pads_swap_fixed.relabel.json"
+    ],
+    "stderr_tail": "",
+    "frame": "relabel",
+    "stamp_note": "court-stamped relabel copy used (original declaration: 'fixed')"
+   },
+   "fixed": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "strict",
+    "error": null,
+    "reason": "两层判据均通过：转移等变（max TV=0.00e+00 ≤ tol=1e-09）+ 奖励剖面（n_bad=0）",
+    "semantics": {
+     "action": "fixed",
+     "judge": "strict",
+     "declared": true,
+     "assumed": false,
+     "source": "flag_strict"
+    },
+    "command": [
+     "python",
+     "-X",
+     "utf8",
+     "-m",
+     "wuxing_gua",
+     "check",
+     "--trans",
+     "cases\\k8s-pod-lifecycle\\model.json",
+     "--group",
+     "cases\\k8s-pod-lifecycle\\groups\\g3_pads_swap_fixed.json",
+     "--strict"
+    ],
+    "stderr_tail": "",
+    "frame": "fixed",
+    "stamp_note": "original group file, --strict flag (fixed frame)"
+   },
+   "networkx": {
+    "structure_symmetry": true,
+    "labeled_symmetry": true,
+    "n_elements": 2,
+    "n_unique_elements": 2,
+    "n_nontrivial": 1,
+    "per_element": [
+     {
+      "element": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7
+      ],
+      "is_identity": true,
+      "structural": true,
+      "labeled": true,
+      "nx_vf2_membership_structural": true,
+      "nx_vf2_membership_labeled": true
+     },
+     {
+      "element": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       6,
+       5,
+       7
+      ],
+      "is_identity": false,
+      "structural": true,
+      "labeled": true,
+      "nx_vf2_membership_structural": true,
+      "nx_vf2_membership_labeled": true
+     }
+    ],
+    "per_element_truncated": false,
+    "method": "primary=direct edge-set check (O(E), hand-checkable); cross-check=networkx VF2 automorphism-set membership (independent implementation)",
+    "method_conflicts": [],
+    "crosscheck_status": "ok",
+    "scope": "full model (all n_states=8, padding included)",
+    "n_autos_structure": 6,
+    "n_autos_labeled": 6,
+    "autos_truncated": false,
+    "autos_skipped_reason": null,
+    "structural_pad_states": [
+     2,
+     3,
+     5,
+     6,
+     7
+    ],
+    "n_autos_structure_nonpad": null,
+    "n_autos_labeled_nonpad": null,
+    "autos_nonpad_scope": "not applicable (no structural pads, or real rows reference pad states)"
+   },
+   "consistency": {
+    "relabel_vs_structure": "agree",
+    "fixed_vs_labeled": "agree",
+    "arms_differ": false,
+    "ruling_code": "agree",
+    "ruling": "all columns agree: engine (both standards) and networkx (both scopes) say 'pass' for this group",
+    "binding_verdict": "pass"
+   }
+  }
+ },
+ "group_errors": [],
+ "rollup": {
+  "groups": 3,
+  "group_errors": 0,
+  "ruling_codes": {
+   "agree": 3
+  },
+  "all_consistent_pairs": true
+ }
+}

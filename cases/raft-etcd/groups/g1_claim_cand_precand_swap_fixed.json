@@ -1,0 +1,26 @@
+{
+ "n_states": 4,
+ "elements": [
+  [
+   0,
+   1,
+   2,
+   3
+  ],
+  [
+   0,
+   3,
+   2,
+   1
+  ]
+ ],
+ "semantics": {
+  "action": "fixed"
+ },
+ "meta": {
+  "claim": "同一集群内、相同配置且日志前缀相同的任意两个 follower 副本在协议层面等价可互换：任一个都可通过同一选举机制胜出成为 leader 并服务同一份日志；角色归属只由日志新旧与票数决定，与节点身份无关。（W1 dossier case-01 symmetric_claim 原文） 状态级类比（被告主张）：Candidate 与 PreCandidate 是同一选举机制的两个等待角色，若主张等价可互换，则此对换置换应保持系统行为；两态的完成事件不同（MsgVoteResp vs MsgPreVoteResp），事件名钉死口径下合并它们是否为协议错误由工具与独立基准裁决。",
+  "construction": "order-2 对换：Candidate(1) <-> PreCandidate(3)；identity + 单对换自动闭包",
+  "dossier_ref": "dossier/selection.json case-01-raft-etcd symmetric_claim",
+  "semantics_note": "事件驱动协议（raftpb.MessageType）-> fixed"
+ }
+}

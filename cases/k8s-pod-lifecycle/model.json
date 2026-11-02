@@ -1,0 +1,554 @@
+{
+ "n_bits": 3,
+ "n_actions": 7,
+ "n_states": 8,
+ "goals": [
+  2,
+  3
+ ],
+ "meta": {
+  "source_system": "Kubernetes official docs Pod Lifecycle (PodPhase), transcribed by field-trial W2 from pinned public docs",
+  "source_citation": [
+   "Kubernetes 官方文档 Pod Lifecycle 页: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/",
+   "  - W1 快照 dossier/sources/k8s_pod_lifecycle.html；W2 本会话（2026-10-31）WebFetch 在线抽查：5 相定义、lifecycle 句、",
+   "    node-death 句、1.27 deletion 句、PodGC 句与快照逐句一致",
+   "  - 关键原文（全部在 transcription_notes.cell_citations 逐边回引）: lifecycle 句 / Pending,Running,Succeeded,Failed,Unknown 相定义 /",
+   "    \"If a node dies or is disconnected...\" / \"Since Kubernetes 1.27, the kubelet transitions deleted Pods to a terminal phase...\" /",
+   "    \"Along with cleaning up the Pods, PodGC will also mark them as failed if they are in a non-terminal phase.\"",
+   "辅助主张来源（W1 快照，未进转录）: kubernetes.io Deployment 页、Service 页"
+  ],
+  "variant": "event-driven-observed-lifecycle",
+  "encoding": "5 个真实 PodPhase + 3 个填充哑态 filler_5/6/7（8=2^3）；填充态边不引用真实事件语义",
+  "state_names": [
+   "Pending",
+   "Running",
+   "Succeeded",
+   "Failed",
+   "Unknown",
+   "filler_5",
+   "filler_6",
+   "filler_7"
+  ],
+  "event_names": [
+   "container_start",
+   "all_containers_succeeded",
+   "any_container_failed",
+   "node_lost",
+   "kubelet_unreachable",
+   "pod_deletion",
+   "gc_mark_failed"
+  ],
+  "semantics_class": "event: 7 个动作是控制面/节点侧外部事件（调度启动、容器终止、节点失联、删除、GC），名字独立于状态 -> groups 必须声明 semantics {\"action\": \"fixed\"}",
+  "transcription_rules": "K1 散文文档转录：每条边回引文档原句（cell_citations），无语句支撑的格记 -1.0 并入 not_collected；K2 pod_deletion 的 Succeeded/Failed 条件分支→等概率占位（1.27 句为条件式）；K3 Unknown 两格（Pending/Running→Unknown）为定义式弱依据，cell_citations 中标注 weak；K4 Succeeded/Failed 按文档 terminal 语义作吸收态；K5 奖励约定见 reward_rule。",
+  "reward_rule": "+1.0 仅'进入 Succeeded'的结果分支（Running|all_containers_succeeded；Running|pod_deletion 的 Succeeded 分支）；-1.0 为文档未陈述迁移的 (相,事件)（含全部'未收录'格）；terminal 相吸收自环与填充态 0.0。奖励为转录约定非 K8s 语义（声明）。",
+  "transcription_notes": {
+   "cell_citations": {
+    "Pending|container_start": "引文: \"Pods follow a defined lifecycle, starting in the Pending phase, moving through Running if at least one of its primary containers starts OK, and then through either the Succeeded or Failed phases depending on whether any container in the Pod terminated in failure.\"（kubernetes.io pod-lifecycle 页（W1 快照 + W2 2026-10-31 WebFetch 在线抽查一致））；Running 相定义 \"The Pod has been bound to a node, and all of the containers have been created.\"（同页）",
+    "Pending|all_containers_succeeded": "Pending 相无'全部容器成功终止'语义（Pending 定义：容器尚未建好/未就绪）；文档未给出该迁移 → 未收录，模型记 -1.0 惩罚自环",
+    "Pending|any_container_failed": "文档未给出 Pending 直接因容器失败进入 Failed 的迁移语句（lifecycle 句把 Failed 挂在 Running 之后）→ 未收录，记 -1.0",
+    "Pending|node_lost": "引文: \"If a node dies or is disconnected from the rest of the cluster, Kubernetes applies a policy for setting the phase of all Pods on the lost node to Failed.\"（kubernetes.io pod-lifecycle 页（W1 快照 + W2 2026-10-31 WebFetch 在线抽查一致））；node death policy 覆盖 lost node 上'所有 Pods'（含 Pending）",
+    "Pending|kubelet_unreachable": "Unknown 相定义: \"For some reason the state of the Pod could not be obtained. This phase typically occurs due to an error in communicating with the node where the Pod should be running.\"——定义式弱依据（判读标注：weak，定义暗示相可出现于节点失联，未写成迁移语句）",
+    "Pending|pod_deletion": "deleted Pods 转 terminal 相的语句以容器退出状态为条件（Since Kubernetes 1.27, the kubelet transitions deleted Pods to a terminal phase (Failed or Succeeded depending on the exit statuses of the pod containers) before their deletion from the API server）；Pending 的容器未创建、退出状态无定义 → 未收录，记 -1.0",
+    "Pending|gc_mark_failed": "引文: \"Along with cleaning up the Pods, PodGC will also mark them as failed if they are in a non-terminal phase.\"（kubernetes.io pod-lifecycle 页（W1 快照 + W2 2026-10-31 WebFetch 在线抽查一致））；non-terminal phase 含 Pending",
+    "Running|container_start": "Running 相下'容器又启动一个'的迁移文档未陈述（Running 定义允许 starting/restarting 但未写相变）→ 未收录，记 -1.0",
+    "Running|all_containers_succeeded": "引文: \"Pods follow a defined lifecycle, starting in the Pending phase, moving through Running if at least one of its primary containers starts OK, and then through either the Succeeded or Failed phases depending on whether any container in the Pod terminated in failure.\"（kubernetes.io pod-lifecycle 页（W1 快照 + W2 2026-10-31 WebFetch 在线抽查一致））；Succeeded 相定义: \"All containers in the Pod have terminated in success, and will not be restarted.\"；奖励约定：进入 Succeeded +1.0",
+    "Running|any_container_failed": "引文: \"Pods follow a defined lifecycle, starting in the Pending phase, moving through Running if at least one of its primary containers starts OK, and then through either the Succeeded or Failed phases depending on whether any container in the Pod terminated in failure.\"（kubernetes.io pod-lifecycle 页（W1 快照 + W2 2026-10-31 WebFetch 在线抽查一致））；Failed 相定义: \"All containers in the Pod have terminated, and at least one container has terminated in failure.\"",
+    "Running|node_lost": "引文: \"If a node dies or is disconnected from the rest of the cluster, Kubernetes applies a policy for setting the phase of all Pods on the lost node to Failed.\"（kubernetes.io pod-lifecycle 页（W1 快照 + W2 2026-10-31 WebFetch 在线抽查一致））",
+    "Running|kubelet_unreachable": "Unknown 相定义: \"For some reason the state of the Pod could not be obtained. This phase typically occurs due to an error in communicating with the node where the Pod should be running.\"——定义式弱依据（判读标注：weak）",
+    "Running|pod_deletion": "引文: \"Since Kubernetes 1.27, the kubelet transitions deleted Pods to a terminal phase (Failed or Succeeded depending on the exit statuses of the pod containers) before their deletion from the API server\"（kubernetes.io pod-lifecycle 页（W1 快照 + W2 2026-10-31 WebFetch 在线抽查一致））；退出状态条件分支→等概率占位（声明）；Succeeded 分支按奖励约定 +1.0",
+    "Running|gc_mark_failed": "引文: \"Along with cleaning up the Pods, PodGC will also mark them as failed if they are in a non-terminal phase.\"（kubernetes.io pod-lifecycle 页（W1 快照 + W2 2026-10-31 WebFetch 在线抽查一致））；non-terminal phase 含 Running",
+    "Succeeded|container_start": "Succeeded 相定义: \"All containers in the Pod have terminated in success, and will not be restarted.\" + 文档 terminal 相语义（Since Kubernetes 1.27, the kubelet transitions deleted Pods to a terminal phase (Failed or Succeeded depending on the exit statuses of the pod containers) before their deletion from the API server；PodGC 句以 non-terminal phase 反衬 terminal 集合）→ 吸收自环 0.0",
+    "Succeeded|all_containers_succeeded": "Succeeded 相定义: \"All containers in the Pod have terminated in success, and will not be restarted.\" + 文档 terminal 相语义（Since Kubernetes 1.27, the kubelet transitions deleted Pods to a terminal phase (Failed or Succeeded depending on the exit statuses of the pod containers) before their deletion from the API server；PodGC 句以 non-terminal phase 反衬 terminal 集合）→ 吸收自环 0.0",
+    "Succeeded|any_container_failed": "Succeeded 相定义: \"All containers in the Pod have terminated in success, and will not be restarted.\" + 文档 terminal 相语义（Since Kubernetes 1.27, the kubelet transitions deleted Pods to a terminal phase (Failed or Succeeded depending on the exit statuses of the pod containers) before their deletion from the API server；PodGC 句以 non-terminal phase 反衬 terminal 集合）→ 吸收自环 0.0",
+    "Succeeded|node_lost": "Succeeded 相定义: \"All containers in the Pod have terminated in success, and will not be restarted.\" + 文档 terminal 相语义（Since Kubernetes 1.27, the kubelet transitions deleted Pods to a terminal phase (Failed or Succeeded depending on the exit statuses of the pod containers) before their deletion from the API server；PodGC 句以 non-terminal phase 反衬 terminal 集合）→ 吸收自环 0.0",
+    "Succeeded|kubelet_unreachable": "Succeeded 相定义: \"All containers in the Pod have terminated in success, and will not be restarted.\" + 文档 terminal 相语义（Since Kubernetes 1.27, the kubelet transitions deleted Pods to a terminal phase (Failed or Succeeded depending on the exit statuses of the pod containers) before their deletion from the API server；PodGC 句以 non-terminal phase 反衬 terminal 集合）→ 吸收自环 0.0",
+    "Succeeded|pod_deletion": "Succeeded 相定义: \"All containers in the Pod have terminated in success, and will not be restarted.\" + 文档 terminal 相语义（Since Kubernetes 1.27, the kubelet transitions deleted Pods to a terminal phase (Failed or Succeeded depending on the exit statuses of the pod containers) before their deletion from the API server；PodGC 句以 non-terminal phase 反衬 terminal 集合）→ 吸收自环 0.0",
+    "Succeeded|gc_mark_failed": "Succeeded 相定义: \"All containers in the Pod have terminated in success, and will not be restarted.\" + 文档 terminal 相语义（Since Kubernetes 1.27, the kubelet transitions deleted Pods to a terminal phase (Failed or Succeeded depending on the exit statuses of the pod containers) before their deletion from the API server；PodGC 句以 non-terminal phase 反衬 terminal 集合）→ 吸收自环 0.0",
+    "Failed|container_start": "Failed 相定义: \"All containers in the Pod have terminated, and at least one container has terminated in failure.\" + 文档 terminal 相语义（Since Kubernetes 1.27, the kubelet transitions deleted Pods to a terminal phase (Failed or Succeeded depending on the exit statuses of the pod containers) before their deletion from the API server）→ 吸收自环 0.0",
+    "Failed|all_containers_succeeded": "Failed 相定义: \"All containers in the Pod have terminated, and at least one container has terminated in failure.\" + 文档 terminal 相语义（Since Kubernetes 1.27, the kubelet transitions deleted Pods to a terminal phase (Failed or Succeeded depending on the exit statuses of the pod containers) before their deletion from the API server）→ 吸收自环 0.0",
+    "Failed|any_container_failed": "Failed 相定义: \"All containers in the Pod have terminated, and at least one container has terminated in failure.\" + 文档 terminal 相语义（Since Kubernetes 1.27, the kubelet transitions deleted Pods to a terminal phase (Failed or Succeeded depending on the exit statuses of the pod containers) before their deletion from the API server）→ 吸收自环 0.0",
+    "Failed|node_lost": "Failed 相定义: \"All containers in the Pod have terminated, and at least one container has terminated in failure.\" + 文档 terminal 相语义（Since Kubernetes 1.27, the kubelet transitions deleted Pods to a terminal phase (Failed or Succeeded depending on the exit statuses of the pod containers) before their deletion from the API server）→ 吸收自环 0.0",
+    "Failed|kubelet_unreachable": "Failed 相定义: \"All containers in the Pod have terminated, and at least one container has terminated in failure.\" + 文档 terminal 相语义（Since Kubernetes 1.27, the kubelet transitions deleted Pods to a terminal phase (Failed or Succeeded depending on the exit statuses of the pod containers) before their deletion from the API server）→ 吸收自环 0.0",
+    "Failed|pod_deletion": "Failed 相定义: \"All containers in the Pod have terminated, and at least one container has terminated in failure.\" + 文档 terminal 相语义（Since Kubernetes 1.27, the kubelet transitions deleted Pods to a terminal phase (Failed or Succeeded depending on the exit statuses of the pod containers) before their deletion from the API server）→ 吸收自环 0.0",
+    "Failed|gc_mark_failed": "Failed 相定义: \"All containers in the Pod have terminated, and at least one container has terminated in failure.\" + 文档 terminal 相语义（Since Kubernetes 1.27, the kubelet transitions deleted Pods to a terminal phase (Failed or Succeeded depending on the exit statuses of the pod containers) before their deletion from the API server）→ 吸收自环 0.0",
+    "Unknown|container_start": "文档未给出 Unknown 恢复到前一相的迁移语句 → 未收录，记 -1.0",
+    "Unknown|all_containers_succeeded": "文档未给出 Unknown→Succeeded 迁移语句 → 未收录，记 -1.0",
+    "Unknown|any_container_failed": "文档未给出 Unknown→Failed 的容器失败迁移语句 → 未收录，记 -1.0",
+    "Unknown|node_lost": "引文: \"If a node dies or is disconnected from the rest of the cluster, Kubernetes applies a policy for setting the phase of all Pods on the lost node to Failed.\"（kubernetes.io pod-lifecycle 页（W1 快照 + W2 2026-10-31 WebFetch 在线抽查一致））；断连（disconnected）即 Unknown 相定义所述场景的延续，超时后 phase 置 Failed",
+    "Unknown|kubelet_unreachable": "Unknown 相定义（For some reason the state of the Pod could not be obtained. This phase typically occurs due to an error in communicating with the node where the Pod should be running.）：持续失联则停留 Unknown；自环",
+    "Unknown|pod_deletion": "deleted Pods 转 terminal 相语句对 Unknown 相未逐字覆盖 → 未收录，记 -1.0",
+    "Unknown|gc_mark_failed": "引文: \"Along with cleaning up the Pods, PodGC will also mark them as failed if they are in a non-terminal phase.\"（kubernetes.io pod-lifecycle 页（W1 快照 + W2 2026-10-31 WebFetch 在线抽查一致））；non-terminal phase 含 Unknown",
+    "filler_5|container_start": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_5|all_containers_succeeded": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_5|any_container_failed": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_5|node_lost": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_5|kubelet_unreachable": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_5|pod_deletion": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_5|gc_mark_failed": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_6|container_start": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_6|all_containers_succeeded": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_6|any_container_failed": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_6|node_lost": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_6|kubelet_unreachable": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_6|pod_deletion": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_6|gc_mark_failed": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_7|container_start": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_7|all_containers_succeeded": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_7|any_container_failed": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_7|node_lost": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_7|kubelet_unreachable": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_7|pod_deletion": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_7|gc_mark_failed": "填充态（2^n_bits 幂次契约，参照工具仓 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义"
+   },
+   "not_collected": [
+    {
+     "item": "Pending → Failed（容器失败直达）",
+     "why": "lifecycle 句把 Failed 挂在 Running 之后；无 Pending 直达语句"
+    },
+    {
+     "item": "Pending → Succeeded / Pending 的 pod_deletion",
+     "why": "deleted-Pods 转 terminal 相以'容器退出状态'为条件；Pending 容器未创建，无定义"
+    },
+    {
+     "item": "Unknown 恢复（→Pending/Running）或 Unknown→Succeeded",
+     "why": "文档无恢复迁移语句"
+    },
+    {
+     "item": "Running → Pending（容器全部退出但未到 terminal 判据的中间态）",
+     "why": "文档未陈述"
+    },
+    {
+     "item": "容器级三态 Waiting/Running/Terminated",
+     "why": "W1 dossier 风险项：容器级状态不收，防范围膨胀"
+    },
+    {
+     "item": "CrashLoopBackOff / PodScheduled、Ready 等 condition 字段",
+     "why": "为 condition/原因标注而非 PodPhase 迁移"
+    },
+    {
+     "item": "Kubelet restart 期间 Pod 行为",
+     "why": "文档描述为运行时行为非相迁移"
+    }
+   ],
+   "unregistered_cell_rule": "文档未陈述的 (相,事件) 统一 -1.0 惩罚自环，理由在 not_collected",
+   "evidence_grading": "强（迁移语句/相定义直接支撑）: Pending→Running, Running→Succeeded/Failed, node_lost 三边, gc 两边, terminal 吸收；弱（定义式判读, 标注 weak）: Pending/Running→Unknown"
+  },
+  "regenerate": "python -X utf8 make_k8s_pod_lifecycle.py",
+  "generator": "make_k8s_pod_lifecycle.py（W2 转录工程师；不运行 wuxing-gua、不算真值）"
+ },
+ "trans": [
+  [
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     1,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     0.5,
+     2,
+     1.0
+    ],
+    [
+     0.5,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     4,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ]
+  ]
+ ]
+}

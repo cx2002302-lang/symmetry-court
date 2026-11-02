@@ -1,0 +1,34 @@
+{
+ "n_states": 8,
+ "elements": [
+  [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  [
+   0,
+   1,
+   5,
+   3,
+   4,
+   2,
+   6,
+   7
+  ]
+ ],
+ "semantics": {
+  "action": "fixed"
+ },
+ "meta": {
+  "claim": "对照主张：RUNNING（执行中）与 KILL_WAIT（等待被杀确认）若等价可互换，则'运行与等待死亡无区别'；两态的自环/完成事件结构差异显著，判别交由工具/基准。",
+  "construction": "order-2 对换：RUNNING(2) <-> KILL_WAIT(5)",
+  "dossier_ref": "dossier/selection.json case-02-hadoop-mr-task（对照组；W1 风险项'KILL_WAIT 自循环边多防漏标'已逐格引证）",
+  "semantics_note": "事件驱动框架 -> fixed"
+ }
+}

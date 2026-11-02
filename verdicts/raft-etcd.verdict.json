@@ -1,0 +1,418 @@
+{
+ "case": "raft-etcd",
+ "generated_utc": "2026-11-02T18:13:21Z",
+ "tools": {
+  "engine": {
+   "name": "wuxing_gua",
+   "version": "wuxing_gua 1.0.0",
+   "location": "vendored/wuxing_gua",
+   "provenance": "pinned source revision + sha256 manifest in NOTICE",
+   "invocation": "python -X utf8 -m wuxing_gua check --trans <model> --group <group> [--strict]; cwd=vendored/; PYTHONDONTWRITEBYTECODE=1"
+  },
+  "networkx": "3.6.1",
+  "python": "3.12.10"
+ },
+ "model": {
+  "path": "cases\\raft-etcd\\model.json",
+  "n_bits": 2,
+  "n_states": 4,
+  "n_actions": 14,
+  "source_system": "etcd-io/raft (go.etcd.io/raft) single-node role state machine (Follower/Candidate/Leader/PreCandidate), transcribed by field-trial W2 from pinned public source",
+  "source_citation": [
+   "etcd-io/raft main @ c51f010c851edd0dada5af41bafbf68e54617767（HEAD 提交日期 2026-10-23，2026-10-31 浅克隆）:",
+   "  - raft.go:49-56 StateType 四值（StateFollower=51, StateCandidate=52, StateLeader=53, StatePreCandidate=54）",
+   "  - raftpb/raft.pb.go:89-112 MessageType 枚举（0..23）；本转录收 14 个、裁剪 10 个（见 trimmed_events）",
+   "  - Step:1089；hup:973；campaign:1025；poll:1075；becomeFollower:891；becomeCandidate:902；becomePreCandidate:917；becomeLeader:933",
+   "  - stepLeader:1275；stepCandidate:1665（与 PreCandidate 共用，注释 1663-1664）；stepFollower:1710",
+   "  - 本地留档 _scratch/sources/raft/repo/（含 .git HEAD）",
+   "论文（仅作主张来源，非转录对象）: Ongaro & Ousterhout, 'In Search of an Understandable Consensus Algorithm', ATC'14, §5.1, §5.4.1（raft.github.io/raft.pdf）"
+  ]
+ },
+ "groups": {
+  "g1_claim_cand_precand_swap_fixed": {
+   "group_file": "groups/g1_claim_cand_precand_swap_fixed.json",
+   "declared_semantics": {
+    "action": "fixed"
+   },
+   "claim": "同一集群内、相同配置且日志前缀相同的任意两个 follower 副本在协议层面等价可互换：任一个都可通过同一选举机制胜出成为 leader 并服务同一份日志；角色归属只由日志新旧与票数决定，与节点身份无关。（W1 dossier case-01 symmetric_claim 原文） 状态级类比（被告主张）：Candidate 与 PreCandidate 是同一选举机制的两个等待角色，若主张等价可互换，则此对换置换应保持系统行为；两态的完成事件不同（MsgVoteResp vs MsgPreVoteResp），事件名钉死口径下合并它们是否为协议错误由工具与独立基准裁决。",
+   "order_engine_reported": 2,
+   "relabel": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "generalized",
+    "error": null,
+    "reason": "转移等变层失败：max TV=inf（含非位置置换元素） > tol=1e-09（1/2 个受检元素不过）；奖励剖面层失败：同轨道剖面不同 1/1 对（判据 n_bad=0 零容忍）",
+    "semantics": {
+     "action": "relabel",
+     "judge": "generalized",
+     "declared": true,
+     "assumed": false,
+     "source": "group_file"
+    },
+    "command": [
+     "python",
+     "-X",
+     "utf8",
+     "-m",
+     "wuxing_gua",
+     "check",
+     "--trans",
+     "cases\\raft-etcd\\model.json",
+     "--group",
+     "<court_tmp>\\g1_claim_cand_precand_swap_fixed.relabel.json"
+    ],
+    "stderr_tail": "",
+    "frame": "relabel",
+    "stamp_note": "court-stamped relabel copy used (original declaration: 'fixed')"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict",
+    "error": null,
+    "reason": "转移等变层失败：max TV=1 > tol=1e-09（1/2 个受检元素不过）；奖励剖面层失败：同轨道剖面不同 1/1 对（判据 n_bad=0 零容忍）",
+    "semantics": {
+     "action": "fixed",
+     "judge": "strict",
+     "declared": true,
+     "assumed": false,
+     "source": "flag_strict"
+    },
+    "command": [
+     "python",
+     "-X",
+     "utf8",
+     "-m",
+     "wuxing_gua",
+     "check",
+     "--trans",
+     "cases\\raft-etcd\\model.json",
+     "--group",
+     "cases\\raft-etcd\\groups\\g1_claim_cand_precand_swap_fixed.json",
+     "--strict"
+    ],
+    "stderr_tail": "",
+    "frame": "fixed",
+    "stamp_note": "original group file, --strict flag (fixed frame)"
+   },
+   "networkx": {
+    "structure_symmetry": false,
+    "labeled_symmetry": false,
+    "n_elements": 2,
+    "n_unique_elements": 2,
+    "n_nontrivial": 1,
+    "per_element": [
+     {
+      "element": [
+       0,
+       1,
+       2,
+       3
+      ],
+      "is_identity": true,
+      "structural": true,
+      "labeled": true,
+      "nx_vf2_membership_structural": true,
+      "nx_vf2_membership_labeled": true
+     },
+     {
+      "element": [
+       0,
+       3,
+       2,
+       1
+      ],
+      "is_identity": false,
+      "structural": false,
+      "labeled": false,
+      "nx_vf2_membership_structural": false,
+      "nx_vf2_membership_labeled": false
+     }
+    ],
+    "per_element_truncated": false,
+    "method": "primary=direct edge-set check (O(E), hand-checkable); cross-check=networkx VF2 automorphism-set membership (independent implementation)",
+    "method_conflicts": [],
+    "crosscheck_status": "ok",
+    "scope": "full model (all n_states=4, padding included)",
+    "n_autos_structure": 1,
+    "n_autos_labeled": 1,
+    "autos_truncated": false,
+    "autos_skipped_reason": null,
+    "structural_pad_states": [],
+    "n_autos_structure_nonpad": null,
+    "n_autos_labeled_nonpad": null,
+    "autos_nonpad_scope": "not applicable (no structural pads, or real rows reference pad states)"
+   },
+   "consistency": {
+    "relabel_vs_structure": "agree",
+    "fixed_vs_labeled": "agree",
+    "arms_differ": false,
+    "ruling_code": "agree",
+    "ruling": "all columns agree: engine (both standards) and networkx (both scopes) say 'reject' for this group",
+    "binding_verdict": "reject"
+   }
+  },
+  "g2_control_follower_leader_swap_fixed": {
+   "group_file": "groups/g2_control_follower_leader_swap_fixed.json",
+   "declared_semantics": {
+    "action": "fixed"
+   },
+   "claim": "对照主张：Follower 与 Leader 承担不同协议角色（服务日志 vs 接收复制），若把角色互换当对称即主张'领导与追随等价'；该候选与 W1 主张方向相反，用于检验工具能否把结构性不同的角色区分开。",
+   "order_engine_reported": 2,
+   "relabel": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "generalized",
+    "error": null,
+    "reason": "转移等变层失败：max TV=inf（含非位置置换元素） > tol=1e-09（1/2 个受检元素不过）；奖励剖面层失败：同轨道剖面不同 1/1 对（判据 n_bad=0 零容忍）",
+    "semantics": {
+     "action": "relabel",
+     "judge": "generalized",
+     "declared": true,
+     "assumed": false,
+     "source": "group_file"
+    },
+    "command": [
+     "python",
+     "-X",
+     "utf8",
+     "-m",
+     "wuxing_gua",
+     "check",
+     "--trans",
+     "cases\\raft-etcd\\model.json",
+     "--group",
+     "<court_tmp>\\g2_control_follower_leader_swap_fixed.relabel.json"
+    ],
+    "stderr_tail": "",
+    "frame": "relabel",
+    "stamp_note": "court-stamped relabel copy used (original declaration: 'fixed')"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict",
+    "error": null,
+    "reason": "转移等变层失败：max TV=1 > tol=1e-09（1/2 个受检元素不过）；奖励剖面层失败：同轨道剖面不同 1/1 对（判据 n_bad=0 零容忍）",
+    "semantics": {
+     "action": "fixed",
+     "judge": "strict",
+     "declared": true,
+     "assumed": false,
+     "source": "flag_strict"
+    },
+    "command": [
+     "python",
+     "-X",
+     "utf8",
+     "-m",
+     "wuxing_gua",
+     "check",
+     "--trans",
+     "cases\\raft-etcd\\model.json",
+     "--group",
+     "cases\\raft-etcd\\groups\\g2_control_follower_leader_swap_fixed.json",
+     "--strict"
+    ],
+    "stderr_tail": "",
+    "frame": "fixed",
+    "stamp_note": "original group file, --strict flag (fixed frame)"
+   },
+   "networkx": {
+    "structure_symmetry": false,
+    "labeled_symmetry": false,
+    "n_elements": 2,
+    "n_unique_elements": 2,
+    "n_nontrivial": 1,
+    "per_element": [
+     {
+      "element": [
+       0,
+       1,
+       2,
+       3
+      ],
+      "is_identity": true,
+      "structural": true,
+      "labeled": true,
+      "nx_vf2_membership_structural": true,
+      "nx_vf2_membership_labeled": true
+     },
+     {
+      "element": [
+       2,
+       1,
+       0,
+       3
+      ],
+      "is_identity": false,
+      "structural": false,
+      "labeled": false,
+      "nx_vf2_membership_structural": false,
+      "nx_vf2_membership_labeled": false
+     }
+    ],
+    "per_element_truncated": false,
+    "method": "primary=direct edge-set check (O(E), hand-checkable); cross-check=networkx VF2 automorphism-set membership (independent implementation)",
+    "method_conflicts": [],
+    "crosscheck_status": "ok",
+    "scope": "full model (all n_states=4, padding included)",
+    "n_autos_structure": 1,
+    "n_autos_labeled": 1,
+    "autos_truncated": false,
+    "autos_skipped_reason": null,
+    "structural_pad_states": [],
+    "n_autos_structure_nonpad": null,
+    "n_autos_labeled_nonpad": null,
+    "autos_nonpad_scope": "not applicable (no structural pads, or real rows reference pad states)"
+   },
+   "consistency": {
+    "relabel_vs_structure": "agree",
+    "fixed_vs_labeled": "agree",
+    "arms_differ": false,
+    "ruling_code": "agree",
+    "ruling": "all columns agree: engine (both standards) and networkx (both scopes) say 'reject' for this group",
+    "binding_verdict": "reject"
+   }
+  },
+  "g3_claim_twin_cand_precand_swap_relabel": {
+   "group_file": "groups/g3_claim_twin_cand_precand_swap_relabel.json",
+   "declared_semantics": {
+    "action": "relabel"
+   },
+   "claim": "与 g1_claim 同一置换、不同语义声明（relabel：事件名可随状态换名）。两文件读数差 = 工具判据分派（strict vs generalized）对陌生人系统的可见行为，由 W3 独立基准与 W4 盲跑对照裁决，本文件不预判胜负。",
+   "order_engine_reported": 2,
+   "relabel": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "generalized",
+    "error": null,
+    "reason": "转移等变层失败：max TV=inf（含非位置置换元素） > tol=1e-09（1/2 个受检元素不过）；奖励剖面层失败：同轨道剖面不同 1/1 对（判据 n_bad=0 零容忍）",
+    "semantics": {
+     "action": "relabel",
+     "judge": "generalized",
+     "declared": true,
+     "assumed": false,
+     "source": "group_file"
+    },
+    "command": [
+     "python",
+     "-X",
+     "utf8",
+     "-m",
+     "wuxing_gua",
+     "check",
+     "--trans",
+     "cases\\raft-etcd\\model.json",
+     "--group",
+     "cases\\raft-etcd\\groups\\g3_claim_twin_cand_precand_swap_relabel.json"
+    ],
+    "stderr_tail": "",
+    "frame": "relabel",
+    "stamp_note": "group already declares relabel; original file used as-is"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict",
+    "error": null,
+    "reason": "转移等变层失败：max TV=1 > tol=1e-09（1/2 个受检元素不过）；奖励剖面层失败：同轨道剖面不同 1/1 对（判据 n_bad=0 零容忍）",
+    "semantics": {
+     "action": "fixed",
+     "judge": "strict",
+     "declared": true,
+     "assumed": false,
+     "source": "flag_strict",
+     "declared_action": "relabel"
+    },
+    "command": [
+     "python",
+     "-X",
+     "utf8",
+     "-m",
+     "wuxing_gua",
+     "check",
+     "--trans",
+     "cases\\raft-etcd\\model.json",
+     "--group",
+     "cases\\raft-etcd\\groups\\g3_claim_twin_cand_precand_swap_relabel.json",
+     "--strict"
+    ],
+    "stderr_tail": "",
+    "frame": "fixed",
+    "stamp_note": "original group file, --strict flag (fixed frame)"
+   },
+   "networkx": {
+    "structure_symmetry": false,
+    "labeled_symmetry": false,
+    "n_elements": 2,
+    "n_unique_elements": 2,
+    "n_nontrivial": 1,
+    "per_element": [
+     {
+      "element": [
+       0,
+       1,
+       2,
+       3
+      ],
+      "is_identity": true,
+      "structural": true,
+      "labeled": true,
+      "nx_vf2_membership_structural": true,
+      "nx_vf2_membership_labeled": true
+     },
+     {
+      "element": [
+       0,
+       3,
+       2,
+       1
+      ],
+      "is_identity": false,
+      "structural": false,
+      "labeled": false,
+      "nx_vf2_membership_structural": false,
+      "nx_vf2_membership_labeled": false
+     }
+    ],
+    "per_element_truncated": false,
+    "method": "primary=direct edge-set check (O(E), hand-checkable); cross-check=networkx VF2 automorphism-set membership (independent implementation)",
+    "method_conflicts": [],
+    "crosscheck_status": "ok",
+    "scope": "full model (all n_states=4, padding included)",
+    "n_autos_structure": 1,
+    "n_autos_labeled": 1,
+    "autos_truncated": false,
+    "autos_skipped_reason": null,
+    "structural_pad_states": [],
+    "n_autos_structure_nonpad": null,
+    "n_autos_labeled_nonpad": null,
+    "autos_nonpad_scope": "not applicable (no structural pads, or real rows reference pad states)"
+   },
+   "consistency": {
+    "relabel_vs_structure": "agree",
+    "fixed_vs_labeled": "agree",
+    "arms_differ": false,
+    "ruling_code": "agree",
+    "ruling": "all columns agree: engine (both standards) and networkx (both scopes) say 'reject' for this group",
+    "binding_verdict": "reject"
+   }
+  }
+ },
+ "group_errors": [],
+ "rollup": {
+  "groups": 3,
+  "group_errors": 0,
+  "ruling_codes": {
+   "agree": 3
+  },
+  "all_consistent_pairs": true
+ }
+}

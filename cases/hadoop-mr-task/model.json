@@ -1,0 +1,721 @@
+{
+ "n_bits": 3,
+ "n_actions": 9,
+ "n_states": 8,
+ "goals": [
+  3
+ ],
+ "meta": {
+  "source_system": "apache/hadoop MRv2 TaskImpl declarative state machine (TaskStateInternal), transcribed by field-trial W2 from pinned public source",
+  "source_citation": [
+   "apache/hadoop trunk @ e66f40daf3cc4ebbb5164cec1ce54b71eddec8a4（git ls-remote refs/heads/trunk, 2026-10-31）：",
+   "  - hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/main/java/org/apache/hadoop/mapreduce/v2/app/job/TaskStateInternal.java:19-23（7 值枚举, line 22）",
+   "  - .../job/event/TaskEventType.java:24-41（9 事件: T_KILL:27, T_SCHEDULE:30, T_RECOVER:31, T_ADD_SPEC_ATTEMPT:34, T_ATTEMPT_LAUNCHED:37, T_ATTEMPT_COMMIT_PENDING:38, T_ATTEMPT_FAILED:39, T_ATTEMPT_SUCCEEDED:40, T_ATTEMPT_KILLED:41）",
+   "  - .../job/impl/TaskImpl.java:154-273 stateMachineFactory（24 个 addTransition 行: 163,165,167,176,178,180,182,188,190,193,195,198,201,205,209,213,217,222,231,234,237,241,249,266）",
+   "  - hadoop-yarn-project/hadoop-yarn/hadoop-yarn-common/src/main/java/org/apache/hadoop/yarn/state/StateMachineFactory.java:305（未注册 (态,事件) 抛 InvalidStateTransitionException）",
+   "  - 本地留档 _scratch/sources/hadoop/（jsdelivr CDN 抓取，trunk SHA 经 git ls-remote 核对）",
+   "论文（仅作主张来源）: Dean & Ghemawat, MapReduce, OSDI'04, §3.3/§3.6（W1 快照 dossier/sources/mapreduce-osdi04.pdf）"
+  ],
+  "variant": "event-driven-framework-fsm",
+  "encoding": "7 个真实态（TaskStateInternal.java:22 声明序）+ 1 个填充哑态 filler_7（8=2^3）；填充态边不引用真实事件语义",
+  "state_names": [
+   "NEW",
+   "SCHEDULED",
+   "RUNNING",
+   "SUCCEEDED",
+   "FAILED",
+   "KILL_WAIT",
+   "KILLED",
+   "filler_7"
+  ],
+  "event_names": [
+   "T_KILL",
+   "T_SCHEDULE",
+   "T_RECOVER",
+   "T_ADD_SPEC_ATTEMPT",
+   "T_ATTEMPT_LAUNCHED",
+   "T_ATTEMPT_COMMIT_PENDING",
+   "T_ATTEMPT_FAILED",
+   "T_ATTEMPT_SUCCEEDED",
+   "T_ATTEMPT_KILLED"
+  ],
+  "semantics_class": "event: 9 个动作是 MRAppMaster TaskEvent 类型（TaskEventType），名字独立于状态 -> groups 必须声明 semantics {\"action\": \"fixed\"}",
+  "transcription_rules": "H1 多目标 EnumSet 行→等概率占位（条件分支未加权重；8 个多目标行: 167,182,201,209,213,217,231,234）；H2 未注册 (态,事件)→-1.0 自环（StateMachineFactory.java:305）；H3 显式注册的 Ignore-able 行→0.0 自环（与未注册惩罚区分）；H4 奖励约定见 reward_rule；H5 以 trunk 为准（非 2.x/1.x 口径）。",
+  "reward_rule": "+1.0 仅'从其他态进入 SUCCEEDED'的结果分支（RUNNING|T_ATTEMPT_SUCCEEDED 195-197；NEW|T_RECOVER 的 SUCCEEDED 分支 167-172）；-1.0 为未注册 (态,事件)（YARN StateMachineFactory 抛 InvalidStateTransitionException, :305）；显式注册的终态/忽略自环 0.0。奖励为转录约定非框架语义（声明）。",
+  "transcription_notes": {
+   "cell_citations": {
+    "NEW|T_KILL": "TaskImpl.java:165-166 addTransition(NEW, KILLED, T_KILL, KillNewTransition)",
+    "NEW|T_SCHEDULE": "TaskImpl.java:163-164 addTransition(NEW, SCHEDULED, T_SCHEDULE, InitialScheduleTransition)",
+    "NEW|T_RECOVER": "TaskImpl.java:167-172 addTransition(NEW, EnumSet{FAILED,KILLED,RUNNING,SUCCEEDED}, T_RECOVER, RecoverTransition)；多目标条件分支→等概率占位（声明），SUCCEEDED 分支按奖励约定 +1.0",
+    "NEW|T_ADD_SPEC_ATTEMPT": "TaskImpl.java:162-172 NEW 态无该事件行；YARN StateMachineFactory.java:305 doTransition 对未注册 (态,事件) 抛 InvalidStateTransitionException → 转录为 -1.0 惩罚自环（声明性约定）",
+    "NEW|T_ATTEMPT_LAUNCHED": "TaskImpl.java:162-172 NEW 态无该事件行；YARN StateMachineFactory.java:305 doTransition 对未注册 (态,事件) 抛 InvalidStateTransitionException → 转录为 -1.0 惩罚自环（声明性约定）",
+    "NEW|T_ATTEMPT_COMMIT_PENDING": "TaskImpl.java:162-172 NEW 态无该事件行；YARN StateMachineFactory.java:305 doTransition 对未注册 (态,事件) 抛 InvalidStateTransitionException → 转录为 -1.0 惩罚自环（声明性约定）",
+    "NEW|T_ATTEMPT_FAILED": "TaskImpl.java:162-172 NEW 态无该事件行；YARN StateMachineFactory.java:305 doTransition 对未注册 (态,事件) 抛 InvalidStateTransitionException → 转录为 -1.0 惩罚自环（声明性约定）",
+    "NEW|T_ATTEMPT_SUCCEEDED": "TaskImpl.java:162-172 NEW 态无该事件行；YARN StateMachineFactory.java:305 doTransition 对未注册 (态,事件) 抛 InvalidStateTransitionException → 转录为 -1.0 惩罚自环（声明性约定）",
+    "NEW|T_ATTEMPT_KILLED": "TaskImpl.java:162-172 NEW 态无该事件行；YARN StateMachineFactory.java:305 doTransition 对未注册 (态,事件) 抛 InvalidStateTransitionException → 转录为 -1.0 惩罚自环（声明性约定）",
+    "SCHEDULED|T_KILL": "TaskImpl.java:178-179 addTransition(SCHEDULED, KILL_WAIT, T_KILL, KILL_TRANSITION)",
+    "SCHEDULED|T_SCHEDULE": "TaskImpl.java:174-185 SCHEDULED 态无 T_SCHEDULE 行；StateMachineFactory.java:305 未注册异常 → -1.0",
+    "SCHEDULED|T_RECOVER": "TaskImpl.java:174-185 SCHEDULED 态无 T_RECOVER 行；StateMachineFactory.java:305 → -1.0",
+    "SCHEDULED|T_ADD_SPEC_ATTEMPT": "TaskImpl.java:174-185 SCHEDULED 态无 T_ADD_SPEC_ATTEMPT 行；StateMachineFactory.java:305 → -1.0",
+    "SCHEDULED|T_ATTEMPT_LAUNCHED": "TaskImpl.java:176-177 addTransition(SCHEDULED, RUNNING, T_ATTEMPT_LAUNCHED, LaunchTransition)",
+    "SCHEDULED|T_ATTEMPT_COMMIT_PENDING": "TaskImpl.java:174-185 SCHEDULED 态无 T_ATTEMPT_COMMIT_PENDING 行；StateMachineFactory.java:305 → -1.0",
+    "SCHEDULED|T_ATTEMPT_FAILED": "TaskImpl.java:182-185 addTransition(SCHEDULED, EnumSet{SCHEDULED,FAILED}, T_ATTEMPT_FAILED, AttemptFailedTransition)；重试/失败条件分支→等概率占位（声明）",
+    "SCHEDULED|T_ATTEMPT_SUCCEEDED": "TaskImpl.java:174-185 SCHEDULED 态无 T_ATTEMPT_SUCCEEDED 行；StateMachineFactory.java:305 → -1.0",
+    "SCHEDULED|T_ATTEMPT_KILLED": "TaskImpl.java:180-181 addTransition(SCHEDULED, SCHEDULED, T_ATTEMPT_KILLED, ATTEMPT_KILLED_TRANSITION)（同态自环）",
+    "RUNNING|T_KILL": "TaskImpl.java:205-206 addTransition(RUNNING, KILL_WAIT, T_KILL, KILL_TRANSITION)",
+    "RUNNING|T_SCHEDULE": "TaskImpl.java:187-206 RUNNING 态无 T_SCHEDULE 行；StateMachineFactory.java:305 → -1.0",
+    "RUNNING|T_RECOVER": "TaskImpl.java:187-206 RUNNING 态无 T_RECOVER 行；StateMachineFactory.java:305 → -1.0",
+    "RUNNING|T_ADD_SPEC_ATTEMPT": "TaskImpl.java:193-194 addTransition(RUNNING, RUNNING, T_ADD_SPEC_ATTEMPT, RedundantScheduleTransition)（同态自环）",
+    "RUNNING|T_ATTEMPT_LAUNCHED": "TaskImpl.java:188-189 addTransition(RUNNING, RUNNING, T_ATTEMPT_LAUNCHED)（注释: more attempts may start later；同态自环）",
+    "RUNNING|T_ATTEMPT_COMMIT_PENDING": "TaskImpl.java:190-192 addTransition(RUNNING, RUNNING, T_ATTEMPT_COMMIT_PENDING, AttemptCommitPendingTransition)（同态自环）",
+    "RUNNING|T_ATTEMPT_FAILED": "TaskImpl.java:201-204 addTransition(RUNNING, EnumSet{RUNNING,FAILED}, T_ATTEMPT_FAILED, AttemptFailedTransition)；条件分支→等概率占位（声明）",
+    "RUNNING|T_ATTEMPT_SUCCEEDED": "TaskImpl.java:195-197 addTransition(RUNNING, SUCCEEDED, T_ATTEMPT_SUCCEEDED, AttemptSucceededTransition)；奖励约定：进入 SUCCEEDED +1.0",
+    "RUNNING|T_ATTEMPT_KILLED": "TaskImpl.java:198-200 addTransition(RUNNING, RUNNING, T_ATTEMPT_KILLED, ATTEMPT_KILLED_TRANSITION)（同态自环）",
+    "SUCCEEDED|T_KILL": "TaskImpl.java:241-246 addTransition(SUCCEEDED, SUCCEEDED, EnumSet{T_ADD_SPEC_ATTEMPT,T_ATTEMPT_COMMIT_PENDING,T_ATTEMPT_LAUNCHED,T_KILL})（源码注释 Ignore-able transitions；显式忽略行 → 0.0 自环）",
+    "SUCCEEDED|T_SCHEDULE": "TaskImpl.java:230-246 SUCCEEDED 态无 T_SCHEDULE 行；StateMachineFactory.java:305 → -1.0",
+    "SUCCEEDED|T_RECOVER": "TaskImpl.java:230-246 SUCCEEDED 态无 T_RECOVER 行；StateMachineFactory.java:305 → -1.0",
+    "SUCCEEDED|T_ADD_SPEC_ATTEMPT": "TaskImpl.java:241-246 Ignore-able 行（显式忽略 → 0.0 自环）",
+    "SUCCEEDED|T_ATTEMPT_LAUNCHED": "TaskImpl.java:241-246 Ignore-able 行（显式忽略 → 0.0 自环）",
+    "SUCCEEDED|T_ATTEMPT_COMMIT_PENDING": "TaskImpl.java:241-246 Ignore-able 行（显式忽略 → 0.0 自环）",
+    "SUCCEEDED|T_ATTEMPT_FAILED": "TaskImpl.java:231-233 addTransition(SUCCEEDED, EnumSet{SCHEDULED,SUCCEEDED,FAILED}, T_ATTEMPT_FAILED, RetroactiveFailureTransition)；追溯失败条件分支→等概率占位（声明）",
+    "SUCCEEDED|T_ATTEMPT_SUCCEEDED": "TaskImpl.java:237-239 addTransition(SUCCEEDED, SUCCEEDED, T_ATTEMPT_SUCCEEDED, AttemptSucceededAtSucceededTransition)（同态自环，非进入 SUCCEEDED → 0.0）",
+    "SUCCEEDED|T_ATTEMPT_KILLED": "TaskImpl.java:234-236 addTransition(SUCCEEDED, EnumSet{SCHEDULED,SUCCEEDED}, T_ATTEMPT_KILLED, RetroactiveKilledTransition)；条件分支→等概率占位（声明）",
+    "FAILED|T_KILL": "TaskImpl.java:249-256 addTransition(FAILED, FAILED, EnumSet{T_KILL,T_ADD_SPEC_ATTEMPT,T_ATTEMPT_COMMIT_PENDING,T_ATTEMPT_FAILED,T_ATTEMPT_KILLED,T_ATTEMPT_LAUNCHED,T_ATTEMPT_SUCCEEDED})（终态自环，显式注册）",
+    "FAILED|T_SCHEDULE": "TaskImpl.java:248-256 FAILED 态无该事件行；StateMachineFactory.java:305 → -1.0",
+    "FAILED|T_RECOVER": "TaskImpl.java:248-256 FAILED 态无该事件行；StateMachineFactory.java:305 → -1.0",
+    "FAILED|T_ADD_SPEC_ATTEMPT": "TaskImpl.java:249-256 addTransition(FAILED, FAILED, EnumSet{T_KILL,T_ADD_SPEC_ATTEMPT,T_ATTEMPT_COMMIT_PENDING,T_ATTEMPT_FAILED,T_ATTEMPT_KILLED,T_ATTEMPT_LAUNCHED,T_ATTEMPT_SUCCEEDED})（终态自环，显式注册）",
+    "FAILED|T_ATTEMPT_LAUNCHED": "TaskImpl.java:249-256 addTransition(FAILED, FAILED, EnumSet{T_KILL,T_ADD_SPEC_ATTEMPT,T_ATTEMPT_COMMIT_PENDING,T_ATTEMPT_FAILED,T_ATTEMPT_KILLED,T_ATTEMPT_LAUNCHED,T_ATTEMPT_SUCCEEDED})（终态自环，显式注册）",
+    "FAILED|T_ATTEMPT_COMMIT_PENDING": "TaskImpl.java:249-256 addTransition(FAILED, FAILED, EnumSet{T_KILL,T_ADD_SPEC_ATTEMPT,T_ATTEMPT_COMMIT_PENDING,T_ATTEMPT_FAILED,T_ATTEMPT_KILLED,T_ATTEMPT_LAUNCHED,T_ATTEMPT_SUCCEEDED})（终态自环，显式注册）",
+    "FAILED|T_ATTEMPT_FAILED": "TaskImpl.java:249-256 addTransition(FAILED, FAILED, EnumSet{T_KILL,T_ADD_SPEC_ATTEMPT,T_ATTEMPT_COMMIT_PENDING,T_ATTEMPT_FAILED,T_ATTEMPT_KILLED,T_ATTEMPT_LAUNCHED,T_ATTEMPT_SUCCEEDED})（终态自环，显式注册）",
+    "FAILED|T_ATTEMPT_SUCCEEDED": "TaskImpl.java:249-256 addTransition(FAILED, FAILED, EnumSet{T_KILL,T_ADD_SPEC_ATTEMPT,T_ATTEMPT_COMMIT_PENDING,T_ATTEMPT_FAILED,T_ATTEMPT_KILLED,T_ATTEMPT_LAUNCHED,T_ATTEMPT_SUCCEEDED})（终态自环，显式注册）",
+    "FAILED|T_ATTEMPT_KILLED": "TaskImpl.java:249-256 addTransition(FAILED, FAILED, EnumSet{T_KILL,T_ADD_SPEC_ATTEMPT,T_ATTEMPT_COMMIT_PENDING,T_ATTEMPT_FAILED,T_ATTEMPT_KILLED,T_ATTEMPT_LAUNCHED,T_ATTEMPT_SUCCEEDED})（终态自环，显式注册）",
+    "KILL_WAIT|T_KILL": "TaskImpl.java:222-228 Ignore-able 行 EnumSet{T_KILL,T_ATTEMPT_LAUNCHED,T_ATTEMPT_COMMIT_PENDING,T_ADD_SPEC_ATTEMPT}（显式忽略 → 0.0 自环）",
+    "KILL_WAIT|T_SCHEDULE": "TaskImpl.java:208-228 KILL_WAIT 态无 T_SCHEDULE 行；StateMachineFactory.java:305 → -1.0",
+    "KILL_WAIT|T_RECOVER": "TaskImpl.java:208-228 KILL_WAIT 态无 T_RECOVER 行；StateMachineFactory.java:305 → -1.0",
+    "KILL_WAIT|T_ADD_SPEC_ATTEMPT": "TaskImpl.java:222-228 Ignore-able 行（显式忽略 → 0.0 自环）",
+    "KILL_WAIT|T_ATTEMPT_LAUNCHED": "TaskImpl.java:222-228 Ignore-able 行（显式忽略 → 0.0 自环）",
+    "KILL_WAIT|T_ATTEMPT_COMMIT_PENDING": "TaskImpl.java:222-228 Ignore-able 行（显式忽略 → 0.0 自环）",
+    "KILL_WAIT|T_ATTEMPT_FAILED": "TaskImpl.java:217-220 addTransition(KILL_WAIT, EnumSet{KILL_WAIT,KILLED}, T_ATTEMPT_FAILED, KillWaitAttemptFailedTransition)；条件分支→等概率占位（声明）",
+    "KILL_WAIT|T_ATTEMPT_SUCCEEDED": "TaskImpl.java:213-216 addTransition(KILL_WAIT, EnumSet{KILL_WAIT,KILLED}, T_ATTEMPT_SUCCEEDED, KillWaitAttemptSucceededTransition)；条件分支→等概率占位（声明）",
+    "KILL_WAIT|T_ATTEMPT_KILLED": "TaskImpl.java:209-212 addTransition(KILL_WAIT, EnumSet{KILL_WAIT,KILLED}, T_ATTEMPT_KILLED, KillWaitAttemptKilledTransition)；条件分支→等概率占位（声明）",
+    "KILLED|T_KILL": "TaskImpl.java:266-270 addTransition(KILLED, KILLED, EnumSet{T_KILL,T_SCHEDULE,T_ATTEMPT_KILLED,T_ADD_SPEC_ATTEMPT})（终态自环，显式注册；注释 259-265 说明竞态成因）",
+    "KILLED|T_SCHEDULE": "TaskImpl.java:266-270 addTransition(KILLED, KILLED, EnumSet{T_KILL,T_SCHEDULE,T_ATTEMPT_KILLED,T_ADD_SPEC_ATTEMPT})（终态自环，显式注册；注释 259-265 说明竞态成因）",
+    "KILLED|T_RECOVER": "TaskImpl.java:258-270 KILLED 态无该事件行；StateMachineFactory.java:305 → -1.0",
+    "KILLED|T_ADD_SPEC_ATTEMPT": "TaskImpl.java:266-270 addTransition(KILLED, KILLED, EnumSet{T_KILL,T_SCHEDULE,T_ATTEMPT_KILLED,T_ADD_SPEC_ATTEMPT})（终态自环，显式注册；注释 259-265 说明竞态成因）",
+    "KILLED|T_ATTEMPT_LAUNCHED": "TaskImpl.java:258-270 KILLED 态无该事件行；StateMachineFactory.java:305 → -1.0",
+    "KILLED|T_ATTEMPT_COMMIT_PENDING": "TaskImpl.java:258-270 KILLED 态无该事件行；StateMachineFactory.java:305 → -1.0",
+    "KILLED|T_ATTEMPT_FAILED": "TaskImpl.java:258-270 KILLED 态无该事件行；StateMachineFactory.java:305 → -1.0",
+    "KILLED|T_ATTEMPT_SUCCEEDED": "TaskImpl.java:258-270 KILLED 态无该事件行；StateMachineFactory.java:305 → -1.0",
+    "KILLED|T_ATTEMPT_KILLED": "TaskImpl.java:266-270 addTransition(KILLED, KILLED, EnumSet{T_KILL,T_SCHEDULE,T_ATTEMPT_KILLED,T_ADD_SPEC_ATTEMPT})（终态自环，显式注册；注释 259-265 说明竞态成因）",
+    "filler_7|T_KILL": "填充态（2^n_bits 幂次契约，参照工具仓 examples eventfsm/gw 系 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_7|T_SCHEDULE": "填充态（2^n_bits 幂次契约，参照工具仓 examples eventfsm/gw 系 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_7|T_RECOVER": "填充态（2^n_bits 幂次契约，参照工具仓 examples eventfsm/gw 系 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_7|T_ADD_SPEC_ATTEMPT": "填充态（2^n_bits 幂次契约，参照工具仓 examples eventfsm/gw 系 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_7|T_ATTEMPT_LAUNCHED": "填充态（2^n_bits 幂次契约，参照工具仓 examples eventfsm/gw 系 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_7|T_ATTEMPT_COMMIT_PENDING": "填充态（2^n_bits 幂次契约，参照工具仓 examples eventfsm/gw 系 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_7|T_ATTEMPT_FAILED": "填充态（2^n_bits 幂次契约，参照工具仓 examples eventfsm/gw 系 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_7|T_ATTEMPT_SUCCEEDED": "填充态（2^n_bits 幂次契约，参照工具仓 examples eventfsm/gw 系 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义",
+    "filler_7|T_ATTEMPT_KILLED": "填充态（2^n_bits 幂次契约，参照工具仓 examples eventfsm/gw 系 padding 惯例）：全事件自环 r=0.0，不引用真实事件语义"
+   },
+   "not_collected": [
+    {
+     "item": "各 Transition 类内部的运行时条件（如 AttemptFailedTransition 的 maxAttempts 重试上限、RetroactiveFailureTransition 的 map/reduce 判别）",
+     "why": "条件在事件对象/作业上下文数据中，非 (态,事件) 表可单值化；已以等概率占位声明，分支依据 = TaskImpl.java 对应 Transition 内部类"
+    },
+    {
+     "item": "COMMIT_PENDING 状态（本仓 trunk 已无）",
+     "why": "TaskStateInternal.java:22 实证 7 态不含 COMMIT_PENDING（旧版本 2.x 有）；按 trunk 原文转录，W1 states_estimate=7 与本会话复核一致"
+    },
+    {
+     "item": "TaskAttempt 级状态机（org.apache.hadoop.mapreduce.v2.app.job.impl.TaskAttemptImpl）",
+     "why": "W1 dossier 明确以 Task 级为准，attempt 级不收（防范围膨胀）"
+    },
+    {
+     "item": "Hadoop 1.x TaskStatus.State 口径",
+     "why": "W1 dossier 风险项：以 MRv2 TaskImpl 为准，1.x 不收"
+    }
+   ],
+   "unregistered_cell_rule": "未注册 (态,事件) 格引证统一为 TaskImpl.java 对应态区间 + StateMachineFactory.java:305",
+   "addTransition_rows": "24 行（163,165,167,176,178,180,182,188,190,193,195,198,201,205,209,213,217,222,231,234,237,241,249,266）；8 态×9 事件=72 格全显式，8 个多目标 EnumSet 行展开后共 83 个结果分支（72+11），跨态结果分支 18"
+  },
+  "regenerate": "python -X utf8 make_hadoop_mr_task.py",
+  "generator": "make_hadoop_mr_task.py（W2 转录工程师；不运行 wuxing-gua、不算真值）"
+ },
+ "trans": [
+  [
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     0.25,
+     4,
+     0.0
+    ],
+    [
+     0.25,
+     6,
+     0.0
+    ],
+    [
+     0.25,
+     2,
+     0.0
+    ],
+    [
+     0.25,
+     3,
+     1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     -1.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     -1.0
+    ]
+   ],
+   [
+    [
+     0.5,
+     1,
+     0.0
+    ],
+    [
+     0.5,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     0.5,
+     2,
+     0.0
+    ],
+    [
+     0.5,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     0.3333333333333333,
+     1,
+     0.0
+    ],
+    [
+     0.3333333333333333,
+     3,
+     0.0
+    ],
+    [
+     0.3333333333333333,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     0.5,
+     1,
+     0.0
+    ],
+    [
+     0.5,
+     3,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     0.5,
+     5,
+     0.0
+    ],
+    [
+     0.5,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     0.5,
+     5,
+     0.0
+    ],
+    [
+     0.5,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     0.5,
+     5,
+     0.0
+    ],
+    [
+     0.5,
+     6,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     -1.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ]
+  ]
+ ]
+}
