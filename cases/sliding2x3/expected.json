@@ -1,0 +1,93 @@
+{
+ "case": "sliding2x3",
+ "provenance": {
+  "recorded": "2026-11-04, observed from a live three-way arbitration run (`python -X utf8 -m symmetry_court arbitrate --emit-expected-template`); the receipt is verdicts/sliding2x3.verdict.json; the gate (`python -X utf8 -m symmetry_court selftest`) replays the case and compares these rows field-by-field",
+  "reading_guide": "relabel row = engine's relabel frame (court-stamped copy; on this 4-action/10-bit model that frame resolves to the bitstring judge, which reads actions as bit flips -- a structural mismatch for a direction-key system, recorded as the diagnostic column); fixed row = directions pinned (--strict); the explicit declarations of g1/g4 are adjudicated by the vendored engine directly (receipts in receipts/) and by the compare subcommand's declared-caliber gate arm; networkx columns = independent juror (the automorphism-set cross-check is skipped at 1024 states per the court's scale guard, the O(E) direct edge-set check is the primary)"
+ },
+ "groups": {
+  "g1_hflip_map": {
+   "claim": "defendant A: mirroring the 2x3 board left-right and renaming the slide directions with it ('a tile slides left' becomes 'a tile slides right', up/down unchanged) preserves the puzzle exactly -- directions are bound to board coordinates, so the true symmetry carries its own direction renaming; declared under the explicit caliber with per-element action maps",
+   "relabel": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "bitstring",
+    "note": "court-stamped relabel frame resolves to the bitstring judge on this 4-action/10-bit model (n_actions <= n_bits), which reads actions as bit flips -- a structural mismatch for a direction-key system; diagnostic column, not expected to flip"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict"
+   },
+   "networkx": {
+    "structure_symmetry": true,
+    "labeled_symmetry": false
+   },
+   "note": "the explicit declaration is adjudicated by the vendored engine directly (receipts/check.g1_hflip_map.json, engine run without --strict: pass, worst_tv 0.0, homomorphism_checked full) and by the compare subcommand's declared-caliber gate arm; the relabel column here resolves to the bitstring judge, which reads actions as bit flips on this 4-action/10-bit model -- a structural mismatch for a direction-key system (same shape as mini2048, contrast lightsout3 where 9 actions = 9 bits made the bitstring derivation coincide with the per-element button maps); the fixed column is the directions-pinned contrast"
+  },
+  "g2_hflip_nomap": {
+   "claim": "defendant B: the same left-right mirror with the directions PINNED (a slide left must stay a slide left) -- the naive-intuition claim that 'the board looks the same mirrored', filed deliberately under the fixed caliber to show it is the direction renaming, not the state permutation, that makes defendant A true",
+   "relabel": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "bitstring",
+    "note": "court-stamped relabel frame resolves to the bitstring judge on this 4-action/10-bit model (n_actions <= n_bits), which reads actions as bit flips -- a structural mismatch for a direction-key system; diagnostic column, not expected to flip"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict",
+    "note": "directions pinned: the mirror claim is genuinely false under this caliber (TV 1.0 -- the mirrored board answers the left slide with the right neighbor); the relabel column passes for no group on this model because the bitstring judge reads actions as bit flips -- the caliber, not the permutation, decides (same structure as mini2048's g1/g2 pair)"
+   },
+   "networkx": {
+    "structure_symmetry": true,
+    "labeled_symmetry": false
+   }
+  },
+  "g3_pads": {
+   "claim": "positive control: padding states 720 and 1023 have the same behavior shape (every action a single self-loop, reward 0), so the swap is a genuine symmetry under the pinned-direction reading and should be admitted everywhere",
+   "relabel": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "bitstring",
+    "note": "court-stamped relabel frame resolves to the bitstring judge on this 4-action/10-bit model (n_actions <= n_bits), which reads actions as bit flips -- a structural mismatch for a direction-key system; diagnostic column, not expected to flip"
+   },
+   "fixed": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "strict",
+    "note": "fixed-caliber positive control: the two padding rows are the same behavior shape (every action a single self-loop with reward 0) and reference no direction, so the pinned reading is the true reading; this case has 304 real padding states (unused lexicographic ranks), so the pads swap returns as the trivial control after lightsout3's no-padding case (see the group file's note)"
+   },
+   "networkx": {
+    "structure_symmetry": true,
+    "labeled_symmetry": true
+   }
+  },
+  "g4_v4_full": {
+   "claim": "main positive control: the FULL 4-element rectangle symmetry group V4 = C2 x C2 (identity, left-right mirror, top-bottom mirror, 180-degree rotation), each element carrying its own direction renaming -- the third non-trivial positive control of this court, after mini2048's D4 and lightsout3's D4, and a third group structure (the board is a non-square rectangle: no 90-degree rotation exists, machine-verified by enumerating all 720 cell bijections against the adjacency graph)",
+   "relabel": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "bitstring",
+    "note": "court-stamped relabel frame resolves to the bitstring judge on this 4-action/10-bit model (n_actions <= n_bits), which reads actions as bit flips -- a structural mismatch for a direction-key system; diagnostic column, not expected to flip"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict"
+   },
+   "networkx": {
+    "structure_symmetry": true,
+    "labeled_symmetry": false
+   },
+   "note": "the explicit declaration is adjudicated by the vendored engine directly (receipts/check.g4_v4_full.json, engine run without --strict: pass, worst_tv 0.0, homomorphism_checked full) and by the compare subcommand's declared-caliber gate arm; the relabel column here resolves to the bitstring judge, which reads actions as bit flips on this 4-action/10-bit model -- a structural mismatch for a direction-key system (same shape as mini2048, contrast lightsout3 where 9 actions = 9 bits made the bitstring derivation coincide with the per-element button maps); the fixed column is the directions-pinned contrast"
+  }
+ }
+}

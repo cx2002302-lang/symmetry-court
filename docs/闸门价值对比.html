@@ -32,7 +32,7 @@
 
 <header>
   <h1>闸门价值对比：用 vs 不用</h1>
-  <div class="tag">10 个真实系统 · 37 个合并主张 · 同一份数据跑两种决策方式（闸门臂按群声明分派口径 · 数字全部回源 comparison.*.json）</div>
+  <div class="tag">11 个真实系统 · 41 个合并主张 · 同一份数据跑两种决策方式（闸门臂按群声明分派口径 · 数字全部回源 comparison.*.json）</div>
 </header>
 
 <section>
@@ -59,8 +59,8 @@
 </section>
 
 <section>
-  <h2>核心结果：朴素臂的 17 次放行里，3 次合并会真改行为</h2>
-  <div class="lead">10 案 37 群（compare v2：闸门臂按各群声明口径对账；2026-11-04 起兼容逐元素 action_maps，见下方"口径尊重"节；2026-11-04 加入 lightsout3 案后刷新）。朴素臂（只看结构）共放行 <b>17</b> 次合并——其中 <b>14 次恰好安全</b>（7 次填充态对换，压缩 1.004–1.143×；7 次声明口径真对称：2048 案 g1/g3/g4 与 Lights Out 案 g1/g3/g4/g5，声明口径下逐格零改），<b>3 次是陷阱</b>：TCP 孪生对（FIN-WAIT-2 ↔ CLOSING，6 格）、2048 案键钉死的 90° 旋转（740 格）与 Lights Out 案键钉死的 90° 旋转（12288 格）。2048 案的 3 个声明口径主张（g1/g3/g4）与 Lights Out 案的 3 个 explicit 主张（g1/g4/g5）闸门均<b>放行</b>——2048 案三群曾于 2026-11-03 因引擎 explicit 层的单映射局限被误拒，上游 2026-11-04 以逐元素 action_maps 修复后翻案兑现（下节详述）。闸门臂放行 <b>14</b> 次全部零破坏，总耗时约 <b>6.6 秒</b>（37 群 10 案，单机实测求和，精确值见 json）。</div>
+  <h2>核心结果：朴素臂的 21 次放行里，4 次合并会真改行为</h2>
+  <div class="lead">11 案 41 群（compare v2：闸门臂按各群声明口径对账；2026-11-04 起兼容逐元素 action_maps，见下方"口径尊重"节；2026-11-04 加入 lightsout3 与 sliding2x3 案后刷新）。朴素臂（只看结构）共放行 <b>21</b> 次合并——其中 <b>17 次恰好安全</b>（8 次填充态对换，压缩 1.001–1.143×；9 次声明口径真对称：2048 案 g1/g3/g4、Lights Out 案 g1/g3/g4/g5 与滑块案 sliding2x3 的 g1/g4，声明口径下逐格零改），<b>4 次是陷阱</b>：TCP 孪生对（FIN-WAIT-2 ↔ CLOSING，6 格）、2048 案键钉死的 90° 旋转（740 格）、Lights Out 案键钉死的 90° 旋转（12288 格）与滑块案方向钉死的左右镜像（1440 格）。2048 案的 3 个声明口径主张（g1/g3/g4）、Lights Out 案的 3 个 explicit 主张（g1/g4/g5）与滑块案的 2 个 explicit 主张（g1/g4）闸门均<b>放行</b>——2048 案三群曾于 2026-11-03 因引擎 explicit 层的单映射局限被误拒，上游 2026-11-04 以逐元素 action_maps 修复后翻案兑现（下节详述）。闸门臂放行 <b>17</b> 次全部零破坏，总耗时约 <b>7.4 秒</b>（41 群 11 案，单机实测求和，精确值见 json）。</div>
   <svg viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg">
     <!-- TCP 放大镜 -->
     <rect x="30" y="30" width="840" height="120" rx="12" fill="#fef2f2" stroke="#dc2626" stroke-width="2"/>
@@ -72,10 +72,10 @@
     <text x="700" y="132" font-size="13" fill="#059669" font-weight="bold">用闸：exit 1 拒答（≈0.2 秒）</text>
     <!-- 汇总条 -->
     <g font-size="14">
-      <text x="60" y="196" fill="#1a1a2e" font-weight="bold">两臂总分（10 案 37 群）</text>
-      <text x="60" y="228" fill="#92400e">朴素臂：放行 17 · 真破坏 3 次（TCP 孪生 6 格 + 2048 键钉死旋转 740 格 + Lights Out 键钉死旋转 12288 格）· 无从得知自己错了</text>
-      <text x="60" y="258" fill="#065f46">闸门臂：放行 14（全部安全，压缩照拿）· 拦下 23（全部拦对；曾经的 3 次口径局限误拒已随 2026-11-04 上游修复翻案，见下节）· 放行群破坏格 0（判据性质）</text>
-      <text x="60" y="286" fill="#55566b" font-size="12.5">闸门成本：37 群 × check 共约 7 秒（单机量级，实测求和 6.6 秒）——一次静默错误协议实现的排查成本通常以人天计</text>
+      <text x="60" y="196" fill="#1a1a2e" font-weight="bold">两臂总分（11 案 41 群）</text>
+      <text x="60" y="228" fill="#92400e">朴素臂：放行 21 · 真破坏 4 次（TCP 孪生 6 格 + 2048 键钉死旋转 740 格 + Lights Out 键钉死旋转 12288 格 + 滑块方向钉死镜像 1440 格）· 无从得知自己错了</text>
+      <text x="60" y="258" fill="#065f46">闸门臂：放行 17（全部安全，压缩照拿）· 拦下 24（全部拦对；曾经的 3 次口径局限误拒已随 2026-11-04 上游修复翻案，见下节）· 放行群破坏格 0（判据性质）</text>
+      <text x="60" y="286" fill="#55566b" font-size="12.5">闸门成本：41 群 × check 共约 7 秒（单机量级，实测求和 7.4 秒）——一次静默错误协议实现的排查成本通常以人天计</text>
     </g>
   </svg>
   <div class="ok"><b>一句话：闸门不是每次都救命——它救的正是"结构一样、事件不一样"这一类你用眼睛和结构工具都看不出的坑；其余时候它花几秒钟给你一张"压缩无害"的收据。（它也曾误拒：mini2048 案 2026-11-03 当场抓到引擎 explicit 层的单映射局限，误拒全程公开记录；上游 2026-11-04 修复后 g1/g3/g4 翻案兑现，见下节——错判史同样保留，不删。）</b></div>
@@ -83,7 +83,7 @@
 
 <section>
   <h2>逐案明细</h2>
-  <div class="lead">法庭三案（本仓 cases/，收据 verdicts/comparison.*.json）＋ 实战盲测五案（field-trial 项目案卷，同格式复跑）＋ 2048 案 mini2048（六群，explicit 口径真实系统样本与单映射局限翻案史）＋ Lights Out 案 lightsout3（五群，2026-11-04 入卷：第二份 explicit 真实系统案卷、第二个非平凡真对称正控，与 mini2048 同群不同机理——Toggle 代数 vs 合并滑动）。</div>
+  <div class="lead">法庭三案（本仓 cases/，收据 verdicts/comparison.*.json）＋ 实战盲测五案（field-trial 项目案卷，同格式复跑）＋ 2048 案 mini2048（六群，explicit 口径真实系统样本与单映射局限翻案史）＋ Lights Out 案 lightsout3（五群，2026-11-04 入卷：第二份 explicit 真实系统案卷、第二个非平凡真对称正控，与 mini2048 同群不同机理——Toggle 代数 vs 合并滑动）＋ 滑块案 sliding2x3（四群，2026-11-04 入卷：第三份 explicit 真实系统案卷、第三个非平凡真对称正控——非正方形矩形上的 V4，第三种群结构，且带 304 个真实填充态——pads 正控回归 explicit 案卷）。</div>
   <table>
     <tr><th>案（系统）</th><th>群（主张）</th><th>朴素臂</th><th>闸门</th><th>破坏格</th><th>压缩读数(若真)</th></tr>
     <tr><td rowspan="4">tcp<br>RFC 9293</td><td>swap（孪生对）</td><td class="bad">合并 ⚠️</td><td class="good">拒答 ✓</td><td class="bad">6</td><td>—</td></tr>
@@ -123,8 +123,12 @@
     <tr><td>g3 全盘取反（fixed 正控；本案无填充态，平凡正控换机理）</td><td>合并</td><td class="good">放行 ✓</td><td>0</td><td>2.000×（256 轨道）</td></tr>
     <tr><td>g4 全 D4（explicit，逐元素映射）</td><td>合并</td><td class="good">放行 ✓（声明口径）</td><td>0*</td><td>5.020×（102 轨道）</td></tr>
     <tr><td>g5 D4×C2 直积（explicit，逐元素映射）</td><td>合并</td><td class="good">放行 ✓（声明口径）</td><td>0*</td><td>10.039×（51 轨道）</td></tr>
+    <tr><td rowspan="4">sliding2x3<br>滑块谜题（n-puzzle 家族）<br>2×3 确定性变体</td><td>g1 hflip+改名方向（explicit，逐元素映射）</td><td>合并</td><td class="good">放行 ✓（声明口径）</td><td>0*</td><td>1.542×（664 轨道）</td></tr>
+    <tr><td>g2 hflip 方向钉死（fixed）</td><td>合并</td><td class="good">拒答 ✓</td><td>1440</td><td>—</td></tr>
+    <tr><td>g3 pads（填充态对换）</td><td>合并</td><td class="good">放行 ✓</td><td>0</td><td>1.001×（1023 轨道）</td></tr>
+    <tr><td>g4 全 V4（explicit，逐元素映射）</td><td>合并</td><td class="good">放行 ✓（声明口径）</td><td>0*</td><td>2.116×（484 轨道）</td></tr>
   </table>
-  <div class="note"><b>诚实声明（四条）</b>：① 朴素臂是<b>决策方式的代理</b>（"结构像就合并"），不是某个具体第三方工具——但这正是 networkx 不带标签口径的同类做法，TCP 孪生案里它确实判"可换"；② "破坏格"按<b>该群声明口径</b>逐格对账计（合并后行为会改变的 (状态×事件) 数）：带 * 的行是 explicit 群按其声明口径改名事件后对账——2026-11-04 起声明为<b>逐元素映射</b>（每元素配各自的 ρ，g1/g3/g4 全为 0，与引擎放行判据同口径），其余行按事件名钉死口径；fixed 口径对照数在 comparison.mini2048.json 的 broken_real_cells_fixed（g1=740、g3=130、g4=1480）；lightsout3 案同式：声明口径放行群破坏格 0（g1/g4/g5 带 * 行），fixed 口径对照数在 comparison.lightsout3.json 的 broken_real_cells_fixed（g1=12288、g4=24576、g5=49152）；协议类案卷奖励全零，判定全在转移层（lightsout3 案奖励全零属游戏设计：原版无计分，见其 model.json 规则引证）；③ 闸门放行群破坏格恒为 0 是<b>判据的数学性质</b>（pass 要求逐格 TV≤1e-9），不是本次运行的巧合。闸门耗时为单机量级记录，精确值在 comparison.*.json；④ <b>历史（2026-11-03 收据，保留）</b>：当时群文件只能带一个单全局 action_map，g1/g4 的对账数（500/1240）是"把 rot90 的映射强加给闭包群每个元素"的结果，闸门据此误拒三个真对称——上游 2026-11-04 逐元素 action_maps 修复后，g1/g3/g4 按各自映射逐格对账为 0 并翻案放行（收据 <code>cases/mini2048/receipts/</code>）；g2 键钉死 740 格、g5 假群 190 格照旧拒答，g6 照旧放行。mini2048 本次放行 g1/g3/g4/g6，压缩读数均为实跑轨道读数。</div>
+  <div class="note"><b>诚实声明（四条）</b>：① 朴素臂是<b>决策方式的代理</b>（"结构像就合并"），不是某个具体第三方工具——但这正是 networkx 不带标签口径的同类做法，TCP 孪生案里它确实判"可换"；② "破坏格"按<b>该群声明口径</b>逐格对账计（合并后行为会改变的 (状态×事件) 数）：带 * 的行是 explicit 群按其声明口径改名事件后对账——2026-11-04 起声明为<b>逐元素映射</b>（每元素配各自的 ρ，g1/g3/g4 全为 0，与引擎放行判据同口径），其余行按事件名钉死口径；fixed 口径对照数在 comparison.mini2048.json 的 broken_real_cells_fixed（g1=740、g3=130、g4=1480）；lightsout3 案同式：声明口径放行群破坏格 0（g1/g4/g5 带 * 行），fixed 口径对照数在 comparison.lightsout3.json 的 broken_real_cells_fixed（g1=12288、g4=24576、g5=49152）；sliding2x3 案同式：声明口径放行群破坏格 0（g1/g4 带 * 行），fixed 口径对照数在 comparison.sliding2x3.json 的 broken_real_cells_fixed（g1=1440、g4=5760）；协议类案卷奖励全零，判定全在转移层（lightsout3 与 sliding2x3 两案奖励全零属游戏设计：原版无计分，见各自 model.json 规则引证）；③ 闸门放行群破坏格恒为 0 是<b>判据的数学性质</b>（pass 要求逐格 TV≤1e-9），不是本次运行的巧合。闸门耗时为单机量级记录，精确值在 comparison.*.json；④ <b>历史（2026-11-03 收据，保留）</b>：当时群文件只能带一个单全局 action_map，g1/g4 的对账数（500/1240）是"把 rot90 的映射强加给闭包群每个元素"的结果，闸门据此误拒三个真对称——上游 2026-11-04 逐元素 action_maps 修复后，g1/g3/g4 按各自映射逐格对账为 0 并翻案放行（收据 <code>cases/mini2048/receipts/</code>）；g2 键钉死 740 格、g5 假群 190 格照旧拒答，g6 照旧放行。mini2048 本次放行 g1/g3/g4/g6，压缩读数均为实跑轨道读数。</div>
 </section>
 
 <section>
@@ -149,6 +153,11 @@ python -X utf8 -m symmetry_court compare --root &lt;cases目录&gt; --out &lt;�
 <section>
   <h2>Lights Out 正控案 lightsout3：第二个非平凡真对称正控（2026-11-04 入卷）</h2>
   <div class="lead"><b>与 mini2048 同群、不同机理</b>：同为 8 元素棋盘群 D4、同样逐元素按钮映射 explicit 放行，但机理不同——2048 的对称活在"滑动 + 合并"的方向规则里，Lights Out 的对称活在 Toggle 代数里（按键 = 异或翻转自身与正交相邻灯，<a href="https://en.wikipedia.org/wiki/Lights_Out_(game)">Wikipedia</a>："Pressing any of the lights will toggle it and the four adjacent lights."）。案卷五群：g1 旋转 C4（explicit）<b>放行</b>，140 轨道（3.657×）；g2 同一旋转按钮钉死（fixed）<b>拒答</b>，键钉死口径下 12288 个行为格被改写（512 态 × 9 按钮中 3 个旋转元素各破 4096 格）——朴素臂看不见这道坎，闸门拦下；g3 全盘取反（fixed）<b>放行</b>，256 轨道（2.000×）；g4 全 D4（explicit，主正控）<b>放行</b>，102 轨道（5.020×）；g5 直积 D4×C2 16 阶（explicit）<b>放行</b>，51 轨道（10.039×）——全盘取反与 D4 每个元素可交换（生成器逐元素断言），几何对称与 Toggle 代数对称相互独立。512 态全部为真态：3×3 翻转矩阵在 GF(2) 上秩 9，<b>本案没有填充态</b>，平凡正控因此换机理（全盘取反，非填充对换；案卷工程裁决 2026-11-04：忠实转录优先于凑正控形式，偏离如实记录在案卷 README 与 model.json）。收据：<code>cases/lightsout3/receipts/</code>（引擎声明口径 live 跑）+ <code>verdicts/lightsout3.verdict.json</code>（三方庭审）+ <code>verdicts/comparison.lightsout3.json</code>（本页读数）。</div>
+</section>
+
+<section>
+  <h2>滑块正控案 sliding2x3：第三个非平凡真对称正控（2026-11-04 入卷）</h2>
+  <div class="lead"><b>第三种群结构、pads 正控回归</b>：2×3 棋盘是非正方形矩形，完整几何对称群是 4 阶 Klein 四元群 <b>V4 = C2 × C2</b>（恒等 / 左右镜像 / 上下镜像 / 180° 旋转）——不存在 90° 旋转，生成器穷举 720 个格子双射对邻接图逐一机器验证"恰 4 个幸存"，案卷因此集齐三种被放行的群结构：D4（mini2048、lightsout3）、D4×C2（lightsout3 g5）、V4（本案）。机理是<b>邻接</b>：一条规则——一块滑一格进相邻空位（<a href="https://en.wikipedia.org/wiki/15_puzzle">Wikipedia "15 puzzle"</a>："Tiles in the same row or column of the open position can be moved by sliding them horizontally or vertically, respectively."），棋盘镜像自带被迫的方向改名（hflip：left↔right；vflip：up↔down；rot180：两者都换）。案卷四群：g1 左右镜像 C2（explicit）<b>放行</b>，664 轨道（1.542×）；g2 同一镜像方向钉死（fixed）<b>拒答</b>，钉死口径下 1440 个行为格被改写——朴素臂看不见这道坎，闸门拦下；g3 填充态对换（fixed）<b>放行</b>，1023 轨道（1.001×）——<b>pads 正控回归</b>：本案 1024 态中 720 个真排列 + 304 个真实填充态（未用编码秩），lightsout3 无填充态案之后平凡正控恢复 pads 形态（定位如实记录：mini2048 本就配对 explicit 与真实填充态及 pads 正控，本案在 V4 结构上再次配对）；g4 全 V4（explicit，主正控）<b>放行</b>，484 轨道（2.116×）——Burnside 交叉验证 (720+0+0+0)/4 = 180 个真态轨道 + 304 个填充单点。Johnson & Story 奇偶分裂（一半起始局面无解）记录不修复：两类都是真态，BFS 实测恰达 360。收据：<code>cases/sliding2x3/receipts/</code>（引擎声明口径 live 跑）+ <code>verdicts/sliding2x3.verdict.json</code>（三方庭审）+ <code>verdicts/comparison.sliding2x3.json</code>（本页读数）。</div>
 </section>
 
 <footer>

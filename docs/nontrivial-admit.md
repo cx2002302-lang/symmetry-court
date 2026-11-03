@@ -238,7 +238,8 @@ The docket rows in `README.md` / `README.zh-CN.md` and
   `verdicts/comparison.mini2048.json` — the gate-value ledger rows quoted
   in §4; `verdicts/comparison.summary.json` — the docket totals (at this
   document's writing 9 cases / 32 groups; since 2026-11-04 the ledger also
-  carries `lightsout3` — 10 cases / 37 groups, see §9).
+  carries `lightsout3` — 10 cases / 37 groups, see §9 — and
+  `sliding2x3` — 11 cases / 41 groups, see §10).
 - `cases/mini2048/README.md` (+ `README.zh-CN.md`) — the case's own
   diagnostic write-up, including the verified 8-element map table.
 
@@ -292,3 +293,59 @@ permutations** asserts exactly one ρ(π) per element plus the homomorphism
 law on every run (`--check`, exit 0); it also pre-registers the fake
 control reading (a top-row-only mirror admits no ρ at all) without spending
 a group file on it.
+
+## 10. The third non-trivial admit: `sliding2x3` (2026-11-04)
+
+The explicit caliber's third real-system filing, and a third group
+structure: the 2×3 sliding-puzzle board (the numbered n-puzzle family —
+15 puzzle / 8 puzzle; Klotski is the sliding-block cognate) is a non-square
+rectangle, so its full geometric symmetry group is the Klein four-group
+**V4 = C2 × C2** (identity, left-right mirror, top-bottom mirror,
+180-degree rotation) — no 90-degree rotation exists. The generator
+machine-verifies V4 as exactly the full geometric group by enumerating all
+720 cell bijections against the adjacency graph (exactly 4 survivors), so
+the docket now holds three distinct admitted structures: D4 (mini2048,
+lightsout3), D4 × C2 (lightsout3's g5), V4 (this case). Where 2048's
+symmetry lives in slide-and-merge direction rules and Lights Out's in
+toggle algebra, the sliding puzzle's symmetry lives in **adjacency**: one
+rule — a tile slides one grid step into the adjacent open position
+("Tiles in the same row or column of the open position can be moved by
+sliding them horizontally or vertically, respectively." — Wikipedia,
+"15 puzzle") — and a board mirror carries its forced direction renaming
+(left ↔ right for hflip; up ↔ down for vflip; both for rot180).
+
+The case transcribes the 2×3 deterministic variant with citations to
+Wikipedia's 15-puzzle and Sliding-puzzle articles; 1024 states = 2^10, of
+which the 6! = 720 arrangements are real (state = lexicographic rank) and
+304 unused ranks are **real padding states** (every action self-loops,
+reward 0). Rewards all zero by design (the puzzle has no score); the
+Johnson & Story parity split is recorded, not repaired (both classes are
+real states; BFS from the goal reaches exactly 360, generator-asserted).
+
+What the case adds, receipt-backed (`cases/sliding2x3/receipts/`,
+`verdicts/sliding2x3.verdict.json`, `verdicts/comparison.sliding2x3.json`;
+gate replay: 410 contract fields green, 2026-11-04):
+
+- **g4_v4_full (V4, 4 elements) — pass** under its declared per-element
+  maps, worst_tv 0.0, `homomorphism_checked: full`: the third non-trivial
+  positive control. **484 orbits** (compression 2.116×) — computed
+  live, not projected (Burnside: (720+0+0+0)/4 real orbits of size 4 —
+  no V4 element fixes a real arrangement, distinct tiles cannot mirror
+  onto each other — plus 304 fixed padding singletons).
+- **g1_hflip_map (order 2)** — pass, **664 orbits** (1.542×).
+- **g3_pads (fixed, positive control)** — pass, 1023 orbits (1.001×):
+  the pads swap **returns** on this docket after lightsout3's no-padding
+  case. Placement recorded honestly: mini2048 already pairs the explicit
+  caliber with real padding states and a pads control (its g6); this case
+  pairs them again on the V4 structure.
+- **g2_hflip_nomap (fixed)** — reject, as it should be: with directions
+  pinned the claim is genuinely false, and the cell-by-cell ledger counts
+  **1440** broken (state × event) cells (`broken_real_cells_fixed`) —
+  the naive structure-only arm admits this merge; the gate refuses it.
+
+The generator (`cases/sliding2x3/make_sliding2x3.py`) runs this case's
+method at 4 actions: exhaustive search over **all 4! = 24 direction
+permutations** asserts exactly one ρ(π) per element plus the
+homomorphism law on every run (`--check`, exit 0); it also pre-registers
+the fake control readings (a cyclic column shift and a top-row left swap
+admit no ρ at all) without spending group files on them.

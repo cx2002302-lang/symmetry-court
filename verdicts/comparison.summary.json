@@ -1,14 +1,14 @@
 {
  "generated": "see per-case comparison.<case>.json for provenance",
- "cases": 10,
- "groups": 37,
- "naive_admits": 17,
- "naive_harmful": 3,
- "naive_broken": 13034,
- "gate_admits": 14,
+ "cases": 11,
+ "groups": 41,
+ "naive_admits": 21,
+ "naive_harmful": 4,
+ "naive_broken": 14474,
+ "gate_admits": 17,
  "gate_broken": 0,
- "gate_explicit_groups": 6,
- "gate_seconds": 6.6000000000000005,
+ "gate_explicit_groups": 8,
+ "gate_seconds": 7.4,
  "gate_admitted_broken_is_zero_by_definition": "pass requires worst_tv <= 1e-9 on every cell",
  "rows": [
   {
@@ -307,6 +307,50 @@
    "gate_saved_this_merge": false,
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 8
+  },
+  {
+   "case": "sliding2x3",
+   "group": "g1_hflip_map.json",
+   "naive_structure_admits": true,
+   "gate_exit": 0,
+   "broken_real_cells_fixed": 1440,
+   "compression_if_true": 1.542,
+   "gate_saved_this_merge": false,
+   "gate_caliber": "explicit",
+   "broken_by_gate_caliber": 0
+  },
+  {
+   "case": "sliding2x3",
+   "group": "g2_hflip_nomap.json",
+   "naive_structure_admits": true,
+   "gate_exit": 1,
+   "broken_real_cells_fixed": 1440,
+   "compression_if_true": 1.542,
+   "gate_saved_this_merge": true,
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 1440
+  },
+  {
+   "case": "sliding2x3",
+   "group": "g3_pads.json",
+   "naive_structure_admits": true,
+   "gate_exit": 0,
+   "broken_real_cells_fixed": 0,
+   "compression_if_true": 1.001,
+   "gate_saved_this_merge": false,
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 0
+  },
+  {
+   "case": "sliding2x3",
+   "group": "g4_v4_full.json",
+   "naive_structure_admits": true,
+   "gate_exit": 0,
+   "broken_real_cells_fixed": 5760,
+   "compression_if_true": 2.116,
+   "gate_saved_this_merge": false,
+   "gate_caliber": "explicit",
+   "broken_by_gate_caliber": 0
   },
   {
    "case": "tcp",

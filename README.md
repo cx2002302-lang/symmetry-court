@@ -90,7 +90,7 @@ means every verdict in the repository still matches its expected record.
 Since v2, compare dispatches the caliber per group declaration (groups
 declaring `explicit` run as declared, without `--strict`; groups declaring
 `fixed` or none run `--strict`; since 2026-11-04 this includes the
-per-element `action_maps` form). Across the 10-case / 37-group ledger every
+per-element `action_maps` form). Across the 11-case / 41-group ledger every
 gate admission is zero-damage by construction. The `mini2048` case (2048
 merge mechanics, 2×2 variant, D4) is the explicit caliber's first
 real-system docket: its "should-admit" is machine-asserted by the case
@@ -102,12 +102,19 @@ caliber. The `lightsout3` case (Lights Out toggle mechanics, 3×3 variant,
 D4 — 2026-11-04) is the second real-system docket of that caliber and the
 court's second non-trivial positive control: same group as `mini2048`'s,
 different mechanism (toggle algebra instead of merge-and-slide). The
-ledger's gate admissions stand at 14 with zero damage throughout, and the
-three genuinely harmful naive admits (TCP twins, 6 cells; keys-pinned
-rotations, 740 + 12288 cells) are all refused (see
-[docs/闸门价值对比.html](docs/闸门价值对比.html),
-[cases/mini2048/README.md](cases/mini2048/README.md) and
-[cases/lightsout3/README.md](cases/lightsout3/README.md)).
+`sliding2x3` case (sliding-puzzle move mechanics, 2×3 variant, V4 —
+2026-11-04) is the third real-system docket of that caliber and the
+court's third non-trivial positive control: a third group structure (the
+Klein four-group on a non-square rectangle, machine-verified as the full
+geometric group), and the pads positive control returns alongside the
+explicit caliber (304 real padding states, after `lightsout3`'s no-padding
+entry). The ledger's gate admissions stand at 17 with zero damage
+throughout, and the four genuinely harmful naive admits (TCP twins, 6
+cells; keys-pinned rotations and mirror, 740 + 12288 + 1440 cells) are all
+refused (see [docs/闸门价值对比.html](docs/闸门价值对比.html),
+[cases/mini2048/README.md](cases/mini2048/README.md),
+[cases/lightsout3/README.md](cases/lightsout3/README.md) and
+[cases/sliding2x3/README.md](cases/sliding2x3/README.md)).
 
 ### How to read a verdict
 
@@ -130,11 +137,12 @@ call, and the next section is the checklist for it.
 
 ## The docket
 
-The docket holds 10 cases: five incorporated from the field-trial blind-test
+The docket holds 11 cases: five incorporated from the field-trial blind-test
 project (model/groups/generator/README copied byte-identical; their verdicts
 reconcile group-by-group with field-trial's sealed truth, 15/15 groups — see
-each case's `expected.json` provenance) and five transcribed in this
-repository (`tcp`, `dhcp`, `imap`, `mini2048`, `lightsout3`). Receipt:
+each case's `expected.json` provenance) and six transcribed in this
+repository (`tcp`, `dhcp`, `imap`, `mini2048`, `lightsout3`,
+`sliding2x3`). Receipt:
 `python -X utf8 -m symmetry_court list` over `cases/`. Every number below is
 backed by the named receipt file in this repository — no number here comes
 from memory.
@@ -151,6 +159,7 @@ from memory.
 | `usb2-device-states` | USB 2.0 device visible state machine | USB 2.0 spec §9.1 (Figure 9-1 / Table 9-1) | 8 states (6 protocol + 2 padding), 14 cross-state branches, 8 events | Default ↔ Address | reject (exit 1, worst_tv 1.0) | reject (exit 1, worst_tv 1.0) | not a symmetry (structure and labeled) |
 | `mini2048` | 2048 merge mechanics (2×2 deterministic variant) | gabrielecirulli/2048 `js/game_manager.js` (`move()` L130-191, direction numbering L131), corroborated by Wikipedia Gameplay | 256 states (81 real + 175 padding), 4 direction keys, score rewards | rot90 with renamed keys (explicit) vs the same rotation with keys pinned (fixed) — the caliber, not the permutation, decides | reject (exit 1, worst_tv 1.0; bitstring diagnostic — see note) | reject (exit 1, worst_tv 1.0) | explicit caliber with per-element maps admits rot90/flip/D4 since 2026-11-04 (70/136/55 orbits); keys-pinned reading stays a non-symmetry (structure-only: yes) |
 | `lightsout3` | Lights Out toggle mechanics (3×3 deterministic variant) | Wikipedia "Lights Out (game)" (Gameplay + Strategy sentences) + Jaap's Puzzle Page (the rules page Wikipedia cites); 3×3 recorded as a variant boundary (the Tiger original is 5×5) | 512 states (all real, no padding), 9 buttons, rewards all zero (the source game has no score) | rot90 with renamed buttons (explicit) vs the same rotation with buttons pinned (fixed) — same group as `mini2048`, different mechanism (toggle algebra) | pass (exit 0, worst_tv 0.0; the bitstring judge's π-derived renaming coincides with the per-element button maps — see note) | reject (exit 1, worst_tv 1.0) | explicit caliber with per-element maps admits rot90/D4/D4×C2 (140/102/51 orbits), the fixed complement control passes (256 orbits); the keys-pinned rotation stays a non-symmetry (structure-only: yes) |
+| `sliding2x3` | Sliding-puzzle move mechanics (2×3 deterministic variant, n-puzzle family; Klotski is the sliding-block cognate) | Wikipedia "15 puzzle" (lead + Solvability sentences) + Wikipedia "Sliding puzzle" (lead sentences); 2×3 recorded as a variant boundary (the canonical n-puzzle is 4×4; the 8 puzzle is 3×3) | 1024 states (720 real arrangements + 304 padding), 4 slide directions, rewards all zero (the puzzle has no score) | hflip with renamed directions (explicit) vs the same mirror with directions pinned (fixed) — a third group structure: V4 on a non-square rectangle (no 90° rotation exists) | reject (exit 1, worst_tv 1.0; bitstring diagnostic — see note) | reject (exit 1, worst_tv 1.0) | explicit caliber with per-element maps admits hflip/V4 (664/484 orbits), the fixed pads control passes (1023 orbits); the directions-pinned mirror stays a non-symmetry (structure-only: yes) |
 
 Notes on the `tcp` row: the state count includes 5 padding states required by
 the engine's bit-string convention (16 total, 11 protocol states); the
@@ -247,6 +256,45 @@ cross-check is skipped by the court's scale guard; the O(E) direct
 edge-set check is the primary. Case write-up with the verified 8-element
 map table: [cases/lightsout3/README.md](cases/lightsout3/README.md).
 
+Notes on the `sliding2x3` row (2026-11-04): the deterministic slide core of
+the sliding-puzzle family — the numbered n-puzzle member (15 puzzle / 8
+puzzle; Klotski is the sliding-block cognate, listed among the sliding-puzzle
+examples but not transcribed here: its unequal multi-cell pieces would need a
+different state space) — transcribed at 2×3 (5 numbered tiles + 1 open
+position); every generating rule cites Wikipedia's 15-puzzle lead/Solvability
+sentences and the Sliding-puzzle lead in `model.json →
+meta.rules_with_citations`; the 2×3 board is a recorded variant boundary (the
+canonical n-puzzle is 4×4; "the 8 puzzle, which has 8 tiles in a 3×3 frame").
+1024 states = 2^10: the 6! = 720 arrangements are the real states (state =
+lexicographic rank of the arrangement); ranks 720..1023 are unused encoding
+space — **304 padding states** (every action self-loops, reward 0), so real
+states sit alongside real padding for the docket's pads control. Rewards are
+all zero by design (the puzzle has no score); the win condition (tiles in
+numerical order, open position last — arrangement (1,2,3,4,5,0), state 153)
+is a goal property in `meta.win_condition`. The Johnson & Story parity split
+(half of the starting positions unsolvable) is recorded, not repaired: both
+classes are real states and BFS from the goal reaches exactly 360
+(generator-asserted). The defendant groups: g1 (hflip + per-element direction
+maps, explicit) and g4 (full V4 = C2 × C2, the third non-trivial positive
+control of this court) pass under their declared caliber (664 and 484 orbits,
+1.542× and 2.116×). V4 is machine-verified as the board's FULL geometric
+group (all 720 cell bijections enumerated; exactly 4 preserve the adjacency
+graph) — a third group structure, distinct from the D4 cases. g2 (the same
+mirror, directions pinned) is refused: the naive structure-only arm admits
+it, and the cell-by-cell ledger counts 1440 broken (state × event) cells
+under the pinned reading. g3 — the swap of padding states 720 and 1023,
+fixed — is the trivial positive control; the pads swap returns on this
+docket after `lightsout3`'s no-padding entry (placement note recorded in the
+case README: `mini2048` already pairs the explicit caliber with real padding
+states and a pads control; this case pairs them again on V4). The relabel
+column here is the court-stamped relabel frame resolving to the bitstring
+judge, which on this 4-action/10-bit model reads actions as bit flips — a
+structural mismatch recorded as the diagnostic column (same shape as
+`mini2048`). At 1024 states the jury's automorphism-set cross-check is
+skipped by the court's scale guard; the O(E) direct edge-set check is the
+primary. Case write-up with the verified 4-element map table:
+[cases/sliding2x3/README.md](cases/sliding2x3/README.md).
+
 ## Which "identical"? — three questions
 
 The whole docket hangs on one distinction: when a judge says "this renaming
@@ -327,6 +375,10 @@ deterministic generator. The six-step process with the ground rules is in
   Out"** — sources of the `lightsout3` case, transcribed from the Gameplay
   and Strategy sentences with the 3×3 board size recorded as a variant
   boundary.
+- **Wikipedia, "15 puzzle"** and **Wikipedia, "Sliding puzzle"** — sources
+  of the `sliding2x3` case, transcribed from the lead and Solvability
+  sentences with the 2×3 board size recorded as a variant boundary (Klotski
+  is the sliding-block cognate of the same family).
 - **the field-trial blind-test project** — transcription and two-round blind
   verification for the five cases above; the sealed-truth reconciliation is
   recorded in each case's `expected.json` provenance.

@@ -1,0 +1,51 @@
+{
+ "command": "check",
+ "verdict": "reject",
+ "exit_code": 1,
+ "reason": "转移等变层失败：max TV=1 > tol=1e-09（1/2 个受检元素不过）",
+ "note": null,
+ "semantics": {
+  "action": "fixed",
+  "judge": "strict",
+  "declared": true,
+  "assumed": false,
+  "source": "flag_strict"
+ },
+ "semantics_assumed": false,
+ "n_bits": 10,
+ "n_states": 1024,
+ "n_actions": 4,
+ "group": {
+  "n_states": 1024,
+  "order": 2,
+  "n_orbits": 664,
+  "compression": 1.5421686746987953,
+  "input_elements": 2,
+  "unique_elements": 2,
+  "duplicates_dropped": 0,
+  "input_was_closed_group": true,
+  "elements_added_by_closure": 0,
+  "generators_found": 1
+ },
+ "layer_transition": {
+  "passed": false,
+  "tol": 1e-09,
+  "mode": "all_elements",
+  "judge": "strict",
+  "n_checked": 2,
+  "n_failed": 1,
+  "worst_tv": 1.0,
+  "worst_tv_is_inf": false,
+  "first_bad": {
+   "index_in_checked": 1,
+   "tv": 1.0,
+   "reason": "转移分布在 π 映射下的 TV 超过容忍（判据 max TV=0 零容忍）"
+  }
+ },
+ "layer_reward_profile": {
+  "passed": true,
+  "n_pair": 360,
+  "n_bad": 0,
+  "sec": 0.006508350372314453
+ }
+}

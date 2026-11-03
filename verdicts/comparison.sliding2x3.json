@@ -1,0 +1,130 @@
+{
+ "case": "sliding2x3",
+ "provenance": {
+  "gate": "vendored wuxing_gua check, caliber per group declaration (compare v2; per-element action_maps recognized since 2026-11-04): groups declaring semantics.action=explicit with a valid action_map (single, legacy) or action_maps (per-element) run as declared (no --strict); groups declaring fixed or no declaration run --strict (live run)",
+  "naive_arm": "structure-only edge-set invariance proxy (see module docstring)",
+  "damage": "cell-by-cell ledger over model trans, same caliber as the gate arm per group (explicit groups: events renamed per the declared mapping — per-element groups use each element's own map; others: event names pinned); fixed-caliber damage kept per row in broken_real_cells_fixed for contrast"
+ },
+ "summary": {
+  "case": "sliding2x3",
+  "n_states": 1024,
+  "n_actions": 4,
+  "n_groups": 4,
+  "naive_admits": 4,
+  "naive_harmful_admits": 1,
+  "naive_broken_real_cells": 1440,
+  "gate_admits": 3,
+  "gate_admitted_broken_cells": 0,
+  "gate_saved_merges": 1,
+  "gate_explicit_groups": 2,
+  "gate_total_seconds_rounded": 0.8
+ },
+ "rows": [
+  {
+   "group": "g1_hflip_map.json",
+   "claim": "defendant A: mirroring the 2x3 board left-right and renaming the slide directions with it ('a tile slides left' becomes 'a tile slides right', up/down unchanged) preserves the puzzle exactly -- directions are bound to board coordinates, so the true symmetry carries its own direction renaming; declared under the explicit caliber with per-element action maps",
+   "naive_structure_admits": true,
+   "gate_exit": 0,
+   "gate_verdict": "pass",
+   "gate_admits": true,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 1440,
+   "real_cells": 4096,
+   "would_be_orbits_if_merged": 664,
+   "compression_if_true": 1.542,
+   "gate_saved_this_merge": false,
+   "gate_strict": false,
+   "damage_caliber": "explicit",
+   "declared_action_map_kind": "per_element",
+   "declared_action_map": null,
+   "declared_action_maps": [
+    [
+     0,
+     1,
+     2,
+     3
+    ],
+    [
+     0,
+     1,
+     3,
+     2
+    ]
+   ],
+   "broken_real_cells_declared": 0
+  },
+  {
+   "group": "g2_hflip_nomap.json",
+   "claim": "defendant B: the same left-right mirror with the directions PINNED (a slide left must stay a slide left) -- the naive-intuition claim that 'the board looks the same mirrored', filed deliberately under the fixed caliber to show it is the direction renaming, not the state permutation, that makes defendant A true",
+   "naive_structure_admits": true,
+   "gate_exit": 1,
+   "gate_verdict": "reject",
+   "gate_admits": false,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 1440,
+   "real_cells": 4096,
+   "would_be_orbits_if_merged": 664,
+   "compression_if_true": 1.542,
+   "gate_saved_this_merge": true
+  },
+  {
+   "group": "g3_pads.json",
+   "claim": "positive control: padding states 720 and 1023 have the same behavior shape (every action a single self-loop, reward 0), so the swap is a genuine symmetry under the pinned-direction reading and should be admitted everywhere",
+   "naive_structure_admits": true,
+   "gate_exit": 0,
+   "gate_verdict": "pass",
+   "gate_admits": true,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 0,
+   "real_cells": 4096,
+   "would_be_orbits_if_merged": 1023,
+   "compression_if_true": 1.001,
+   "gate_saved_this_merge": false
+  },
+  {
+   "group": "g4_v4_full.json",
+   "claim": "main positive control: the FULL 4-element rectangle symmetry group V4 = C2 x C2 (identity, left-right mirror, top-bottom mirror, 180-degree rotation), each element carrying its own direction renaming -- the third non-trivial positive control of this court, after mini2048's D4 and lightsout3's D4, and a third group structure (the board is a non-square rectangle: no 90-degree rotation exists, machine-verified by enumerating all 720 cell bijections against the adjacency graph)",
+   "naive_structure_admits": true,
+   "gate_exit": 0,
+   "gate_verdict": "pass",
+   "gate_admits": true,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 5760,
+   "real_cells": 4096,
+   "would_be_orbits_if_merged": 484,
+   "compression_if_true": 2.116,
+   "gate_saved_this_merge": false,
+   "gate_strict": false,
+   "damage_caliber": "explicit",
+   "declared_action_map_kind": "per_element",
+   "declared_action_map": null,
+   "declared_action_maps": [
+    [
+     0,
+     1,
+     2,
+     3
+    ],
+    [
+     0,
+     1,
+     3,
+     2
+    ],
+    [
+     1,
+     0,
+     2,
+     3
+    ],
+    [
+     1,
+     0,
+     3,
+     2
+    ]
+   ],
+   "broken_real_cells_declared": 0
+  }
+ ]
+}
