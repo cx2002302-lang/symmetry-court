@@ -57,10 +57,11 @@ time.
       upstream release tree, which its own release scan (upstream
       `RELEASE-CHECK.md`) had already cleared for those categories; charter
       "not one byte changed" forbids editing them here.
-- [x] **Desensitization.** Grepped tracked files for person names, machine
-      paths (`D:/`, `C:\Users`), and internal project identifiers
-      (老徐/qywx/GameWXXX/team_battle/64卦/ZCode/AgentHome/WorkBuddy): zero
-      hits in authored text. Verdict records sanitize paths at write time
+- [x] **Desensitization.** Grepped tracked files against the six-category
+      scan list — person names, internal codenames, project handles, local
+      toolchain names, machine paths (both drive-root and user-profile
+      forms), and the upstream project's own name variants — zero hits in
+      authored text. Verdict records sanitize paths at write time
       (`symmetry_court/trial.py` `_sanitize`). `_rfc_scratch/` (local RFC
       texts used for verification) is `.gitignore`d and not committed.
 - [x] **Case sources are public standards, cited per edge.** tcp ← RFC 9293

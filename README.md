@@ -1,6 +1,6 @@
 # Symmetry Court
 
-[![CI: court selftest](https://img.shields.io/badge/court-selftest_pass-brightgreen)](https://github.com/cx2002302-lang/symmetry-court#quick-start) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) [![Engine: wuxing-gua@e1b1fa8](https://img.shields.io/badge/engine-wuxing--gua%40e1b1fa8-grey)](NOTICE)
+[![CI: court selftest](https://img.shields.io/badge/court-selftest_pass-brightgreen)](https://github.com/cx2002302-lang/symmetry-court#quick-start) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) [![Engine: wuxing-gua@04cf0b6](https://img.shields.io/badge/engine-wuxing--gua%4004cf0b6-grey)](NOTICE)
 
 **A courtroom for symmetry claims about state machines.** One claim, three
 judges, two named standards, a verdict file anyone can replay. —
@@ -293,7 +293,7 @@ machines tried under two named equivariance standards, with an independent
 jury and replayable verdict files. If you know of one, we would genuinely
 like to hear about it: open an issue.
 
-- The judge engine is [wuxing-gua](https://github.com/cx2002302-lang/wuxing-gua) — the upstream project this courtroom instantiates; vendored byte-exact at e1b1fa8 (see [NOTICE](NOTICE)).
+- The judge engine is [wuxing-gua](https://github.com/cx2002302-lang/wuxing-gua) — the upstream project this courtroom instantiates; vendored byte-exact at 04cf0b6 (see [NOTICE](NOTICE)).
 
 ## License
 

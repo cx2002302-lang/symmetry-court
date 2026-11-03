@@ -1,6 +1,6 @@
 # 对称法庭 Symmetry Court
 
-[![CI: court selftest](https://img.shields.io/badge/court-selftest_pass-brightgreen)](https://github.com/cx2002302-lang/symmetry-court#quick-start) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) [![Engine: wuxing-gua@e1b1fa8](https://img.shields.io/badge/engine-wuxing--gua%40e1b1fa8-grey)](NOTICE)
+[![CI: court selftest](https://img.shields.io/badge/court-selftest_pass-brightgreen)](https://github.com/cx2002302-lang/symmetry-court#quick-start) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) [![Engine: wuxing-gua@04cf0b6](https://img.shields.io/badge/engine-wuxing--gua%4004cf0b6-grey)](NOTICE)
 
 **给状态机的对称性主张开庭。** 一条主张、三位裁判、两套写明的口径、一份人人可复跑的判决书。—— English: [README.md](README.md)
 
@@ -126,7 +126,7 @@ compare 自 v2 起按各群声明分派口径：声明 `explicit` 的群原样�
 
 定位口径，明说：在我们检索过的范围内，没有见到这个组合的对标——公开标准的状态机、在两套写明名字的等变口径下受审、配独立陪审团与可复跑判决书。若你知道对标在哪里，我们真心想听：开个 issue。
 
-- 判决引擎为 [wuxing-gua](https://github.com/cx2002302-lang/wuxing-gua)——本法庭所实例化的上游项目；以 e1b1fa8 版字节级内嵌（见 [NOTICE](NOTICE)）。
+- 判决引擎为 [wuxing-gua](https://github.com/cx2002302-lang/wuxing-gua)——本法庭所实例化的上游项目；以 04cf0b6 版字节级内嵌（见 [NOTICE](NOTICE)）。
 
 ## 许可
 
