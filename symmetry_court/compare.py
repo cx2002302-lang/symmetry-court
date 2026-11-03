@@ -11,8 +11,9 @@
 
 2. **用闸（闸门臂）**——内嵌引擎 check，**口径按群文件声明分派**
    （2026-11-03 compare v2；此前无条件 --strict，对 explicit 声明群会错误
-   覆盖其声明）：群声明 explicit（semantics.action="explicit" 且 action_map
-   是动作集上的合法双射）→ 不加 --strict 原样跑，让声明口径说话；声明 fixed
+   覆盖其声明；2026-11-04 起兼容逐元素声明）：群声明 explicit——legacy 单
+   action_map（合法双射）或逐元素 action_maps（与 elements 一一对应，引擎
+   装载时校验同态律）→ 不加 --strict 原样跑，让声明口径说话；声明 fixed
    或无声明 → 维持 --strict（动作名钉死）。放行的群给出压缩读数（轨道数），
    拒答的群拦下朴素臂的损害。放行 = 声明口径下等变逐格零误差，该口径破坏格数
    按定义为 0（闸门判据的数学性质，不是本次运行的巧合）。
@@ -24,12 +25,15 @@
 压缩工具；它代表的决策方式（"长得一样就合并"）在工程里真实存在，TCP 孪生案
 里 networkx 的结构口径就判"可换"。
 
-口径说明（explicit 群）：群文件只带一个 action_map（引擎格式如此），对账与
-闸门臂都用这个单映射逐动作改名后对账（破坏格 = 声明口径下会变的格数）。
-fixed 口径的破坏格仍单独记录在 broken_real_cells_fixed 字段供对照。已知边界：
-mini2048 案发现引擎 explicit 层对闭包恒等元也用同一映射（见
-cases/mini2048/README.md），非平凡 explicit 群会被拒——compare 如实记录
-闸门行为，不代引擎翻案。
+口径说明（explicit 群）：legacy 群文件带一个单 action_map（每元素同一映射），
+2026-11-04 起群文件也可带逐元素 action_maps（与 elements 一一对应）；对账与
+闸门臂都按声明口径逐动作改名（逐元素群按每元素各自的映射）后对账
+（破坏格 = 声明口径下会变的格数）。fixed 口径的破坏格仍单独记录在
+broken_real_cells_fixed 字段供对照。历史边界（已修复）：mini2048 案 2026-11-03
+发现引擎 explicit 层对闭包恒等元也用同一映射，非平凡 explicit 群被拒——
+compare 当时如实记录闸门行为，不代引擎翻案；上游 2026-11-04 以逐元素
+action_maps（含同态律校验）修复，g1/g3/g4 在声明口径下放行（见
+cases/mini2048/README.md 与 comparison.mini2048.json）。
 
 用法：
     python -X utf8 -m symmetry_court compare                  # 法庭自有案卷
@@ -91,21 +95,47 @@ def _structural_admits(trans, perm):
 
 
 def _declared_action_map(group_raw):
-    """群文件的 explicit 声明 → (is_explicit, action_map|None)。
+    """群文件的 explicit 声明 → (is_explicit, rho_for|None, kind)。
 
-    合法 explicit = semantics.action=="explicit" 且 action_map 是动作集上的
-    双射（与引擎 load_group 的校验同规则）。声明 explicit 但映射缺失/非法 →
-    (True, None)（调用方回退 strict 并如实标注，引擎侧对这种文件本就报错）。
+    合法 explicit 两种声明形态（与引擎 load_group 的校验同规则）：
+      kind="single"      legacy 单 action_map（每元素同一映射；引擎 2026-11-04
+                         起标 deprecated，行为不变）；
+      kind="per_element" action_maps（2026-11-04 起）：与 elements 一一对应的
+                         逐元素映射排列（恒等元须对应恒等映射；同态律由引擎
+                         装载时权威校验——compare 只做结构校验用于口径分派与
+                         对账取映射，判决仍以引擎为准）。
+    返回 rho_for(perm) 闭包：按元素置换取其声明的动作映射。声明 explicit 但
+    映射缺失/非法 → (True, None, None)（调用方回退 strict 并如实标注，引擎
+    侧对这种文件本就报错）。
     """
     sem = group_raw.get("semantics") or {}
     if sem.get("action") != "explicit":
-        return False, None
+        return False, None, None
     amap = sem.get("action_map")
     if isinstance(amap, list) and amap and \
             all(isinstance(x, int) and not isinstance(x, bool) for x in amap) \
             and sorted(amap) == list(range(len(amap))):
-        return True, list(amap)
-    return True, None
+        return True, (lambda _perm: list(amap)), "single"
+    amaps = sem.get("action_maps")
+    elements = group_raw.get("elements")
+    if isinstance(amaps, list) and amaps and isinstance(elements, list) \
+            and len(amaps) == len(elements):
+        ok = True
+        table = {}
+        for e, m in zip(elements, amaps):
+            if not (isinstance(e, list) and isinstance(m, list) and m
+                    and all(isinstance(x, int) and not isinstance(x, bool)
+                            for x in m)
+                    and sorted(m) == list(range(len(m)))):
+                ok = False
+                break
+            table[tuple(e)] = list(m)
+        n_act = len(next(iter(table.values()))) if table else 0
+        ident = table.get(tuple(range(len(elements[0])))) \
+            if table else None
+        if ok and ident == list(range(n_act)):
+            return True, (lambda perm: table.get(tuple(perm))), "per_element"
+    return True, None, None
 
 
 def _damage(trans, perm, amap=None):
@@ -199,19 +229,21 @@ def compare_case(cases_root, case, verdicts_dir, vendored):
         claim = (g.get("meta") or {}).get("claim", "")
         gens = [e for e in elements if e != ident]
 
-        # 口径分派（compare v2）：explicit（含合法 action_map）→ 声明口径；
-        # fixed / 无声明 / 声明 explicit 但映射非法 → fixed 口径（--strict）。
-        is_exp, amap = _declared_action_map(g)
-        gate_strict = not (is_exp and amap is not None)
+        # 口径分派（compare v2；2026-11-04 起兼容逐元素 action_maps）：
+        # explicit（合法单映射或逐元素映射）→ 声明口径；fixed / 无声明 /
+        # 声明 explicit 但映射非法 → fixed 口径（--strict）。
+        is_exp, rho_for, amap_kind = _declared_action_map(g)
+        gate_strict = not (is_exp and rho_for is not None)
 
         # 朴素臂
         naive_ok = all(_structural_admits(trans, e) for e in gens)
         # 损害台账：按闸门臂同一口径对账；fixed 口径数值单独保留供对照
         # （explicit 群 = 声明口径与钉死口径两行都有，差异本身是读数）。
+        # 逐元素声明按每元素各自的映射对账（与引擎判据同口径）。
         broken_ledger = 0    # 闸门口径（explicit 群 = 声明口径）
         broken_fixed = 0     # fixed 口径（对照列）
         for e in gens:
-            b, _rc = _damage(trans, e, amap if (is_exp and amap is not None)
+            b, _rc = _damage(trans, e, rho_for(e) if rho_for is not None
                              else None)
             broken_ledger += b
             bf, _rc2 = _damage(trans, e, None)
@@ -254,13 +286,21 @@ def compare_case(cases_root, case, verdicts_dir, vendored):
             "gate_saved_this_merge": saved,
         }
         if is_exp:
-            # explicit 群的追加字段（fixed/无声明群不加，旧收据保持字节稳定）
+            # explicit 群的追加字段（fixed/无声明群不加，旧收据保持字节稳定；
+            # 2026-11-04 起逐元素声明另记 declared_action_maps 全表）
             row["gate_strict"] = gate_strict
-            row["damage_caliber"] = ("explicit" if amap is not None
+            row["damage_caliber"] = ("explicit" if rho_for is not None
                                      else "explicit_invalid_map_fallback_fixed")
-            row["declared_action_map"] = amap
+            row["declared_action_map_kind"] = amap_kind
+            row["declared_action_map"] = (rho_for(ident)
+                                          if (rho_for is not None
+                                              and amap_kind == "single")
+                                          else None)
+            if rho_for is not None and amap_kind == "per_element":
+                row["declared_action_maps"] = [rho_for(e) for e in elements]
             row["broken_real_cells_declared"] = (broken_ledger
-                                                 if amap is not None else None)
+                                                 if rho_for is not None
+                                                 else None)
         rows.append(row)
 
     def _ledger(r_):
@@ -292,15 +332,17 @@ def compare_case(cases_root, case, verdicts_dir, vendored):
     }
     out = {"case": case, "provenance": {
         "gate": ("vendored wuxing_gua check, caliber per group declaration "
-                 "(compare v2): groups declaring semantics.action=explicit "
-                 "with a valid action_map run as declared (no --strict); "
-                 "groups declaring fixed or no declaration run --strict "
-                 "(live run)"),
+                 "(compare v2; per-element action_maps recognized since "
+                 "2026-11-04): groups declaring semantics.action=explicit "
+                 "with a valid action_map (single, legacy) or action_maps "
+                 "(per-element) run as declared (no --strict); groups "
+                 "declaring fixed or no declaration run --strict (live run)"),
         "naive_arm": "structure-only edge-set invariance proxy (see module docstring)",
         "damage": ("cell-by-cell ledger over model trans, same caliber as "
                    "the gate arm per group (explicit groups: events renamed "
-                   "per the declared action_map; others: event names "
-                   "pinned); fixed-caliber damage kept per row in "
+                   "per the declared mapping — per-element groups use each "
+                   "element's own map; others: event names pinned); "
+                   "fixed-caliber damage kept per row in "
                    "broken_real_cells_fixed for contrast"),
     }, "summary": {k: v for k, v in summary.items() if k != "rows"}, "rows": rows}
     with open(os.path.join(verdicts_dir, "comparison.%s.json" % case), "w",
@@ -357,7 +399,7 @@ def cmd_compare(args):
                 "%s%s" % (ledger, mark),
                 r_["compression_if_true"] if r_["gate_admits"] else "-"))
         print("-" * 100)
-    print("(破坏格列：* = 声明口径（explicit action_map）下的对账；"
+    print("(破坏格列：* = 声明口径（explicit：legacy 单映射或逐元素映射）下的对账；"
           "无 * = fixed 口径（动作名钉死）。)")
     summary = {
         "generated": "see per-case comparison.<case>.json for provenance",

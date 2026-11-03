@@ -1036,16 +1036,36 @@
  ],
  "semantics": {
   "action": "explicit",
-  "action_map": [
-   1,
-   2,
-   3,
-   0
+  "action_maps": [
+   [
+    0,
+    1,
+    2,
+    3
+   ],
+   [
+    1,
+    2,
+    3,
+    0
+   ],
+   [
+    3,
+    0,
+    1,
+    2
+   ],
+   [
+    2,
+    3,
+    0,
+    1
+   ]
   ]
  },
  "meta": {
-  "claim": "defendant A: rotating the board 90 degrees clockwise and renaming the direction keys with it (up->right->down->left->up) preserves the game exactly -- the direction keys are bound to board coordinates, so the true symmetry carries its own key renaming; declared under the explicit caliber with the rot90 generator's action map",
-  "construction": "order-4 cyclic group {id, rot90cw, rot180, rot90ccw} as state permutations; semantics.action_map = the rot90cw generator's derived renaming [1, 2, 3, 0] (meta.per_element_action_maps holds all eight per-element maps; rho(identity)=id and rho(rot90)!=id, so a single map cannot serve the whole closed group -- this file declares the generator's)",
+  "claim": "defendant A: rotating the board 90 degrees clockwise and renaming the direction keys with it (up->right->down->left->up) preserves the game exactly -- the direction keys are bound to board coordinates, so the true symmetry carries its own key renaming; declared under the explicit caliber with per-element action maps",
+  "construction": "order-4 cyclic group {id, rot90cw, rot180, rot90ccw} as state permutations; semantics.action_maps = the per-element derived renamings, one bijection per element, parallel to elements (meta.per_element_action_maps holds the full derivation table; rho(identity)=id; the homomorphism law is asserted by this generator and re-checked by the engine at load)",
   "why_it_is_a_symmetry": "the move rule is defined through the same vector map (game_manager.js L194-204) for all four directions; rotating the board and renaming the keys commutes with slide+merge on every one of the 256 states (asserted exhaustively by the generator)",
   "caliber_note": "explicit declaration: the action names are bound to board coordinates ('the key that slides toward the top edge'), so they travel with the rotation",
   "regenerate": "python -X utf8 cases/mini2048/make_mini2048.py"

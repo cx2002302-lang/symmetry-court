@@ -13,13 +13,15 @@ dependence), next to this script:
                                    (up/right/down/left, the original's own
                                    direction numbering), rewards = 2048 score
   groups/g1_rot90_map.json         defendant A: 90-degree board rotation +
-                                   renamed direction keys (explicit+action_map)
+                                   renamed direction keys (explicit+
+                                   action_maps, per-element)
   groups/g2_rot90_nomap.json       defendant B: same rotation, direction keys
                                    pinned (fixed) -- the naive-intuition claim
   groups/g3_flip_map.json          defendant C: top-bottom mirror + renamed
-                                   keys (explicit+action_map)
+                                   keys (explicit+action_maps, per-element)
   groups/g4_d4_full.json           defendant D: the full 8-element board
-                                   symmetry group D4 (explicit+action_map)
+                                   symmetry group D4 (explicit+action_maps,
+                                   per-element)
   groups/g5_row_mirror_fake.json   control: top-row-only mirror (not a board
                                    symmetry) -- expected refuse
   groups/g6_pads.json              positive control: swap of two padding
@@ -55,11 +57,17 @@ Variant boundaries (recorded, not hidden -- see TRANSCRIPTION_NOTES):
 The explicit caliber and this case: a true board symmetry renames the four
 direction keys along with the cells (rotating the board clockwise turns the
 "up" key into the "right" key). Per group element pi the renaming rho(pi) is
-forced; rho(identity)=id and rho(rot90)!=id, so a group file can only carry
-the renaming of ONE chosen element (the engine's group format has a single
-semantics.action_map). Each explicit group file here declares the map of its
-named generator; model.meta carries the full per-element derivation table
-(computed and asserted by this generator on every run).
+forced; rho(identity)=id and rho(rot90)!=id, so a single global map cannot
+serve a closed group. Since 2026-11-04 the engine's group format accepts
+semantics.action_maps: one action renaming (bijection) per group element,
+parallel to elements, homomorphism-law checked at load -- each explicit
+group file here declares the per-element maps of its own elements
+(computed and asserted by this generator on every run); model.meta carries
+the full derivation table. (History: 2026-11-03 the engine only had the
+single legacy action_map, which judges the identity element under the same
+rho and therefore forced rho = id -- every non-trivial renamed-action
+symmetry was mathematically refused; that limitation was fixed upstream,
+2026-11-04, per-element action_maps + homomorphism law.)
 
 Usage:
   python -X utf8 cases/mini2048/make_mini2048.py            # write all files
@@ -204,11 +212,16 @@ TRANSCRIPTION_NOTES = [
     "explicit caliber note: a board symmetry renames the direction keys "
     "element-by-element (rotating the board clockwise turns 'up' into "
     "'right'); rho(identity)=id while rho(rot90)!=id, so no single "
-    "action_map can serve a whole closed group. The engine's group format "
-    "carries ONE semantics.action_map; each explicit group file here "
-    "declares the map of its named generator, and "
-    "meta.per_element_action_maps holds the full derivation (computed and "
-    "asserted by this generator on every run).",
+    "action_map can serve a whole closed group. Since 2026-11-04 the "
+    "engine's group format accepts semantics.action_maps (one bijection "
+    "per element, parallel to elements, homomorphism-law checked at load); "
+    "each explicit group file here declares the per-element maps of its "
+    "own elements, and meta.per_element_action_maps holds the full "
+    "derivation (computed and asserted by this generator on every run). "
+    "History: 2026-11-03 the engine's explicit layer applied ONE declared "
+    "action_map to every element including the identity (which forces "
+    "rho=id and mathematically refuses every non-trivial renamed-action "
+    "symmetry); fixed upstream 2026-11-04.",
     "regenerate: python -X utf8 cases/mini2048/make_mini2048.py",
 ]
 
@@ -374,6 +387,28 @@ def compose_maps(rho_outer, rho_inner):
     return [rho_outer[rho_inner[a]] for a in range(N_ACTIONS)]
 
 
+def _per_element_action_maps(sym, elements):
+    """Closed-group elements (state permutations, file order) -> the list of
+    per-element action maps parallel to elements, looked up from the derived
+    D4 table. Raises (loud) on any element outside the derived table.
+    This is the list the group files declare as semantics.action_maps
+    (2026-11-04 engine format); the identity element necessarily maps to
+    the identity renaming."""
+    by_perm = {tuple(sym[name]["state_perm"]): list(sym[name]["action_map"])
+               for name, _fn in D4_TRANSFORMS}
+    maps = []
+    for e in elements:
+        key = tuple(e)
+        if key not in by_perm:
+            raise AssertionError("group element outside the derived D4 table")
+        maps.append(by_perm[key])
+    ident = tuple(range(N_STATES))
+    for e, m in zip(elements, maps):
+        if tuple(e) == ident:
+            assert m == [0, 1, 2, 3]
+    return maps
+
+
 def derive_symmetry_table():
     """Per-element action maps for the whole D4 + the homomorphism check.
 
@@ -470,7 +505,8 @@ def build_groups(sym):
         "g1_rot90_map.json": {
             "n_states": N_STATES,
             "elements": g1,
-            "semantics": {"action": "explicit", "action_map": list(rot_map)},
+            "semantics": {"action": "explicit",
+                          "action_maps": _per_element_action_maps(sym, g1)},
             "meta": {
                 "claim": ("defendant A: rotating the board 90 degrees "
                           "clockwise and renaming the direction keys with it "
@@ -478,17 +514,17 @@ def build_groups(sym):
                           "exactly -- the direction keys are bound to board "
                           "coordinates, so the true symmetry carries its own "
                           "key renaming; declared under the explicit caliber "
-                          "with the rot90 generator's action map"),
+                          "with per-element action maps"),
                 "construction": ("order-4 cyclic group {id, rot90cw, rot180, "
                                  "rot90ccw} as state permutations; "
-                                 "semantics.action_map = the rot90cw "
-                                 "generator's derived renaming %r "
-                                 "(meta.per_element_action_maps holds all "
-                                 "eight per-element maps; rho(identity)=id "
-                                 "and rho(rot90)!=id, so a single map cannot "
-                                 "serve the whole closed group -- this file "
-                                 "declares the generator's)"
-                                 % (rot_map,)),
+                                 "semantics.action_maps = the per-element "
+                                 "derived renamings, one bijection per "
+                                 "element, parallel to elements "
+                                 "(meta.per_element_action_maps holds the "
+                                 "full derivation table; rho(identity)=id; "
+                                 "the homomorphism law is asserted by this "
+                                 "generator and re-checked by the engine at "
+                                 "load)"),
                 "why_it_is_a_symmetry": ("the move rule is defined through "
                                          "the same vector map (game_manager.js "
                                          "L194-204) for all four directions; "
@@ -535,16 +571,21 @@ def build_groups(sym):
         "g3_flip_map.json": {
             "n_states": N_STATES,
             "elements": g3,
-            "semantics": {"action": "explicit", "action_map": list(flip_map)},
+            "semantics": {"action": "explicit",
+                          "action_maps": _per_element_action_maps(sym, g3)},
             "meta": {
                 "claim": ("defendant C: mirroring the board top-bottom and "
                           "swapping the vertical keys with it (up<->down, "
                           "left/right unchanged) preserves the game -- the "
                           "second generator of the 8-element board group, "
-                          "declared explicit with its derived action map"),
+                          "declared explicit with per-element action maps"),
                 "construction": ("order-2 group {id, flip_tb}; "
-                                 "semantics.action_map = the flip_tb "
-                                 "generator's derived renaming %r"
+                                 "semantics.action_maps = the per-element "
+                                 "derived renamings, one bijection per "
+                                 "element, parallel to elements "
+                                 "(rho(id)=[0,1,2,3], "
+                                 "rho(flip_tb)=%r; derivation table in "
+                                 "meta.per_element_action_maps)"
                                  % (flip_map,)),
                 "why_it_is_a_symmetry": ("the vector map's y-component flips "
                                          "sign with the mirror while the "
@@ -560,34 +601,37 @@ def build_groups(sym):
         "g4_d4_full.json": {
             "n_states": N_STATES,
             "elements": d4,
-            "semantics": {"action": "explicit", "action_map": list(rot_map)},
+            "semantics": {"action": "explicit",
+                          "action_maps": _per_element_action_maps(sym, d4)},
             "meta": {
                 "claim": ("defendant D: the FULL 8-element board symmetry "
                           "group D4 (identity, three rotations, four "
                           "reflections), each element carrying its own "
                           "direction-key renaming -- the complete "
-                          "non-trivial positive control; if admitted, the "
-                          "compression reading is the orbit count"),
+                          "non-trivial positive control; the compression "
+                          "reading is the orbit count"),
                 "construction": ("closure of {rot90cw, flip_tb} = 8 elements; "
-                                 "semantics.action_map = the rot90cw "
-                                 "generator's map %r (the file format holds "
-                                 "one map; the per-element maps for all eight "
-                                 "elements are derived and asserted in "
-                                 "meta.per_element_action_maps -- "
-                                 "rho(identity)=id, so a single non-trivial "
-                                 "map cannot be equivariant for the identity "
-                                 "element; see the explicit caliber note in "
-                                 "model.meta.transcription_notes)"
-                                 % (rot_map,)),
+                                 "semantics.action_maps = the per-element "
+                                 "derived renamings, one bijection per "
+                                 "element, parallel to elements (all eight "
+                                 "maps derived and asserted in "
+                                 "meta.per_element_action_maps; "
+                                 "rho(identity)=id; homomorphism law "
+                                 "asserted by this generator and re-checked "
+                                 "by the engine at load -- see the explicit "
+                                 "caliber note in "
+                                 "model.meta.transcription_notes)"),
                 "why_it_is_a_symmetry": ("D4 is the square's own symmetry "
                                          "group and the move rule is "
                                          "direction-symmetric by construction "
                                          "(one vector-driven rule, four "
                                          "directions)"),
-                "caliber_note": ("compression reading if admitted: orbits of "
-                                 "D4 on the 256 states (expected 55: 21 real "
-                                 "+ 34 padding), i.e. 256 states collapse to "
-                                 "55 classes"),
+                "caliber_note": ("admitted under the explicit caliber since "
+                                 "the 2026-11-04 per-element action_maps "
+                                 "fix; compression reading: orbits of D4 on "
+                                 "the 256 states (21 real + 34 padding "
+                                 "classes expected), live count in "
+                                 "receipts/check.g4_d4_full.json"),
                 "regenerate": regen,
             },
         },
@@ -712,19 +756,22 @@ def build_model(sym, tags):
             },
             "per_element_action_maps": per_elem,
             "known_issue": (
-                "engine explicit-caliber limitation discovered by this case "
-                "(2026-11-03, crew-chief ruling: record as observed, fix "
-                "upstream next wave): the vendored judge's explicit layer "
-                "applies ONE declared action_map to every closed group "
+                "RESOLVED engine finding (discovered by this case 2026-11-03, "
+                "crew-chief ruling: record as observed, fix upstream next "
+                "wave; fixed upstream 2026-11-04): the judge's explicit layer "
+                "used to apply ONE declared action_map to every closed group "
                 "element including the identity, so on any model with "
                 "behaviorally distinguishable actions the identity element "
-                "forces the identity map and no non-trivial renamed-action "
-                "symmetry can be admitted. g1/g3/g4 are true symmetries "
-                "under per-element action maps (derivation asserted by the "
-                "generator; table in meta.per_element_action_maps); their "
-                "explicit-caliber rejects are expected to flip after the "
-                "upstream fix. Diagnosis: cases/mini2048/README.md; live "
-                "receipts: cases/mini2048/receipts/."),
+                "forced the identity map and no non-trivial renamed-action "
+                "symmetry could be admitted. Since 2026-11-04 the engine "
+                "accepts semantics.action_maps (per-element renamings "
+                "parallel to elements, homomorphism-law checked at load; "
+                "legacy single action_map still runs unchanged, deprecated). "
+                "g1/g3/g4 now pass under the explicit caliber with the "
+                "derived per-element maps (live receipts in "
+                "cases/mini2048/receipts/), g2/g5 stay rejected (fixed "
+                "caliber), g6 stays admitted. History and diagnosis: "
+                "cases/mini2048/README.md."),
             "transcription_notes": TRANSCRIPTION_NOTES,
             "regenerate": "python -X utf8 cases/mini2048/make_mini2048.py",
         },
@@ -740,29 +787,30 @@ def build_model(sym, tags):
 # compares these pinned rows field-by-field against a fresh run.
 #
 # NOTE (explicit-caliber finding, crew-chief ruling 2026-11-03): the vendored
-# engine's explicit judge applies ONE declared action_map to every closed
-# group element including the identity, so no non-trivial renamed-action
-# symmetry can be admitted (see README.md for the diagnosis). g1/g3/g4 are
-# true symmetries under per-element action maps; their explicit-caliber
-# verdicts (receipts/check.*.json, engine run WITHOUT --strict) are expected
-# to flip from reject to pass after the upstream per-element fix. The
-# relabel/fixed rows below answer different calibers and are not expected to
-# flip; each carries its own note saying so.
-_NOTE_FLIP = ("expected to flip after upstream per-element action-map fix "
-              "(see cases/mini2048/README.md and "
-              "receipts/check.%s.json): this group is a true symmetry under "
-              "per-element action maps; the explicit-caliber reject is the "
-              "engine's single-global-action_map limitation, not a "
-              "transcription error")
+# engine's explicit judge used to apply ONE declared action_map to every
+# closed group element including the identity, so no non-trivial
+# renamed-action symmetry could be admitted (see README.md for the
+# diagnosis). g1/g3/g4 are true symmetries under per-element action maps;
+# after the upstream per-element action_maps fix (2026-11-04) their
+# explicit-caliber verdicts (receipts/check.*.json, engine run WITHOUT
+# --strict) are PASS -- the flip hook is cashed, see the note fields. The
+# relabel/fixed rows below answer different calibers and did not flip; each
+# carries its own note saying so.
+_NOTE_FLIP = ("cashed 2026-11-04 (upstream per-element action_maps fix): "
+              "this group passes under per-element action maps (live receipt "
+              "receipts/check.%s.json, engine run without --strict); the "
+              "earlier explicit-caliber reject was the engine's "
+              "single-global-action_map limitation (finding recorded "
+              "2026-11-03), not a transcription error")
 _RELABEL_NOTE = ("court-stamped relabel frame resolves to the bitstring "
                  "judge on this 4-action/8-bit model (n_actions <= n_bits), "
                  "which reads actions as bit flips -- a structural mismatch "
                  "for a direction-key system; diagnostic column, not "
                  "expected to flip")
 _FIXED_NOTE = ("direction keys pinned (--strict): under this caliber the "
-               "claim is genuinely false, so this row is not expected to "
-               "flip; the group's explicit-caliber verdict (receipts/) is "
-               "the row that flips after the upstream fix")
+               "claim is genuinely false, so this row does not flip; the "
+               "group's explicit-caliber verdict (receipts/) flipped to "
+               "pass on 2026-11-04 (upstream per-element action_maps fix)")
 
 EXPECTED_ROWS = {
     "g1_rot90_map": {
@@ -833,7 +881,11 @@ def build_expected():
                          "is verdicts/mini2048.verdict.json; the gate "
                          "(`python -X utf8 -m symmetry_court selftest`) "
                          "replays the case and compares these rows "
-                         "field-by-field"),
+                         "field-by-field. 2026-11-04: group files of "
+                         "g1/g3/g4 upgraded to per-element action_maps "
+                         "(upstream engine fix) and the flip-hook notes "
+                         "cashed; relabel/fixed rows unchanged (re-verified "
+                         "against live replays at the same time)"),
             "reading_guide": ("relabel row = engine's relabel frame "
                               "(court-stamped copy; on this 4-action/8-bit "
                               "model that frame resolves to the bitstring "
@@ -846,12 +898,13 @@ def build_expected():
                               "(receipts in receipts/) and by the compare "
                               "subcommand's declared-caliber gate arm; "
                               "networkx columns = independent juror. The "
-                              "note fields record the explicit-caliber "
-                              "finding: g1/g3/g4 are true symmetries under "
-                              "per-element action maps, rejected only by the "
-                              "engine's single-global-action_map limitation "
-                              "(README.md); the relabel/fixed rows answer "
-                              "other calibers and are not expected to flip"),
+                              "note fields record the flip: g1/g3/g4 pass "
+                              "under per-element action maps since the "
+                              "2026-11-04 upstream action_maps fix (the "
+                              "2026-11-03 rejects were the engine's "
+                              "single-global-action_map limitation, "
+                              "README.md); the relabel/fixed rows answer "
+                              "other calibers and did not flip"),
         },
         "groups": groups,
     }
@@ -898,24 +951,44 @@ def self_certify():
                 assert not is_pad(t), (s, a, t)
                 assert r in (0.0, MERGE_REWARD)
     groups = build_groups(sym)
+    ident = list(range(N_STATES))
     for fname, g in groups.items():
         sem = g["semantics"]
         if sem["action"] == "explicit":
-            amap = sem["action_map"]
-            assert sorted(amap) == list(range(N_ACTIONS))
+            amaps = sem["action_maps"]
+            assert len(amaps) == len(g["elements"])
+            for m in amaps:
+                assert sorted(m) == list(range(N_ACTIONS))
         assert g["n_states"] == N_STATES
         for e in g["elements"]:
             assert len(e) == N_STATES and sorted(e) == list(range(N_STATES))
-    # g1 elements == rot90 closure; its declared map == derived rot90 map
+    # g1 elements == rot90 closure; its declared per-element maps align with
+    # elements and the identity element carries the identity map
     assert groups["g1_rot90_map.json"]["elements"] == \
         _closure([sym["rot90cw"]["state_perm"]])
-    assert groups["g1_rot90_map.json"]["semantics"]["action_map"] == \
-        sym["rot90cw"]["action_map"]
-    assert groups["g3_flip_map.json"]["semantics"]["action_map"] == \
-        sym["flip_tb"]["action_map"]
     assert groups["g4_d4_full.json"]["elements"] == \
         _closure([sym["rot90cw"]["state_perm"], sym["flip_tb"]["state_perm"]])
     assert len(groups["g4_d4_full.json"]["elements"]) == 8
+    # per-element declared maps: exactly the derived rho of each element,
+    # and the engine's homomorphism convention holds on every declared pair
+    # ((g o h)[s] = g[h[s]]  =>  rho(g o h) == rho_g o rho_h)
+    by_perm = {tuple(sym[name]["state_perm"]): list(sym[name]["action_map"])
+               for name, _fn in D4_TRANSFORMS}
+    for key in ("g1_rot90_map.json", "g3_flip_map.json",
+                "g4_d4_full.json"):
+        els = groups[key]["elements"]
+        mps = groups[key]["semantics"]["action_maps"]
+        assert mps == [by_perm[tuple(e)] for e in els], key
+        assert any(tuple(e) == tuple(ident) for e in els)
+        for e, m in zip(els, mps):
+            if tuple(e) == tuple(ident):
+                assert m == [0, 1, 2, 3]
+        table = {tuple(e): m for e, m in zip(els, mps)}
+        for eg, mg in table.items():
+            for eh, mh in table.items():
+                comp = tuple(eg[x] for x in eh)
+                assert table[comp] == [mg[mh[a]] for a in range(N_ACTIONS)], \
+                    (key, comp)
     n_orbits = {"g1": orbits(groups["g1_rot90_map.json"]["elements"]),
                 "g3": orbits(groups["g3_flip_map.json"]["elements"]),
                 "g4": orbits(groups["g4_d4_full.json"]["elements"]),

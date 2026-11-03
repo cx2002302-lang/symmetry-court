@@ -1,6 +1,6 @@
 {
  "case": "mini2048",
- "generated_utc": "2026-11-02T18:13:19Z",
+ "generated_utc": "2026-11-03T18:19:04Z",
  "tools": {
   "engine": {
    "name": "wuxing_gua",
@@ -25,14 +25,34 @@
    "group_file": "groups/g1_rot90_map.json",
    "declared_semantics": {
     "action": "explicit",
-    "action_map": [
-     1,
-     2,
-     3,
-     0
+    "action_maps": [
+     [
+      0,
+      1,
+      2,
+      3
+     ],
+     [
+      1,
+      2,
+      3,
+      0
+     ],
+     [
+      3,
+      0,
+      1,
+      2
+     ],
+     [
+      2,
+      3,
+      0,
+      1
+     ]
     ]
    },
-   "claim": "defendant A: rotating the board 90 degrees clockwise and renaming the direction keys with it (up->right->down->left->up) preserves the game exactly -- the direction keys are bound to board coordinates, so the true symmetry carries its own key renaming; declared under the explicit caliber with the rot90 generator's action map",
+   "claim": "defendant A: rotating the board 90 degrees clockwise and renaming the direction keys with it (up->right->down->left->up) preserves the game exactly -- the direction keys are bound to board coordinates, so the true symmetry carries its own key renaming; declared under the explicit caliber with per-element action maps",
    "order_engine_reported": 4,
    "relabel": {
     "exit": 1,
@@ -2718,14 +2738,22 @@
    "group_file": "groups/g3_flip_map.json",
    "declared_semantics": {
     "action": "explicit",
-    "action_map": [
-     2,
-     1,
-     0,
-     3
+    "action_maps": [
+     [
+      0,
+      1,
+      2,
+      3
+     ],
+     [
+      2,
+      1,
+      0,
+      3
+     ]
     ]
    },
-   "claim": "defendant C: mirroring the board top-bottom and swapping the vertical keys with it (up<->down, left/right unchanged) preserves the game -- the second generator of the 8-element board group, declared explicit with its derived action map",
+   "claim": "defendant C: mirroring the board top-bottom and swapping the vertical keys with it (up<->down, left/right unchanged) preserves the game -- the second generator of the 8-element board group, declared explicit with per-element action maps",
    "order_engine_reported": 2,
    "relabel": {
     "exit": 1,
@@ -3538,14 +3566,58 @@
    "group_file": "groups/g4_d4_full.json",
    "declared_semantics": {
     "action": "explicit",
-    "action_map": [
-     1,
-     2,
-     3,
-     0
+    "action_maps": [
+     [
+      0,
+      1,
+      2,
+      3
+     ],
+     [
+      3,
+      2,
+      1,
+      0
+     ],
+     [
+      0,
+      3,
+      2,
+      1
+     ],
+     [
+      1,
+      2,
+      3,
+      0
+     ],
+     [
+      3,
+      0,
+      1,
+      2
+     ],
+     [
+      2,
+      1,
+      0,
+      3
+     ],
+     [
+      1,
+      0,
+      3,
+      2
+     ],
+     [
+      2,
+      3,
+      0,
+      1
+     ]
     ]
    },
-   "claim": "defendant D: the FULL 8-element board symmetry group D4 (identity, three rotations, four reflections), each element carrying its own direction-key renaming -- the complete non-trivial positive control; if admitted, the compression reading is the orbit count",
+   "claim": "defendant D: the FULL 8-element board symmetry group D4 (identity, three rotations, four reflections), each element carrying its own direction-key renaming -- the complete non-trivial positive control; the compression reading is the orbit count",
    "order_engine_reported": 8,
    "relabel": {
     "exit": 1,

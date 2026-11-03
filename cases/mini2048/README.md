@@ -104,13 +104,48 @@ other calibers and are not expected to flip — each carries a `note` saying
 so. `expected.json → groups.*.note` and
 `model.json → meta.known_issue` point here.
 
+## Resolution (2026-11-04): the flip hooks are cashed
+
+The hook above was **cashed**: the upstream engine now accepts
+`semantics.action_maps` — one action renaming per group element, parallel to
+`elements`, validated at load (length pairing, action-set permutations,
+identity element carries the identity map, homomorphism law
+ρ(g∘h) = ρ(g)∘ρ(h); every group in this case reports
+`homomorphism_checked: full`) — with the legacy single `action_map` kept
+byte-for-byte in behavior and marked deprecated. The fixed engine was
+re-vendored (NOTICE manifest re-hashed, 30/30 byte-identical), this case's
+g1/g3/g4 group files upgraded to the per-element declaration (generator
+`--check` byte-identity green), and all six groups re-run live
+(`python -X utf8 -m wuxing_gua check` from `vendored/`, explicit groups
+without `--strict`; receipts `receipts/`, 2026-11-04):
+
+| group | declaration (2026-11-04 on) | order | engine verdict | reading | orbits (compression) |
+|---|---|---|---|---|---|
+| `g1_rot90_map` | explicit, per-element action_maps | 4 | **pass** (exit 0, worst_tv 0.0) | 4/4 elements pass, homomorphism full | 70 (3.657×) |
+| `g2_rot90_nomap` | fixed (keys pinned) | 4 | reject (unchanged) | claim genuinely false under fixed | 70 (3.657×) |
+| `g3_flip_map` | explicit, per-element action_maps | 2 | **pass** (exit 0, worst_tv 0.0) | 2/2 pass | 136 (1.882×) |
+| `g4_d4_full` | explicit, per-element action_maps | 8 | **pass** (exit 0, worst_tv 0.0) | 8/8 pass | 55 (4.655×) |
+| `g5_row_mirror_fake` | fixed, control | 2 | reject (unchanged) | fake in every caliber | 160 (1.600×) |
+| `g6_pads` | fixed, padding swap | 2 | pass (unchanged) | positive control | 255 (1.004×) |
+| control: g1 with identity map (legacy single map) | explicit, [0,1,2,3] | 4 | reject (unchanged) | `first_bad` = rot90 element — direct evidence the legacy behavior is unchanged | 70 |
+
+The pre-registered readings cashed exactly: g4 (full D4) **4.655×** (55
+orbits), g1 **3.657×** (70), g3 **1.882×** (136); g2/g5 stay rejected, g6
+stays admitted. The 2026-11-03 finding record and reject fingerprints above
+are **kept verbatim** (honest tradition: the misjudgment history stays) —
+they now form the before/after pair of snapshots of this one docket. The
+court gate (selftest) and the compare ledger (gate admissions 7 → 10,
+harmful naive admits 5 → 2) were refreshed in the same pass.
+
 ## Files
 
 - `make_mini2048.py` — deterministic generator; `--check` re-runs the
   symmetry self-certification and verifies byte identity of all 8 files.
 - `model.json`, `expected.json`, `groups/g1…g6.json` — the case.
 - `receipts/check.<group>.json` — live engine receipts (no `--strict`),
-  one per group; `receipts/check.control_g1_identity_map.json` + 
+  one per group; `receipts/check.<group>.strict.json` — `--strict`-caliber
+  receipts for the three fixed-declared groups (added 2026-11-04);
+  `receipts/check.control_g1_identity_map.json` +
   `receipts/_control_g1_identity_map.group.json` — the identity-map control
   experiment (temporary group file, kept as evidence, not part of the case).
 - Court receipt: `verdicts/mini2048.verdict.json` (three-way arbitration).
@@ -122,4 +157,4 @@ not `vendored/`): accept per-element action maps (e.g. `action_maps` aligned
 with `elements`, or derive ρ(π) from a declared generator map by
 composition and verify the homomorphism law). `mini2048` then serves as the
 regression positive control: g1/g3/g4 flip to pass, g2/g5 stay rejected,
-g6 stays admitted.
+g6 stays admitted. — **Done (2026-11-04)**, see "Resolution" above.

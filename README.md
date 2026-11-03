@@ -89,14 +89,18 @@ means every verdict in the repository still matches its expected record.
 
 Since v2, compare dispatches the caliber per group declaration (groups
 declaring `explicit` run as declared, without `--strict`; groups declaring
-`fixed` or none run `--strict`). Across the 9-case / 32-group ledger every
+`fixed` or none run `--strict`; since 2026-11-04 this includes the
+per-element `action_maps` form). Across the 9-case / 32-group ledger every
 gate admission is zero-damage by construction. The `mini2048` case (2048
 merge mechanics, 2×2 variant, D4) is the explicit caliber's first
-real-system candidate docket: its "should-admit" is machine-asserted by the
-case generator (per-element map uniqueness plus the group homomorphism
-law), yet the engine's single-global-action_map design structurally rejects
-it at the tool layer — a finding of this wave, fix scheduled upstream, with
-g1/g3/g4 expected to flip on admit after the fix (see
+real-system docket: its "should-admit" is machine-asserted by the case
+generator (per-element map uniqueness plus the group homomorphism law);
+the engine's single-global-action_map limitation found on 2026-11-03 was
+fixed upstream on 2026-11-04 (per-element `action_maps`, homomorphism law
+checked at load) and g1/g3/g4 now run and pass under their declared
+caliber — the ledger's gate admissions went 7 → 10 with zero damage
+throughout, and the two genuinely harmful naive admits (TCP twins, 6
+cells; keys-pinned rotation, 740 cells) are unchanged (see
 [docs/闸门价值对比.html](docs/闸门价值对比.html) and
 [cases/mini2048/README.md](cases/mini2048/README.md)).
 
@@ -140,7 +144,7 @@ from memory.
 | `k8s-pod-lifecycle` | Kubernetes Pod lifecycle (PodPhase) | kubernetes.io docs, Pod Lifecycle page | 8 states (5 protocol + 3 padding), 13 cross-state branches, 7 events | Succeeded ↔ Failed | reject (exit 1, worst_tv 1.0) | reject (exit 1, worst_tv 1.0) | not a symmetry (structure and labeled) |
 | `tls13-handshake` | TLS 1.3 handshake state machine (client + server) | RFC 8446 Appendix A (§A.1/§A.2) | 32 states (17 protocol + 15 padding), 22 cross-state branches, 18 events | c_WAIT_CERT ↔ c_WAIT_CV | reject (exit 1, worst_tv 1.0) | reject (exit 1, worst_tv 1.0) | not a symmetry (structure and labeled) |
 | `usb2-device-states` | USB 2.0 device visible state machine | USB 2.0 spec §9.1 (Figure 9-1 / Table 9-1) | 8 states (6 protocol + 2 padding), 14 cross-state branches, 8 events | Default ↔ Address | reject (exit 1, worst_tv 1.0) | reject (exit 1, worst_tv 1.0) | not a symmetry (structure and labeled) |
-| `mini2048` | 2048 merge mechanics (2×2 deterministic variant) | gabrielecirulli/2048 `js/game_manager.js` (`move()` L130-191, direction numbering L131), corroborated by Wikipedia Gameplay | 256 states (81 real + 175 padding), 4 direction keys, score rewards | rot90 with renamed keys (explicit) vs the same rotation with keys pinned (fixed) — the caliber, not the permutation, decides | reject (exit 1, worst_tv 1.0; bitstring diagnostic — see note) | reject (exit 1, worst_tv 1.0) | keys-pinned reading is not a symmetry (structure-only: yes) |
+| `mini2048` | 2048 merge mechanics (2×2 deterministic variant) | gabrielecirulli/2048 `js/game_manager.js` (`move()` L130-191, direction numbering L131), corroborated by Wikipedia Gameplay | 256 states (81 real + 175 padding), 4 direction keys, score rewards | rot90 with renamed keys (explicit) vs the same rotation with keys pinned (fixed) — the caliber, not the permutation, decides | reject (exit 1, worst_tv 1.0; bitstring diagnostic — see note) | reject (exit 1, worst_tv 1.0) | explicit caliber with per-element maps admits rot90/flip/D4 since 2026-11-04 (70/136/55 orbits); keys-pinned reading stays a non-symmetry (structure-only: yes) |
 
 Notes on the `tcp` row: the state count includes 5 padding states required by
 the engine's bit-string convention (16 total, 11 protocol states); the
@@ -181,21 +185,27 @@ other rows — it is 22 (client 10 + server 12, recomputable from
 Notes on the `mini2048` row: the first real-system exercise of the engine's
 **explicit** caliber (a declared per-action renaming — a board symmetry
 renames the direction keys with the cells), and the source of this
-repository's first reproduced engine finding: the vendored judge's explicit
-layer applies one declared `action_map` to every closed-group element
-*including the identity*, so on any model with pairwise-distinguishable
-actions the identity element forces the identity map and no non-trivial
-renamed-action symmetry can be admitted. The rot90/flip/D4 groups here are
-true symmetries under per-element maps (derived exhaustively and
-machine-asserted by the case generator); their explicit-caliber receipts
-(`cases/mini2048/receipts/`, engine run without `--strict`) read reject with
-`first_bad` = the identity element — expected to flip after the upstream
-per-element fix, and each `expected.json` row carries a note saying so. The
-pads swap passes on the same model (exit 0), and the table's relabel column
-for this case is the court-stamped relabel frame, which resolves to the
-bitstring judge (actions-read-as-bit-flips) on a 4-action/8-bit model — a
-structural mismatch recorded as the diagnostic column. Full diagnosis with
-the verified 8-element map table: [cases/mini2048/README.md](cases/mini2048/README.md).
+repository's first reproduced engine finding (2026-11-03): the vendored
+judge's explicit layer *then* applied one declared `action_map` to every
+closed-group element *including the identity*, so on any model with
+pairwise-distinguishable actions the identity element forced the identity
+map and no non-trivial renamed-action symmetry could be admitted. The
+rot90/flip/D4 groups here are true symmetries under per-element maps
+(derived exhaustively and machine-asserted by the case generator).
+**Resolved 2026-11-04**: the upstream per-element `action_maps` fix
+(homomorphism law checked at load) was re-vendored, the group files declare
+the per-element maps, and the explicit-caliber receipts
+(`cases/mini2048/receipts/`, engine run without `--strict`) read **pass**
+with `homomorphism_checked: full` — g1/g3/g4 admitted at 70/136/55 orbits
+(compression 3.657×/1.882×/4.655×); g2/g5 stay rejected, g6 stays admitted,
+and the identity-map control still rejects under the legacy single map
+(deprecated, behavior unchanged). The relabel/fixed table columns did not
+flip. The pads swap passes on the same model (exit 0), and the table's
+relabel column for this case is the court-stamped relabel frame, which
+resolves to the bitstring judge (actions-read-as-bit-flips) on a
+4-action/8-bit model — a structural mismatch recorded as the diagnostic
+column. Full diagnosis with the verified 8-element map table:
+[cases/mini2048/README.md](cases/mini2048/README.md).
 
 ## Which "identical"? — three questions
 

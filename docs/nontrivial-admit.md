@@ -4,7 +4,12 @@
 filing, the mirror image of the TCP twin trial, and the engine limitation
 the filing surfaced. Written 2026-11-03; the crew chief's ruling on the
 finding was "record as observed, fix upstream next wave" — every row below
-is recorded as observed.*
+is recorded as observed. **2026-11-04: the limitation was fixed upstream
+(per-element `action_maps` with the homomorphism law checked at load) and
+the engine re-vendored; g1/g3/g4 flipped to pass under their declared
+per-element maps — the flip hooks of §7 are cashed, and the 2026-11-03
+records below are kept as history (honest tradition: findings stay on the
+record).**
 
 Every number in this document is backed by a receipt file in this
 repository — the case file `cases/mini2048/` (model, groups, generator,
@@ -12,7 +17,8 @@ per-group engine receipts under `cases/mini2048/receipts/`), the trial
 record `verdicts/mini2048.verdict.json`, and the gate-value ledger
 `verdicts/comparison.mini2048.json` — and the gate
 (`python -X utf8 -m symmetry_court selftest`; 320 contract fields replayed
-green on 2026-11-03) re-verifies the match on every run.
+green on 2026-11-03, re-verified green after the 2026-11-04 flip) re-verifies
+the match on every run.
 
 ---
 
@@ -21,11 +27,12 @@ green on 2026-11-03) re-verifies the match on every run.
 The docket's first non-trivial true-symmetry candidate case (2048-mini, D4)
 is on file; its "should-admit" is machine-asserted by the case generator
 (per-element map uniqueness plus the group homomorphism law, verified over
-all 24 action bijections), but the engine's explicit caliber applies one
-declared action map to every closed-group element including the identity,
-so the group is structurally rejected at the tool layer — a finding of this
-wave, with the fix scheduled upstream and g1/g3/g4 expected to flip to
-admit afterwards.
+all 24 action bijections). On 2026-11-03 the engine's explicit caliber
+still applied one declared action map to every closed-group element
+including the identity, so the group was structurally rejected at the tool
+layer; on 2026-11-04 the upstream per-element `action_maps` fix landed and
+was re-vendored, and **g1/g3/g4 now pass under their declared per-element
+maps** (live receipts; g2/g5 stay rejected, g6 stays admitted).
 
 ## 2. The mirror: TCP and 2048 fail in opposite directions
 
@@ -104,46 +111,53 @@ because the difference lives entirely in the event names. The networkx
 jury agrees on the shape question (`structure_symmetry: true` for
 g1–g4 in `cases/mini2048/expected.json`, labeled: false).
 
-And the explicit-caliber ledger says this about the real candidates:
+And the explicit-caliber ledger says this about the real candidates —
+**2026-11-04 state (live, receipts re-run against the re-vendored engine;
+each element reconciles under its own declared map)**:
 
 | group | declared caliber, cell-by-cell damage | engine explicit verdict |
 |---|---|---|
-| `g1_rot90_map` (C4) | 500 cells* | reject — 3/4 elements fail |
-| `g3_flip_map` (order 2) | **0 cells** | reject — 1/2 elements fail |
-| `g4_d4_full` (D4) | 1240 cells* | reject — 7/8 elements fail |
+| `g1_rot90_map` (C4) | 0 cells | **pass** (exit 0, worst_tv 0.0) |
+| `g3_flip_map` (order 2) | **0 cells** | **pass** (exit 0, worst_tv 0.0) |
+| `g4_d4_full` (D4) | 0 cells | **pass** (exit 0, worst_tv 0.0) |
 
-\* The 500/1240 are what happens when the file's single declared map is
-applied to *every* element of the closed group: the group-file format
-cannot express "each element carries its own renaming", so executing the
-file as written would change that many cells. The generator-matched pair
-for each element is a different story: the rot90 element itself passes the
-engine's equivariance check under its own map (see §5), and `g3` — whose
-group has a single non-identity element, so the file's map *is* the
-element's map — reconciles at **zero** broken cells: a real-system,
-non-trivial (order-2) renamed-action symmetry that the cell-by-cell ledger
-finds perfectly harmless, rejected by the tool anyway.
+History (2026-11-03 receipts, kept): with the then-only single-map
+format the ledger read g1 = 500 cells, g4 = 1240 cells — what happens when
+the file's single declared map is applied to *every* element of the closed
+group — and the engine rejected g1/g3/g4 (3/4, 1/2, 7/8 elements failing,
+each on the identity). The per-element `action_maps` fix removed the
+degeneration: each element is now judged with its own derived ρ(π), the
+ledger reconciles at zero everywhere, and the verdicts flipped. The
+fixed-caliber contrast is still recorded per row
+(`broken_real_cells_fixed`: g1=740, g3=130, g4=1480).
 
-Compression readings if these groups were admitted: g4 (full D4)
-**4.655×** (55 orbits), g1/g2 (C4) **3.657×** (70), g3 **1.882×** (136) —
-the numbers the flip in §7 would cash in.
+Compression readings, now **live** (admitted groups): g4 (full D4)
+**4.655×** (55 orbits), g1 (C4) **3.657×** (70 orbits), g3 **1.882×**
+(136 orbits) — exactly the numbers the flip hooks of §7 projected;
+g2 stays rejected (740-cell damage under its keys-pinned claim), g5
+rejected, g6 admitted at 1.004× (255 orbits).
 
-## 5. The wall: one action map per group file, identity included
+## 5. The wall (2026-11-03, resolved 2026-11-04): one action map per group file, identity included
 
-The engine's explicit judge
-(`vendored/wuxing_gua/core_check.py`, `_equiv_error_explicit`, wired in
-`_check_transition`) checks every element π of the closed group against
-**one** declared map ρ: for all s, a — `π(T(s,a))` must equal
+The engine's explicit judge used to check every element π of the closed
+group against **one** declared map ρ: for all s, a — `π(T(s,a))` must equal
 `T(π(s), ρ(a))`. Closure (`close_group`) always includes the identity.
 For the identity element the condition degenerates to
 `dist(s,a) = dist(s, ρ(a))` for all s, a — which, on any model whose
 actions are pairwise behaviourally distinguishable (one tile on the board
 suffices here), forces ρ = identity. But a rotation's map is not the
-identity. Contradiction: **no** declared map can let a non-trivial
+identity. Contradiction: **no** declared map could let a non-trivial
 renamed-action symmetry through. This is precisely why the explicit
-caliber had zero real-system samples until now.
+caliber had zero real-system samples until this case — and why the upstream
+fix (2026-11-04) declares the maps **per element** (`semantics.action_maps`,
+a list parallel to `elements`, homomorphism law ρ(g∘h) = ρ(g)∘ρ(h) checked
+at load: all ordered pairs up to 500 elements, `homomorphism_checked` =
+`full` on every group in this case).
 
-The two-sided control pins the diagnosis to the identity element, not to a
-mistaken map (`receipts/`):
+The two-sided control pinned the diagnosis to the identity element, not to
+a mistaken map (`receipts/`; 2026-11-03 record, control re-run live on
+2026-11-04 against the fixed engine with the same outcome — legacy
+single-map behavior unchanged):
 
 - `g1` declared with the rot90 map [1,2,3,0]: **reject**, 3/4 elements
   fail, `first_bad` = the identity element (index 0);
@@ -151,41 +165,55 @@ mistaken map (`receipts/`):
   (`check.control_g1_identity_map.json`): **reject**, 3/4 fail,
   `first_bad` = the rot90 element (index 1).
 
-Whichever map you declare, the element it doesn't fit fails first — the
+Whichever map you declared, the element it didn't fit failed first — the
 exact fingerprint of the single-global-map design, not of a transcription
-error. (During this wave's doc review the same reject was reproduced with
+error. (During that wave's doc review the same reject was reproduced with
 an ad-hoc identity-only group filed against this model under a non-identity
 map — 1/1 elements fail — consistent with the argument above; that ad-hoc
-probe is not a repository receipt, the two-sided control above is.)
+probe is not a repository receipt, the two-sided control above is.) Under
+the per-element format this degeneration cannot arise: the identity element
+carries the identity map (validated at load) and every other element its
+own ρ.
 
 ## 6. What the explicit caliber is for — and what this case gives it
 
 The point of the explicit caliber is to turn "renaming knowledge" from
 prose into a machine-checkable declaration: instead of arguing about
-whether "the keys rename with the board", the case file asserts
-`semantics: {action: "explicit", action_map: [...]}` and the engine checks
-the claim cell-by-cell at zero tolerance. What this case adds is the
-**first real-system instance of that declaration** — plus the discovery
-that the current schema (one map per group file) cannot carry the
-per-element information a real symmetry group needs. compare v2
-(`symmetry_court/compare.py`) already respects the declaration: explicit
+whether "the keys rename with the board", the case file asserts the
+declaration and the engine checks the claim cell-by-cell at zero
+tolerance. What this case added was the **first real-system instance of
+that declaration** — plus the discovery (2026-11-03) that the then-current
+schema (one map per group file) could not carry the per-element
+information a real symmetry group needs. compare v2
+(`symmetry_court/compare.py`) already respected the declaration: explicit
 groups run as declared (no `--strict`), their ledger is kept in the
 declared caliber, and the fixed-caliber contrast is recorded per row — so
-the day the engine gains per-element maps, the ledger flips without any
-tooling change.
+when the engine gained per-element maps (2026-11-04), the ledger flipped
+with only a declaration-form recognition added to compare
+(`declared_action_map_kind: per_element`, per-element damage ledger); the
+engine stayed the sole judge.
 
-## 7. The flip hooks (wave 37)
+## 7. The flip hooks — cashed 2026-11-04 (upstream per-element action_maps fix)
 
-The fix belongs to the upstream engine (per-element `action_maps`, or
-deriving ρ(π) from declared generator maps and verifying the homomorphism
-law); `vendored/` stays byte-identical this wave. After the fix and
-re-vendoring, the expected state of this docket is: g1/g3/g4 flip to
-**pass** under their declared per-element maps (readings 3.657× / 1.882× /
-4.655×), g2 and g5 stay **rejected** (the keys-pinned and fake claims are
-genuinely false), g6 stays **pass**. The pages that carry this story —
-`docs/闸门价值对比.html`, the docket rows in `README.md` /
-`README.zh-CN.md`, and this file — each need a one-line flip, already
-marked in place.
+The 2026-11-03 hook read: "the fix belongs to the upstream engine
+(per-element `action_maps`, or deriving ρ(π) from declared generator maps
+and verifying the homomorphism law); `vendored/` stays byte-identical this
+wave. After the fix and re-vendoring, the expected state of this docket
+is: g1/g3/g4 flip to **pass** under their declared per-element maps
+(readings 3.657× / 1.882× / 4.655×), g2 and g5 stay **rejected** (the
+keys-pinned and fake claims are genuinely false), g6 stays **pass**."
+(Original text preserved above verbatim in this paragraph.)
+
+**Cashed, 2026-11-04**: upstream commit "explicit caliber per-element
+action_maps + homomorphism law" re-vendored (NOTICE manifest re-hashed,
+30/30 byte-identical), group files upgraded to `action_maps` (generator
+`--check` byte-identity green), live re-run: g1/g3/g4 **pass** (orbits
+70 / 136 / 55; compression 3.657× / 1.882× / 4.655×; worst_tv 0.0;
+`homomorphism_checked: full`), g2/g5 **reject** unchanged, g6 **pass**
+unchanged, control unchanged (reject). The W2 acceptance corpus
+(`w37_acceptance/run_acceptance.py` against the fixed engine): 7/7 PASS.
+The docket rows in `README.md` / `README.zh-CN.md` and
+`docs/闸门价值对比.html` carry the same flip.
 
 ## 8. Reading the receipts
 
@@ -193,15 +221,19 @@ marked in place.
   anchors every generating rule to the original source (`game_manager.js`
   line anchors, corroborated by Wikipedia's Gameplay text);
   `meta.per_element_action_maps` holds the 8 verified (π, ρ(π)) pairs;
-  `meta.known_issue` records this finding.
+  `meta.known_issue` records the finding and its 2026-11-04 resolution.
 - `cases/mini2048/groups/g1…g6.json` — the defendants; g1/g3/g4 declare
-  `explicit` with their generator's map, g2/g5/g6 declare `fixed`.
+  `explicit` with per-element `action_maps` (since 2026-11-04; previously
+  the legacy single generator map), g2/g5/g6 declare `fixed`.
 - `cases/mini2048/receipts/check.<group>.json` — one live engine receipt
   per group (run without `--strict`), plus
-  `check.control_g1_identity_map.json` (the two-sided control of §5).
+  `check.control_g1_identity_map.json` (the two-sided control of §5) and,
+  since 2026-11-04, `check.<group>.strict.json` for the three fixed-declared
+  groups (the --strict caliber receipt).
 - `cases/mini2048/expected.json` — the court columns (relabel/fixed/
-  networkx) per group, with per-row notes on which rows are expected to
-  flip and which are not.
+  networkx) per group, with per-row notes recording which rows flipped
+  (g1/g3/g4's explicit-caliber receipts, cashed 2026-11-04) and which did
+  not.
 - `verdicts/mini2048.verdict.json` — the full trial record;
   `verdicts/comparison.mini2048.json` — the gate-value ledger rows quoted
   in §4; `verdicts/comparison.summary.json` — the 9-case / 32-group totals.

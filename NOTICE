@@ -15,10 +15,13 @@ repository is a defect; `tools/selftest.py` re-verifies the manifest).
                       desensitized: local paths not recorded here)
                       subdirectory  publish/   (its own git repository)
 
-  Pinned version      git commit e1b1fa86b04cba2bd0001134bf3c33255a748d39
-                      ("audit low fixes: split semantics warning copy ...")
-                      HEAD of the source repo at vendoring time (2026-10-31),
-                      working tree clean (git status verified at copy time)
+  Pinned version      git commit 04cf0b611f1290a5de03341d49836b4eaf139df6
+                      ("explicit caliber per-element action_maps + homomorphism
+                      law") HEAD of the source repo at re-vendoring time
+                      (2026-11-04), working tree clean (git status verified at
+                      copy time; previous pin e1b1fa86b04cba2bd0001134bf3c33255a748d39
+                      of 2026-10-31 — see the re-vendoring addendum at the
+                      bottom of this file)
 
   Package version     wuxing_gua 1.0.0 (vendored/wuxing_gua/__init__.py __version__)
 
@@ -116,9 +119,35 @@ d7da74e4090cf0ffeb926dd8e6f38746b68067774ab4ad8725766b432c5c7406  wuxing_gua/REA
 56987f08d9adffeff425d081add6092dc53a898c4311a6b1d5733156f2ce74c9  wuxing_gua/__main__.py
 4c656d10197e9a87d5773ae2df0ce235faaffa5c123ee4fdc4b4f6e8f3f8252c  wuxing_gua/cli.py
 8dc935a03cfa789f54bbfbef8b34224f25cea5b68f16b3db5a3ab43dae7a697b  wuxing_gua/confidence.py
-f49bf2c7510a622339b2365b309ddeb13d07059122081420b02a42c0d2101353  wuxing_gua/core_check.py
+d4543444ef0b36eb236e5abf0d323bf6ce836f73a199cf42af6c96c2543b8e0b  wuxing_gua/core_check.py
 1c3e69ee79f2453cd93ae63791d27d65f35266d2e9d6f69a4b2144a432371f4f  wuxing_gua/core_discover.py
 066ed656074a30511c7dc44a076da8968137457cd8a23fcf096a4e26c9f9ad6c  wuxing_gua/core_sample.py
 4c694c66e93d41d374f93b767bec60b5914d1a66691cebcc5f6d05ddfba5e9d6  wuxing_gua/demo_env.py
 7329bdad703613f10465a982c2b8fc3817ffe99b4c6c9d9cbbb9013be4e4f7b9  wuxing_gua/errors.py
-b1fb95e61497bfcbbbd50966584b0123e041517742fdd23591f7a4bc296faf1b  wuxing_gua/selftest.py
+5f86f7e10c3e0ef82c21fc84cff643c853cf9d4610985c8dc6295e38fe5bd8fa  wuxing_gua/selftest.py
+
+---------------------------------------------------------------------------
+Addendum (2026-11-04, re-vendoring: per-element action_maps fix)
+---------------------------------------------------------------------------
+
+The engine was re-vendored on 2026-11-04 from source-repo commit
+04cf0b611f1290a5de03341d49836b4eaf139df6 (HEAD, working tree clean), which
+adds per-element action renamings for the explicit reading
+(semantics.action_maps, homomorphism-law checked at load) while keeping the
+legacy single action_map byte-for-byte in behavior (deprecated). The judging
+mathematics (dist_of/tvd, bitstring/generalized/strict/explicit criteria) is
+unchanged in the source diff.
+
+  Copy verification   vendored/wuxing_gua/ replaced wholesale with a byte-level
+                      copy of the source tree (publish/wuxing_gua/); every file
+                      re-hashed after the copy: 30/30 identical (11 engine +
+                      19 src), 0 mismatches, 0 extra files. The sha256 manifest
+                      above was recomputed at the same time: 28 of 30 entries
+                      unchanged, 2 re-hashed (wuxing_gua/core_check.py,
+                      wuxing_gua/selftest.py). File count unchanged (30).
+
+  The 2026-10-31 addendum above records the previous vendoring generation
+  (pin e1b1fa86b04cba2bd0001134bf3c33255a748d39); its "preserved verbatim"
+  refers to the file as it stood before this addendum. The "Pinned version"
+  block in the section above now reflects the current generation, as does
+  the manifest above.

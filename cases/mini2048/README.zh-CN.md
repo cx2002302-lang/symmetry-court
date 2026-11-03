@@ -85,14 +85,42 @@ explicit 层拒绝它们，是因为其群文件格式表达不了逐元素映�
 `note` 说明。`expected.json → groups.*.note` 与
 `model.json → meta.known_issue` 均指向本文件。
 
+## 翻案兑现（2026-11-04，上游逐元素 action_maps 修复）
+
+上节的钩子已**兑现**：上游引擎新增 `semantics.action_maps`（与 `elements`
+一一对应的逐元素动作映射排列，装载时校验长度配对、动作集排列、恒等元恒等
+映射、同态律 ρ(g∘h)=ρ(g)∘ρ(h)——本仓六群全部 `homomorphism_checked=full`；
+legacy 单 `action_map` 行为不变、标 deprecated），修复版引擎重 vendored
+（NOTICE 清单 30/30 逐字节重核），本案群文件 g1/g3/g4 升级为逐元素声明
+（生成器 `--check` 字节自证通过），六群 live 重跑（`vendored/` 下
+`python -X utf8 -m wuxing_gua check`，explicit 群不带 `--strict`；
+收据 `receipts/`，2026-11-04）：
+
+| 群 | 声明（2026-11-04 起） | 阶 | 引擎判决 | 读数 | 轨道（压缩） |
+|---|---|---|---|---|---|
+| `g1_rot90_map` | explicit，逐元素 action_maps | 4 | **放行**（exit 0，worst_tv 0.0） | 4/4 元素全过，同态律 full | 70（3.657×） |
+| `g2_rot90_nomap` | fixed（键钉死） | 4 | 拒答（不变） | fixed 口径下主张为假 | 70（3.657×） |
+| `g3_flip_map` | explicit，逐元素 action_maps | 2 | **放行**（exit 0，worst_tv 0.0） | 2/2 全过 | 136（1.882×） |
+| `g4_d4_full` | explicit，逐元素 action_maps | 8 | **放行**（exit 0，worst_tv 0.0） | 8/8 全过 | 55（4.655×） |
+| `g5_row_mirror_fake` | fixed，对照 | 2 | 拒答（不变） | 假群在任何口径下都非对称 | 160（1.600×） |
+| `g6_pads` | fixed，填充态对换 | 2 | 放行（不变） | 阳性对照 | 255（1.004×） |
+| 对照：g1 改恒等映射（legacy 单映射） | explicit，[0,1,2,3] | 4 | 拒答（不变） | `first_bad` = rot90 元素——legacy 行为不变的直接证据 | 70 |
+
+预注册读数逐项兑现：g4 全 D4 **4.655×**（55 轨道）、g1 **3.657×**（70）、
+g3 **1.882×**（136）；g2/g5 维持拒答、g6 维持放行。上节 2026-11-03 的发现
+记录与拒答指纹**原文保留**（诚实传统：错判史不删）——它们现在是
+"修复前 vs 修复后"的同一案卷双快照。法庭门禁（selftest）与 compare 台账
+（闸门放行 7 → 10、朴素臂有害放行 5 → 2）同步刷新。
+
 ## 文件
 
 - `make_mini2048.py` —— 确定性生成器；`--check` 重跑对称自证并核 8 个文件的
   字节一致。
 - `model.json`、`expected.json`、`groups/g1…g6.json` —— 案卷本体。
 - `receipts/check.<群名>.json` —— 每群一份 live 引擎收据（不带 `--strict`）；
-  `receipts/check.control_g1_identity_map.json` +
-  `receipts/_control_g1_identity_map.group.json` —— 恒等映射对照实验
+  `receipts/check.<群名>.strict.json` —— 三个 fixed 声明群的 `--strict`
+  口径收据（2026-11-04 增补）；`receipts/check.control_g1_identity_map.json`
+  + `receipts/_control_g1_identity_map.group.json` —— 恒等映射对照实验
   （临时群文件，留证不属案卷六群）。
 - 法庭收据：`verdicts/mini2048.verdict.json`（三方庭审）。
 
@@ -101,4 +129,4 @@ explicit 层拒绝它们，是因为其群文件格式表达不了逐元素映�
 修复属于上游引擎（下一波；不动本仓库、不动 `vendored/`）：支持逐元素动作映射
 （如与 `elements` 对齐的 `action_maps`，或由声明的生成元映射按复合推导 ρ(π)
 并验证同态律）。修复后 `mini2048` 即回归正控：g1/g3/g4 翻案放行、g2/g5 维持
-拒答、g6 维持放行。
+拒答、g6 维持放行。——**已完成（2026-11-04）**，见"翻案兑现"一节。

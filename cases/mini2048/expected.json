@@ -1,12 +1,12 @@
 {
  "case": "mini2048",
  "provenance": {
-  "recorded": "2026-11-03, observed from a live three-way arbitration run (`python -X utf8 -m symmetry_court arbitrate --emit-expected-template`); the receipt is verdicts/mini2048.verdict.json; the gate (`python -X utf8 -m symmetry_court selftest`) replays the case and compares these rows field-by-field",
-  "reading_guide": "relabel row = engine's relabel frame (court-stamped copy; on this 4-action/8-bit model that frame resolves to the bitstring judge, which reads actions as bit flips -- a structural mismatch for a direction-key system, recorded as the diagnostic column); fixed row = direction keys pinned (--strict); the explicit declarations of g1/g3/g4 are adjudicated by the vendored engine directly (receipts in receipts/) and by the compare subcommand's declared-caliber gate arm; networkx columns = independent juror. The note fields record the explicit-caliber finding: g1/g3/g4 are true symmetries under per-element action maps, rejected only by the engine's single-global-action_map limitation (README.md); the relabel/fixed rows answer other calibers and are not expected to flip"
+  "recorded": "2026-11-03, observed from a live three-way arbitration run (`python -X utf8 -m symmetry_court arbitrate --emit-expected-template`); the receipt is verdicts/mini2048.verdict.json; the gate (`python -X utf8 -m symmetry_court selftest`) replays the case and compares these rows field-by-field. 2026-11-04: group files of g1/g3/g4 upgraded to per-element action_maps (upstream engine fix) and the flip-hook notes cashed; relabel/fixed rows unchanged (re-verified against live replays at the same time)",
+  "reading_guide": "relabel row = engine's relabel frame (court-stamped copy; on this 4-action/8-bit model that frame resolves to the bitstring judge, which reads actions as bit flips -- a structural mismatch for a direction-key system, recorded as the diagnostic column); fixed row = direction keys pinned (--strict); the explicit declarations of g1/g3/g4 are adjudicated by the vendored engine directly (receipts in receipts/) and by the compare subcommand's declared-caliber gate arm; networkx columns = independent juror. The note fields record the flip: g1/g3/g4 pass under per-element action maps since the 2026-11-04 upstream action_maps fix (the 2026-11-03 rejects were the engine's single-global-action_map limitation, README.md); the relabel/fixed rows answer other calibers and did not flip"
  },
  "groups": {
   "g1_rot90_map": {
-   "claim": "defendant A: rotating the board 90 degrees clockwise and renaming the direction keys with it (up->right->down->left->up) preserves the game exactly -- the direction keys are bound to board coordinates, so the true symmetry carries its own key renaming; declared under the explicit caliber with the rot90 generator's action map",
+   "claim": "defendant A: rotating the board 90 degrees clockwise and renaming the direction keys with it (up->right->down->left->up) preserves the game exactly -- the direction keys are bound to board coordinates, so the true symmetry carries its own key renaming; declared under the explicit caliber with per-element action maps",
    "relabel": {
     "exit": 1,
     "verdict": "reject",
@@ -19,13 +19,13 @@
     "verdict": "reject",
     "worst_tv": 1.0,
     "judge": "strict",
-    "note": "direction keys pinned (--strict): under this caliber the claim is genuinely false, so this row is not expected to flip; the group's explicit-caliber verdict (receipts/) is the row that flips after the upstream fix"
+    "note": "direction keys pinned (--strict): under this caliber the claim is genuinely false, so this row does not flip; the group's explicit-caliber verdict (receipts/) flipped to pass on 2026-11-04 (upstream per-element action_maps fix)"
    },
    "networkx": {
     "structure_symmetry": true,
     "labeled_symmetry": false
    },
-   "note": "expected to flip after upstream per-element action-map fix (see cases/mini2048/README.md and receipts/check.g1_rot90_map.json): this group is a true symmetry under per-element action maps; the explicit-caliber reject is the engine's single-global-action_map limitation, not a transcription error"
+   "note": "cashed 2026-11-04 (upstream per-element action_maps fix): this group passes under per-element action maps (live receipt receipts/check.g1_rot90_map.json, engine run without --strict); the earlier explicit-caliber reject was the engine's single-global-action_map limitation (finding recorded 2026-11-03), not a transcription error"
   },
   "g2_rot90_nomap": {
    "claim": "defendant B: the same 90-degree rotation with the direction keys PINNED (up must stay up) -- the naive-intuition claim that 'the board looks the same rotated', filed deliberately under the fixed caliber to show it is the key renaming, not the state permutation, that makes defendant A true",
@@ -48,7 +48,7 @@
    }
   },
   "g3_flip_map": {
-   "claim": "defendant C: mirroring the board top-bottom and swapping the vertical keys with it (up<->down, left/right unchanged) preserves the game -- the second generator of the 8-element board group, declared explicit with its derived action map",
+   "claim": "defendant C: mirroring the board top-bottom and swapping the vertical keys with it (up<->down, left/right unchanged) preserves the game -- the second generator of the 8-element board group, declared explicit with per-element action maps",
    "relabel": {
     "exit": 1,
     "verdict": "reject",
@@ -61,16 +61,16 @@
     "verdict": "reject",
     "worst_tv": 1.0,
     "judge": "strict",
-    "note": "direction keys pinned (--strict): under this caliber the claim is genuinely false, so this row is not expected to flip; the group's explicit-caliber verdict (receipts/) is the row that flips after the upstream fix"
+    "note": "direction keys pinned (--strict): under this caliber the claim is genuinely false, so this row does not flip; the group's explicit-caliber verdict (receipts/) flipped to pass on 2026-11-04 (upstream per-element action_maps fix)"
    },
    "networkx": {
     "structure_symmetry": true,
     "labeled_symmetry": false
    },
-   "note": "expected to flip after upstream per-element action-map fix (see cases/mini2048/README.md and receipts/check.g3_flip_map.json): this group is a true symmetry under per-element action maps; the explicit-caliber reject is the engine's single-global-action_map limitation, not a transcription error"
+   "note": "cashed 2026-11-04 (upstream per-element action_maps fix): this group passes under per-element action maps (live receipt receipts/check.g3_flip_map.json, engine run without --strict); the earlier explicit-caliber reject was the engine's single-global-action_map limitation (finding recorded 2026-11-03), not a transcription error"
   },
   "g4_d4_full": {
-   "claim": "defendant D: the FULL 8-element board symmetry group D4 (identity, three rotations, four reflections), each element carrying its own direction-key renaming -- the complete non-trivial positive control; if admitted, the compression reading is the orbit count",
+   "claim": "defendant D: the FULL 8-element board symmetry group D4 (identity, three rotations, four reflections), each element carrying its own direction-key renaming -- the complete non-trivial positive control; the compression reading is the orbit count",
    "relabel": {
     "exit": 1,
     "verdict": "reject",
@@ -83,13 +83,13 @@
     "verdict": "reject",
     "worst_tv": 1.0,
     "judge": "strict",
-    "note": "direction keys pinned (--strict): under this caliber the claim is genuinely false, so this row is not expected to flip; the group's explicit-caliber verdict (receipts/) is the row that flips after the upstream fix"
+    "note": "direction keys pinned (--strict): under this caliber the claim is genuinely false, so this row does not flip; the group's explicit-caliber verdict (receipts/) flipped to pass on 2026-11-04 (upstream per-element action_maps fix)"
    },
    "networkx": {
     "structure_symmetry": true,
     "labeled_symmetry": false
    },
-   "note": "expected to flip after upstream per-element action-map fix (see cases/mini2048/README.md and receipts/check.g4_d4_full.json): this group is a true symmetry under per-element action maps; the explicit-caliber reject is the engine's single-global-action_map limitation, not a transcription error"
+   "note": "cashed 2026-11-04 (upstream per-element action_maps fix): this group passes under per-element action maps (live receipt receipts/check.g4_d4_full.json, engine run without --strict); the earlier explicit-caliber reject was the engine's single-global-action_map limitation (finding recorded 2026-11-03), not a transcription error"
   },
   "g5_row_mirror_fake": {
    "claim": "control: mirror the top row only (cells 0<->1 swap, bottom row untouched) -- the board looks locally mirror-symmetric but this map moves one cell pair off the square's symmetry group; filed under fixed and expected to be refused",

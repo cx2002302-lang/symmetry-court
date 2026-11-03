@@ -1,9 +1,9 @@
 {
  "case": "mini2048",
  "provenance": {
-  "gate": "vendored wuxing_gua check, caliber per group declaration (compare v2): groups declaring semantics.action=explicit with a valid action_map run as declared (no --strict); groups declaring fixed or no declaration run --strict (live run)",
+  "gate": "vendored wuxing_gua check, caliber per group declaration (compare v2; per-element action_maps recognized since 2026-11-04): groups declaring semantics.action=explicit with a valid action_map (single, legacy) or action_maps (per-element) run as declared (no --strict); groups declaring fixed or no declaration run --strict (live run)",
   "naive_arm": "structure-only edge-set invariance proxy (see module docstring)",
-  "damage": "cell-by-cell ledger over model trans, same caliber as the gate arm per group (explicit groups: events renamed per the declared action_map; others: event names pinned); fixed-caliber damage kept per row in broken_real_cells_fixed for contrast"
+  "damage": "cell-by-cell ledger over model trans, same caliber as the gate arm per group (explicit groups: events renamed per the declared mapping — per-element groups use each element's own map; others: event names pinned); fixed-caliber damage kept per row in broken_real_cells_fixed for contrast"
  },
  "summary": {
   "case": "mini2048",
@@ -11,37 +11,59 @@
   "n_actions": 4,
   "n_groups": 6,
   "naive_admits": 5,
-  "naive_harmful_admits": 4,
-  "naive_broken_real_cells": 2480,
-  "gate_admits": 1,
+  "naive_harmful_admits": 1,
+  "naive_broken_real_cells": 740,
+  "gate_admits": 4,
   "gate_admitted_broken_cells": 0,
-  "gate_saved_merges": 4,
+  "gate_saved_merges": 1,
   "gate_explicit_groups": 3,
-  "gate_total_seconds_rounded": 1.0
+  "gate_total_seconds_rounded": 1.1
  },
  "rows": [
   {
    "group": "g1_rot90_map.json",
-   "claim": "defendant A: rotating the board 90 degrees clockwise and renaming the direction keys with it (up->right->down->left->up) preserves the game exactly -- the direction keys are bound to board coordinates, so the true symmetry carries its own key renaming; declared under the explicit caliber with the rot90 generator's action map",
+   "claim": "defendant A: rotating the board 90 degrees clockwise and renaming the direction keys with it (up->right->down->left->up) preserves the game exactly -- the direction keys are bound to board coordinates, so the true symmetry carries its own key renaming; declared under the explicit caliber with per-element action maps",
    "naive_structure_admits": true,
-   "gate_exit": 1,
-   "gate_verdict": "reject",
-   "gate_admits": false,
+   "gate_exit": 0,
+   "gate_verdict": "pass",
+   "gate_admits": true,
    "nx_labeled_symmetry": null,
    "broken_real_cells_fixed": 740,
    "real_cells": 1024,
    "would_be_orbits_if_merged": 70,
    "compression_if_true": 3.657,
-   "gate_saved_this_merge": true,
+   "gate_saved_this_merge": false,
    "gate_strict": false,
    "damage_caliber": "explicit",
-   "declared_action_map": [
-    1,
-    2,
-    3,
-    0
+   "declared_action_map_kind": "per_element",
+   "declared_action_map": null,
+   "declared_action_maps": [
+    [
+     0,
+     1,
+     2,
+     3
+    ],
+    [
+     1,
+     2,
+     3,
+     0
+    ],
+    [
+     3,
+     0,
+     1,
+     2
+    ],
+    [
+     2,
+     3,
+     0,
+     1
+    ]
    ],
-   "broken_real_cells_declared": 500
+   "broken_real_cells_declared": 0
   },
   {
    "group": "g2_rot90_nomap.json",
@@ -59,49 +81,105 @@
   },
   {
    "group": "g3_flip_map.json",
-   "claim": "defendant C: mirroring the board top-bottom and swapping the vertical keys with it (up<->down, left/right unchanged) preserves the game -- the second generator of the 8-element board group, declared explicit with its derived action map",
+   "claim": "defendant C: mirroring the board top-bottom and swapping the vertical keys with it (up<->down, left/right unchanged) preserves the game -- the second generator of the 8-element board group, declared explicit with per-element action maps",
    "naive_structure_admits": true,
-   "gate_exit": 1,
-   "gate_verdict": "reject",
-   "gate_admits": false,
+   "gate_exit": 0,
+   "gate_verdict": "pass",
+   "gate_admits": true,
    "nx_labeled_symmetry": null,
    "broken_real_cells_fixed": 130,
    "real_cells": 1024,
    "would_be_orbits_if_merged": 136,
    "compression_if_true": 1.882,
-   "gate_saved_this_merge": true,
+   "gate_saved_this_merge": false,
    "gate_strict": false,
    "damage_caliber": "explicit",
-   "declared_action_map": [
-    2,
-    1,
-    0,
-    3
+   "declared_action_map_kind": "per_element",
+   "declared_action_map": null,
+   "declared_action_maps": [
+    [
+     0,
+     1,
+     2,
+     3
+    ],
+    [
+     2,
+     1,
+     0,
+     3
+    ]
    ],
    "broken_real_cells_declared": 0
   },
   {
    "group": "g4_d4_full.json",
-   "claim": "defendant D: the FULL 8-element board symmetry group D4 (identity, three rotations, four reflections), each element carrying its own direction-key renaming -- the complete non-trivial positive control; if admitted, the compression reading is the orbit count",
+   "claim": "defendant D: the FULL 8-element board symmetry group D4 (identity, three rotations, four reflections), each element carrying its own direction-key renaming -- the complete non-trivial positive control; the compression reading is the orbit count",
    "naive_structure_admits": true,
-   "gate_exit": 1,
-   "gate_verdict": "reject",
-   "gate_admits": false,
+   "gate_exit": 0,
+   "gate_verdict": "pass",
+   "gate_admits": true,
    "nx_labeled_symmetry": null,
    "broken_real_cells_fixed": 1480,
    "real_cells": 1024,
    "would_be_orbits_if_merged": 55,
    "compression_if_true": 4.655,
-   "gate_saved_this_merge": true,
+   "gate_saved_this_merge": false,
    "gate_strict": false,
    "damage_caliber": "explicit",
-   "declared_action_map": [
-    1,
-    2,
-    3,
-    0
+   "declared_action_map_kind": "per_element",
+   "declared_action_map": null,
+   "declared_action_maps": [
+    [
+     0,
+     1,
+     2,
+     3
+    ],
+    [
+     3,
+     2,
+     1,
+     0
+    ],
+    [
+     0,
+     3,
+     2,
+     1
+    ],
+    [
+     1,
+     2,
+     3,
+     0
+    ],
+    [
+     3,
+     0,
+     1,
+     2
+    ],
+    [
+     2,
+     1,
+     0,
+     3
+    ],
+    [
+     1,
+     0,
+     3,
+     2
+    ],
+    [
+     2,
+     3,
+     0,
+     1
+    ]
    ],
-   "broken_real_cells_declared": 1240
+   "broken_real_cells_declared": 0
   },
   {
    "group": "g5_row_mirror_fake.json",

@@ -1,8 +1,8 @@
 {
  "command": "check",
- "verdict": "reject",
- "exit_code": 1,
- "reason": "转移等变层失败：max TV=1 > tol=1e-09（1/2 个受检元素不过）",
+ "verdict": "pass",
+ "exit_code": 0,
+ "reason": "两层判据均通过：转移等变（max TV=0.00e+00 ≤ tol=1e-09）+ 奖励剖面（n_bad=0）",
  "note": null,
  "semantics": {
   "action": "explicit",
@@ -10,12 +10,21 @@
   "declared": true,
   "assumed": false,
   "source": "group_file",
-  "action_map": [
-   2,
-   1,
-   0,
-   3
-  ]
+  "action_maps": [
+   [
+    0,
+    1,
+    2,
+    3
+   ],
+   [
+    2,
+    1,
+    0,
+    3
+   ]
+  ],
+  "homomorphism_checked": "full"
  },
  "semantics_assumed": false,
  "n_bits": 8,
@@ -34,24 +43,20 @@
   "generators_found": 1
  },
  "layer_transition": {
-  "passed": false,
+  "passed": true,
   "tol": 1e-09,
   "mode": "all_elements",
   "judge": "explicit",
   "n_checked": 2,
-  "n_failed": 1,
-  "worst_tv": 1.0,
+  "n_failed": 0,
+  "worst_tv": 0.0,
   "worst_tv_is_inf": false,
-  "first_bad": {
-   "index_in_checked": 0,
-   "tv": 1.0,
-   "reason": "转移分布在 π 映射下的 TV 超过容忍（判据 max TV=0 零容忍）"
-  }
+  "first_bad": null
  },
  "layer_reward_profile": {
   "passed": true,
   "n_pair": 120,
   "n_bad": 0,
-  "sec": 0.003000020980834961
+  "sec": 0.0019989013671875
  }
 }

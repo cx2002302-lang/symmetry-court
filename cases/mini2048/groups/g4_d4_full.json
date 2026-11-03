@@ -2068,18 +2068,62 @@
  ],
  "semantics": {
   "action": "explicit",
-  "action_map": [
-   1,
-   2,
-   3,
-   0
+  "action_maps": [
+   [
+    0,
+    1,
+    2,
+    3
+   ],
+   [
+    3,
+    2,
+    1,
+    0
+   ],
+   [
+    0,
+    3,
+    2,
+    1
+   ],
+   [
+    1,
+    2,
+    3,
+    0
+   ],
+   [
+    3,
+    0,
+    1,
+    2
+   ],
+   [
+    2,
+    1,
+    0,
+    3
+   ],
+   [
+    1,
+    0,
+    3,
+    2
+   ],
+   [
+    2,
+    3,
+    0,
+    1
+   ]
   ]
  },
  "meta": {
-  "claim": "defendant D: the FULL 8-element board symmetry group D4 (identity, three rotations, four reflections), each element carrying its own direction-key renaming -- the complete non-trivial positive control; if admitted, the compression reading is the orbit count",
-  "construction": "closure of {rot90cw, flip_tb} = 8 elements; semantics.action_map = the rot90cw generator's map [1, 2, 3, 0] (the file format holds one map; the per-element maps for all eight elements are derived and asserted in meta.per_element_action_maps -- rho(identity)=id, so a single non-trivial map cannot be equivariant for the identity element; see the explicit caliber note in model.meta.transcription_notes)",
+  "claim": "defendant D: the FULL 8-element board symmetry group D4 (identity, three rotations, four reflections), each element carrying its own direction-key renaming -- the complete non-trivial positive control; the compression reading is the orbit count",
+  "construction": "closure of {rot90cw, flip_tb} = 8 elements; semantics.action_maps = the per-element derived renamings, one bijection per element, parallel to elements (all eight maps derived and asserted in meta.per_element_action_maps; rho(identity)=id; homomorphism law asserted by this generator and re-checked by the engine at load -- see the explicit caliber note in model.meta.transcription_notes)",
   "why_it_is_a_symmetry": "D4 is the square's own symmetry group and the move rule is direction-symmetric by construction (one vector-driven rule, four directions)",
-  "caliber_note": "compression reading if admitted: orbits of D4 on the 256 states (expected 55: 21 real + 34 padding), i.e. 256 states collapse to 55 classes",
+  "caliber_note": "admitted under the explicit caliber since the 2026-11-04 per-element action_maps fix; compression reading: orbits of D4 on the 256 states (21 real + 34 padding classes expected), live count in receipts/check.g4_d4_full.json",
   "regenerate": "python -X utf8 cases/mini2048/make_mini2048.py"
  }
 }

@@ -520,16 +520,24 @@
  ],
  "semantics": {
   "action": "explicit",
-  "action_map": [
-   2,
-   1,
-   0,
-   3
+  "action_maps": [
+   [
+    0,
+    1,
+    2,
+    3
+   ],
+   [
+    2,
+    1,
+    0,
+    3
+   ]
   ]
  },
  "meta": {
-  "claim": "defendant C: mirroring the board top-bottom and swapping the vertical keys with it (up<->down, left/right unchanged) preserves the game -- the second generator of the 8-element board group, declared explicit with its derived action map",
-  "construction": "order-2 group {id, flip_tb}; semantics.action_map = the flip_tb generator's derived renaming [2, 1, 0, 3]",
+  "claim": "defendant C: mirroring the board top-bottom and swapping the vertical keys with it (up<->down, left/right unchanged) preserves the game -- the second generator of the 8-element board group, declared explicit with per-element action maps",
+  "construction": "order-2 group {id, flip_tb}; semantics.action_maps = the per-element derived renamings, one bijection per element, parallel to elements (rho(id)=[0,1,2,3], rho(flip_tb)=[2, 1, 0, 3]; derivation table in meta.per_element_action_maps)",
   "why_it_is_a_symmetry": "the vector map's y-component flips sign with the mirror while the x-component is untouched; slide+merge commutes with the mirrored keys on all 256 states (asserted exhaustively)",
   "caliber_note": "with g1 and g3 both admitted, the full D4 (g4) is generated: <rot90cw, flip_tb> = D4",
   "regenerate": "python -X utf8 cases/mini2048/make_mini2048.py"

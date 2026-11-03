@@ -15,7 +15,8 @@
    1,
    2,
    3
-  ]
+  ],
+  "homomorphism_checked": null
  },
  "semantics_assumed": false,
  "n_bits": 8,
@@ -52,6 +53,6 @@
   "passed": true,
   "n_pair": 366,
   "n_bad": 0,
-  "sec": 0.003526926040649414
+  "sec": 0.002006053924560547
  }
 }

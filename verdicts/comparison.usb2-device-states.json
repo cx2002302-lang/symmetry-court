@@ -1,9 +1,9 @@
 {
  "case": "usb2-device-states",
  "provenance": {
-  "gate": "vendored wuxing_gua check, caliber per group declaration (compare v2): groups declaring semantics.action=explicit with a valid action_map run as declared (no --strict); groups declaring fixed or no declaration run --strict (live run)",
+  "gate": "vendored wuxing_gua check, caliber per group declaration (compare v2; per-element action_maps recognized since 2026-11-04): groups declaring semantics.action=explicit with a valid action_map (single, legacy) or action_maps (per-element) run as declared (no --strict); groups declaring fixed or no declaration run --strict (live run)",
   "naive_arm": "structure-only edge-set invariance proxy (see module docstring)",
-  "damage": "cell-by-cell ledger over model trans, same caliber as the gate arm per group (explicit groups: events renamed per the declared action_map; others: event names pinned); fixed-caliber damage kept per row in broken_real_cells_fixed for contrast"
+  "damage": "cell-by-cell ledger over model trans, same caliber as the gate arm per group (explicit groups: events renamed per the declared mapping — per-element groups use each element's own map; others: event names pinned); fixed-caliber damage kept per row in broken_real_cells_fixed for contrast"
  },
  "summary": {
   "case": "usb2-device-states",
