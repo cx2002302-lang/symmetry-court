@@ -236,9 +236,59 @@ The docket rows in `README.md` / `README.zh-CN.md` and
   not.
 - `verdicts/mini2048.verdict.json` — the full trial record;
   `verdicts/comparison.mini2048.json` — the gate-value ledger rows quoted
-  in §4; `verdicts/comparison.summary.json` — the 9-case / 32-group totals.
+  in §4; `verdicts/comparison.summary.json` — the docket totals (at this
+  document's writing 9 cases / 32 groups; since 2026-11-04 the ledger also
+  carries `lightsout3` — 10 cases / 37 groups, see §9).
 - `cases/mini2048/README.md` (+ `README.zh-CN.md`) — the case's own
   diagnostic write-up, including the verified 8-element map table.
 
 Engine exit codes: `0` pass, `1` reject, `2` sample shortfall (not used
 here), `3` input or internal error.
+
+## 9. The second non-trivial admit: `lightsout3` (2026-11-04)
+
+The explicit caliber's second real-system filing — same group as this
+case's (the full 8-element board group D4), different mechanism. Where the
+2048 board's symmetry lives in the slide-and-merge direction rules, the
+Lights Out board's symmetry lives in **toggle algebra**: a press is an XOR
+flip of a button and its orthogonal neighbors ("Pressing any of the lights
+will toggle it and the four adjacent lights." — Wikipedia, "Lights Out
+(game)"), so rotating the board and moving the buttons with it commutes
+with every press. The case transcribes the 3×3 deterministic variant of
+the Tiger Electronics handheld (1995) with citations to Wikipedia and
+Jaap's Puzzle Page; 512 states, all real (the 9×9 toggle matrix over GF(2)
+has rank 9 — asserted by the generator — so there are **no padding
+states**), rewards all zero by design (the source game has no score).
+
+What the case adds, receipt-backed (`cases/lightsout3/receipts/`,
+`verdicts/lightsout3.verdict.json`, `verdicts/comparison.lightsout3.json`;
+gate replay: 370 contract fields green, 2026-11-04):
+
+- **g4_d4_full (D4, 8 elements) — pass** under its declared per-element
+  maps, worst_tv 0.0, `homomorphism_checked: full`: the second
+  non-trivial positive control, after this case's g4. **102 orbits**
+  (compression 5.020×) — computed live, not projected.
+- **g1_rot90_map (C4)** — pass, **140 orbits** (3.657×).
+- **g5_d4_x_c2 (D4 × C2, 16 elements)** — pass, **51 orbits**
+  (10.039×): the all-lamps complement map π(s) = 511 ⊕ s commutes with
+  every D4 element (generator-asserted per element), so the board group
+  and the complement generate their direct product — geometric symmetry
+  and toggle-algebra symmetry are independent here.
+- **g2_rot90_nomap (fixed)** — reject, as it should be: with buttons
+  pinned the claim is genuinely false, and the cell-by-cell ledger counts
+  **12288** broken (state × event) cells (`broken_real_cells_fixed`,
+  three rotation elements × 4096 each) — the naive structure-only arm
+  admits this merge; the gate refuses it.
+- **g3_complement (fixed, positive control)** — pass, 256 orbits
+  (2.000×). Deviation recorded honestly: the trivial positive control is
+  **not** a padding-state swap — this case has no padding states to swap
+  (rank-9 toggle matrix); the complement map plays the same role this
+  case's `g6_pads` plays there. Ruled 2026-11-04 during case engineering:
+  faithful transcription outranks control-form symmetry.
+
+The generator (`cases/lightsout3/make_lightsout3.py`) scales this case's
+method to 9 buttons: exhaustive search over **all 9! = 362 880 button
+permutations** asserts exactly one ρ(π) per element plus the homomorphism
+law on every run (`--check`, exit 0); it also pre-registers the fake
+control reading (a top-row-only mirror admits no ρ at all) without spending
+a group file on it.

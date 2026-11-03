@@ -53,7 +53,7 @@ python -X utf8 -m symmetry_court selftest    # 全案重放对 expected（退出
 
 arbitrate 会在控制台打印判决表，并把完整庭审记录写进 `verdicts/<case>.verdict.json`。selftest 是门禁：退出码 `0` 表示仓里每份判决仍与 expected 记录逐字段一致。
 
-compare 自 v2 起按各群声明分派口径：声明 `explicit` 的群原样跑（不加 `--strict`），声明 `fixed` 或无声明的群维持 `--strict`（2026-11-04 起声明口径含逐元素 `action_maps` 形态）。9 案 32 群台账中，闸门每次放行都零破坏（判据性质）。`mini2048` 案（2048 合并机制 2×2 变体，D4）是 explicit 口径的第一个真实系统案卷：其『该放』已由案卷生成器穷举断言（逐元素映射唯一 + 群同态律）；2026-11-03 发现的引擎单映射局限已于 2026-11-04 由上游修复（逐元素 `action_maps`，装载时校验同态律）并重 vendored，g1/g3/g4 按声明口径实跑放行——台账闸门放行 7 → 10、全程零破坏，两处真陷阱（TCP 孪生 6 格、键钉死旋转 740 格）照旧拦下（见 [docs/闸门价值对比.html](docs/闸门价值对比.html) 与 [cases/mini2048/README.zh-CN.md](cases/mini2048/README.zh-CN.md)）。
+compare 自 v2 起按各群声明分派口径：声明 `explicit` 的群原样跑（不加 `--strict`），声明 `fixed` 或无声明的群维持 `--strict`（2026-11-04 起声明口径含逐元素 `action_maps` 形态）。10 案 37 群台账中，闸门每次放行都零破坏（判据性质）。`mini2048` 案（2048 合并机制 2×2 变体，D4）是 explicit 口径的第一个真实系统案卷：其『该放』已由案卷生成器穷举断言（逐元素映射唯一 + 群同态律）；2026-11-03 发现的引擎单映射局限已于 2026-11-04 由上游修复（逐元素 `action_maps`，装载时校验同态律）并重 vendored，g1/g3/g4 按声明口径实跑放行。`lightsout3` 案（Lights Out 翻转机制 3×3 变体，D4——2026-11-04 入卷）是该口径的第二份真实系统案卷，也是本法庭第二个非平凡真对称正控：与 `mini2048` 同群、不同机理（Toggle 代数，而非合并滑动）。台账闸门放行现为 14、全程零破坏；三处真陷阱（TCP 孪生 6 格、两案键钉死旋转 740 + 12288 格）全部拦下（见 [docs/闸门价值对比.html](docs/闸门价值对比.html)、[cases/mini2048/README.zh-CN.md](cases/mini2048/README.zh-CN.md) 与 [cases/lightsout3/README.zh-CN.md](cases/lightsout3/README.zh-CN.md)）。
 
 ### 怎么读判决
 
@@ -69,7 +69,7 @@ compare 自 v2 起按各群声明分派口径：声明 `explicit` 的群原样�
 
 ## 案卷
 
-案卷现有 9 宗案件：5 案收编自 field-trial 盲测项目（模型/群文件/生成器/README 字节级复制；判词已与 field-trial 的 sealed 真值逐案对账，15/15 群一致，见各案 `expected.json` 的 provenance），4 案为本仓转录（`tcp`、`dhcp`、`imap`、`mini2048`）。回执：对 `cases/` 目录跑 `python -X utf8 -m symmetry_court list`。下表每个数字都有仓内指名的回执文件背书——没有一个数来自记忆。
+案卷现有 10 宗案件：5 案收编自 field-trial 盲测项目（模型/群文件/生成器/README 字节级复制；判词已与 field-trial 的 sealed 真值逐案对账，15/15 群一致，见各案 `expected.json` 的 provenance），5 案为本仓转录（`tcp`、`dhcp`、`imap`、`mini2048`、`lightsout3`）。回执：对 `cases/` 目录跑 `python -X utf8 -m symmetry_court list`。下表每个数字都有仓内指名的回执文件背书——没有一个数来自记忆。
 
 | 案件 | 协议 | 出处 | 状态数 | 孪生对 | relabel | fixed | networkx（带标签） |
 |---|---|---|---|---|---|---|---|
@@ -82,12 +82,15 @@ compare 自 v2 起按各群声明分派口径：声明 `explicit` 的群原样�
 | `tls13-handshake` | TLS 1.3 握手状态机（client + server） | RFC 8446 Appendix A（§A.1/§A.2） | 32 状态（17 协议态 + 15 补位）、22 条跨态分支、18 种事件 | c_WAIT_CERT ↔ c_WAIT_CV | reject（exit 1，worst_tv 1.0） | reject（exit 1，worst_tv 1.0） | 非对称（结构与带标签口径皆非） |
 | `usb2-device-states` | USB 2.0 设备可见状态机 | USB 2.0 规范 §9.1（Figure 9-1 / Table 9-1） | 8 状态（6 协议态 + 2 补位）、14 条跨态分支、8 种事件 | Default ↔ Address | reject（exit 1，worst_tv 1.0） | reject（exit 1，worst_tv 1.0） | 非对称（结构与带标签口径皆非） |
 | `mini2048` | 2048 合并机制（2×2 确定性变体） | gabrielecirulli/2048 `js/game_manager.js`（`move()` L130-191，方向编号 L131），Wikipedia Gameplay 互证 | 256 状态（81 真态 + 175 补位）、4 个方向键、计分奖励 | rot90+改名方向键（explicit）对 同一旋转+键钉死（fixed）——起决定作用的是口径，不是置换 | reject（exit 1，worst_tv 1.0；bitstring 诊断列——见注） | reject（exit 1，worst_tv 1.0） | explicit 口径逐元素映射自 2026-11-04 起放行 rot90/翻转/D4（70/136/55 轨道）；键钉死口径仍非对称（只看结构：是） |
+| `lightsout3` | Lights Out 翻转机制（3×3 确定性变体） | Wikipedia "Lights Out (game)"（Gameplay/Strategy 原句）+ Jaap's Puzzle Page（Wikipedia 引用的规则页）；3×3 记为变体边界（Tiger 原版 5×5） | 512 状态（全真态、无补位）、9 个按钮、奖励全零（原版无计分） | rot90+改名按钮（explicit）对 同一旋转+按钮钉死（fixed）——与 `mini2048` 同群、不同机理（Toggle 代数） | pass（exit 0，worst_tv 0.0；bitstring 判官从置换推导的改名与逐元素按钮映射重合——见注） | reject（exit 1，worst_tv 1.0） | explicit 口径逐元素映射放行 rot90/D4/D4×C2（140/102/51 轨道），fixed 补集正控放行（256 轨道）；按钮钉死旋转仍非对称（只看结构：是） |
 
 `tcp` 行的注：状态数含 5 个补位哑态（引擎位串约定所需，16 态中 11 个为协议态）；案卷里其余两名被告——一个无聊换位、一个荒谬换位——在两套口径下都被拒（`cases/tcp/expected.json` 中 4/4 行 reject），这是"判官不是橡皮图章"在记录里的样子。底本转录里的一条边在逐边复核后被删除（`SYN-SENT` 上的 `CLOSE`：Figure 5 没有画这条箭头，且 §3.10.4 写明"删除 TCB"）；更正记录在模型元数据的转录注记里。`dhcp` 行的判决是数据说了算，不是感觉：两个续租状态共用同一完成标签 `DHCPACK/Record lease`，但连 relabel 口径都拒绝这次换位——因为 `REBINDING` 没有回到 `RENEWING` 的边。`imap` 行转录自 RFC 3501 的正文（其 §3 无图）；每条边都引用写明它的原句。TCP 没有回报概念，该案奖励层按设计全零，全部结论来自转移层（`dhcp`、`imap` 同）。
 
 `raft-etcd`…`usb2-device-states` 五行收编自 field-trial 盲测项目（字节级复制；本仓回执 = `cases/<案>/expected.json` + `verdicts/<案>.verdict.json`；networkx 两列与 field-trial 的 sealed 真值逐案对账一致——15/15 群，sealed 文件与其 `_W3_manifest.json` 的 sha256 可回核）。`k8s-pod-lifecycle`、`tls13-handshake`、`usb2-device-states` 三案各含一个 pads 正对照（填充态对换：两口径 pass、networkx 结构/带标签皆同，`expected.json` 中 TRUE）；`hadoop-mr-task` 的第三群是对照群（RUNNING ↔ KILL_WAIT，拒）；`raft-etcd` 的第三群是 relabel 声明对照（同一置换、relabel 读法，仍拒）。`hadoop-mr-task` 行 relabel 列 worst_tv=0.75：FAILED/KILLED 对换只破坏部分真实格——数据实录，非笔误。`tls13-handshake` 随案 README 称跨态分支 20（按格计：client 9 + server 11）；按结果分支计（与本表其余各行同口径）为 22（client 10 + server 12，`model.json` 实算可复核）——本表取 22。
 
 `mini2048` 行的注：引擎 **explicit** 口径（逐动作声明映射——棋盘对称会连格带方向键一起改名）的第一个真实系统样本，也是本仓库第一个被复现的引擎发现现场（2026-11-03）：vendored 判官的 explicit 层当时把**一个**声明的 `action_map` 用于闭包群的**每一个**元素（**含恒等元**），于是在任何"动作两两可分辨"的模型上，恒等元强制映射为恒等，任何非平凡的"动作改名"对称都不可能被放行。本案的 rot90/翻转/D4 群在逐元素映射语义下是真对称（由案卷生成器穷举推导并机器断言）。**2026-11-04 已修复兑现**：上游逐元素 `action_maps` 修复（装载时校验同态律）重 vendored，群文件改声明逐元素映射，explicit 口径收据（`cases/mini2048/receipts/`，引擎不带 `--strict`）实跑 **pass**、`homomorphism_checked: full`——g1/g3/g4 以 70/136/55 轨道放行（压缩 3.657×/1.882×/4.655×）；g2/g5 维持拒答、g6 维持放行，恒等映射对照在 legacy 单映射下照旧拒答（deprecated，行为不变）。本表 relabel/fixed 两列未翻案。同一模型上填充态对换照常放行（exit 0）；本表 relabel 列是法庭盖章的 relabel 框架，在 4 动作/8 位模型上解析为位串判据（动作当翻位读）——与方向键系统结构性错位，如实录为诊断列。完整诊断（含已验证的 8 元素映射表）：[cases/mini2048/README.zh-CN.md](cases/mini2048/README.zh-CN.md)。
+
+`lightsout3` 行的注（2026-11-04 入卷）：Lights Out 谜题（Tiger Electronics 掌机，1995 年公开发售）确定性翻转核心的 3×3 转录——每条生成规则都在 `model.json → meta.rules_with_citations` 引 Wikipedia Gameplay/Strategy 原句与 Jaap's Puzzle Page；3×3 棋盘本身记为变体边界（原版 5×5；3×3 脉络经 Merlin 再版 Magic Square 与 Lights Out Cube 的 3×3 面）。512 个状态全是真态——3×3 翻转矩阵在 GF(2) 上秩 9（生成器断言），无补位态、零自环、任意两态整行互异。奖励全零属设计（原版无计分）；胜利条件（9 灯全灭）作为终局性质记录在 `meta.win_condition`，裁决完全落在转移层。被告群：g1（rot90 + 逐元素按钮映射，explicit）与 g4（全 D4，本法庭第二个非平凡真对称正控）按声明口径放行（140 / 102 轨道，3.657× / 5.020×）；g5——直积 D4 × C2（16 元素，51 轨道，10.039×）——因全盘取反与 D4 每个元素可交换（生成器逐元素断言）而放行。g2（同一旋转、按钮钉死）被拒：朴素臂会放行它，逐格对账在按钮钉死口径下数出 12288 个被改写的 (状态 × 事件) 行为格。g3——全盘取反，fixed——是平凡正控；偏离如实记录：本案没有填充态可换，补集映射扮演 `mini2048` 里 pads 对换的同一种角色（2026-11-04 案卷工程裁决：忠实转录优先于凑正控形式）。本表 relabel 列是法庭盖章的 relabel 框架，解析为 bitstring 判官——在 9 动作 = 9 位的本模型上，它从状态置换自身推导动作改名，该推导恰好重合于被 forced 的逐元素按钮映射，所以这一列与 explicit 收据同判（对比 `mini2048`：4 动作 < 8 位时同一框架是结构性错位）。512 态超出陪审团自同构枚举的规模护栏（跳过并如实记录）；O(E) 直接边集检查是主判定。案卷全文（含已验证的 8 元素映射表）：[cases/lightsout3/README.zh-CN.md](cases/lightsout3/README.zh-CN.md)。
 
 ## 『两种一样』——三问自判
 
@@ -122,6 +125,7 @@ compare 自 v2 起按各群声明分派口径：声明 `explicit` 的群原样�
 - **Kubernetes 官方文档**（Pod Lifecycle 页）—— `k8s-pod-lifecycle` 案出处，逐边引官方原句。
 - **RFC 8446**（TLS 1.3）—— `tls13-handshake` 案出处，转录自 Appendix A（§A.1/§A.2），§4 为规范锚点。
 - **USB 2.0 规范**（USB-IF，§9.1）—— `usb2-device-states` 案出处，转录自 Figure 9-1 与 Table 9-1。
+- **Wikipedia "Lights Out (game)"** 与 **Jaap's Puzzle Page "Lights Out"** —— `lightsout3` 案出处，转录自 Gameplay/Strategy 原句，3×3 棋盘尺寸记为变体边界。
 - **field-trial 盲测项目** —— 上述 5 案的转录与两轮盲测验证来源；sealed 真值对账记录在各案 `expected.json` 的 provenance 里。
 
 定位口径，明说：在我们检索过的范围内，没有见到这个组合的对标——公开标准的状态机、在两套写明名字的等变口径下受审、配独立陪审团与可复跑判决书。若你知道对标在哪里，我们真心想听：开个 issue。

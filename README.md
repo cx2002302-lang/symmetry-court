@@ -90,7 +90,7 @@ means every verdict in the repository still matches its expected record.
 Since v2, compare dispatches the caliber per group declaration (groups
 declaring `explicit` run as declared, without `--strict`; groups declaring
 `fixed` or none run `--strict`; since 2026-11-04 this includes the
-per-element `action_maps` form). Across the 9-case / 32-group ledger every
+per-element `action_maps` form). Across the 10-case / 37-group ledger every
 gate admission is zero-damage by construction. The `mini2048` case (2048
 merge mechanics, 2×2 variant, D4) is the explicit caliber's first
 real-system docket: its "should-admit" is machine-asserted by the case
@@ -98,11 +98,16 @@ generator (per-element map uniqueness plus the group homomorphism law);
 the engine's single-global-action_map limitation found on 2026-11-03 was
 fixed upstream on 2026-11-04 (per-element `action_maps`, homomorphism law
 checked at load) and g1/g3/g4 now run and pass under their declared
-caliber — the ledger's gate admissions went 7 → 10 with zero damage
-throughout, and the two genuinely harmful naive admits (TCP twins, 6
-cells; keys-pinned rotation, 740 cells) are unchanged (see
-[docs/闸门价值对比.html](docs/闸门价值对比.html) and
-[cases/mini2048/README.md](cases/mini2048/README.md)).
+caliber. The `lightsout3` case (Lights Out toggle mechanics, 3×3 variant,
+D4 — 2026-11-04) is the second real-system docket of that caliber and the
+court's second non-trivial positive control: same group as `mini2048`'s,
+different mechanism (toggle algebra instead of merge-and-slide). The
+ledger's gate admissions stand at 14 with zero damage throughout, and the
+three genuinely harmful naive admits (TCP twins, 6 cells; keys-pinned
+rotations, 740 + 12288 cells) are all refused (see
+[docs/闸门价值对比.html](docs/闸门价值对比.html),
+[cases/mini2048/README.md](cases/mini2048/README.md) and
+[cases/lightsout3/README.md](cases/lightsout3/README.md)).
 
 ### How to read a verdict
 
@@ -125,11 +130,11 @@ call, and the next section is the checklist for it.
 
 ## The docket
 
-The docket holds 9 cases: five incorporated from the field-trial blind-test
+The docket holds 10 cases: five incorporated from the field-trial blind-test
 project (model/groups/generator/README copied byte-identical; their verdicts
 reconcile group-by-group with field-trial's sealed truth, 15/15 groups — see
-each case's `expected.json` provenance) and four transcribed in this
-repository (`tcp`, `dhcp`, `imap`, `mini2048`). Receipt:
+each case's `expected.json` provenance) and five transcribed in this
+repository (`tcp`, `dhcp`, `imap`, `mini2048`, `lightsout3`). Receipt:
 `python -X utf8 -m symmetry_court list` over `cases/`. Every number below is
 backed by the named receipt file in this repository — no number here comes
 from memory.
@@ -145,6 +150,7 @@ from memory.
 | `tls13-handshake` | TLS 1.3 handshake state machine (client + server) | RFC 8446 Appendix A (§A.1/§A.2) | 32 states (17 protocol + 15 padding), 22 cross-state branches, 18 events | c_WAIT_CERT ↔ c_WAIT_CV | reject (exit 1, worst_tv 1.0) | reject (exit 1, worst_tv 1.0) | not a symmetry (structure and labeled) |
 | `usb2-device-states` | USB 2.0 device visible state machine | USB 2.0 spec §9.1 (Figure 9-1 / Table 9-1) | 8 states (6 protocol + 2 padding), 14 cross-state branches, 8 events | Default ↔ Address | reject (exit 1, worst_tv 1.0) | reject (exit 1, worst_tv 1.0) | not a symmetry (structure and labeled) |
 | `mini2048` | 2048 merge mechanics (2×2 deterministic variant) | gabrielecirulli/2048 `js/game_manager.js` (`move()` L130-191, direction numbering L131), corroborated by Wikipedia Gameplay | 256 states (81 real + 175 padding), 4 direction keys, score rewards | rot90 with renamed keys (explicit) vs the same rotation with keys pinned (fixed) — the caliber, not the permutation, decides | reject (exit 1, worst_tv 1.0; bitstring diagnostic — see note) | reject (exit 1, worst_tv 1.0) | explicit caliber with per-element maps admits rot90/flip/D4 since 2026-11-04 (70/136/55 orbits); keys-pinned reading stays a non-symmetry (structure-only: yes) |
+| `lightsout3` | Lights Out toggle mechanics (3×3 deterministic variant) | Wikipedia "Lights Out (game)" (Gameplay + Strategy sentences) + Jaap's Puzzle Page (the rules page Wikipedia cites); 3×3 recorded as a variant boundary (the Tiger original is 5×5) | 512 states (all real, no padding), 9 buttons, rewards all zero (the source game has no score) | rot90 with renamed buttons (explicit) vs the same rotation with buttons pinned (fixed) — same group as `mini2048`, different mechanism (toggle algebra) | pass (exit 0, worst_tv 0.0; the bitstring judge's π-derived renaming coincides with the per-element button maps — see note) | reject (exit 1, worst_tv 1.0) | explicit caliber with per-element maps admits rot90/D4/D4×C2 (140/102/51 orbits), the fixed complement control passes (256 orbits); the keys-pinned rotation stays a non-symmetry (structure-only: yes) |
 
 Notes on the `tcp` row: the state count includes 5 padding states required by
 the engine's bit-string convention (16 total, 11 protocol states); the
@@ -206,6 +212,40 @@ resolves to the bitstring judge (actions-read-as-bit-flips) on a
 4-action/8-bit model — a structural mismatch recorded as the diagnostic
 column. Full diagnosis with the verified 8-element map table:
 [cases/mini2048/README.md](cases/mini2048/README.md).
+
+Notes on the `lightsout3` row (2026-11-04): the deterministic toggle core of
+the Lights Out puzzle (Tiger Electronics handheld, 1995) transcribed at 3×3
+— every generating rule cites Wikipedia's Gameplay/Strategy sentences and
+Jaap's Puzzle Page in `model.json → meta.rules_with_citations`; the 3×3
+board itself is a recorded variant boundary (the original is 5×5; the 3×3
+lineage runs through Merlin's reissued Magic Square and the Lights Out
+Cube's 3×3 faces). All 512 states are real — the 9×9 toggle matrix over
+GF(2) has rank 9 (generator-asserted), so there are no padding states, no
+self-loops, and no two states share a row. Rewards are all zero by design
+(the source game has no score); the win condition (all lamps off) is a
+terminal property recorded in `meta.win_condition`, so the adjudication
+runs entirely on the transition layer. The defendant groups: g1 (rot90 +
+per-element button maps, explicit) and g4 (full D4, the second non-trivial
+positive control of this court) pass under their declared caliber (140 and
+102 orbits, 3.657× and 5.020×), as does g5 — the direct product D4 × C2
+(16 elements, 51 orbits, 10.039×), admitted because the all-lamps
+complement commutes with every D4 element (generator-asserted). g2 (the
+same rotation, buttons pinned) is refused: the naive structure-only arm
+admits it, and the cell-by-cell ledger counts 12288 broken (state × event)
+cells under the pinned reading. g3 — the all-lamps complement, fixed — is
+the trivial positive control; deviation recorded honestly: this case has
+no padding states to swap, so the complement map plays the role
+`mini2048`'s pads swap plays there (ruled 2026-11-04: faithful
+transcription outranks control-form symmetry). The relabel column here is
+the court-stamped relabel frame resolving to the bitstring judge, which on
+this 9-action/9-bit model derives the action renaming from the state
+permutation itself — that derivation coincides with the forced per-element
+button maps, so the column passes in step with the explicit receipts
+(contrast `mini2048`, where 4 actions on 8 bits made the same frame a
+structural mismatch). At 512 states the jury's automorphism-set
+cross-check is skipped by the court's scale guard; the O(E) direct
+edge-set check is the primary. Case write-up with the verified 8-element
+map table: [cases/lightsout3/README.md](cases/lightsout3/README.md).
 
 ## Which "identical"? — three questions
 
@@ -283,6 +323,10 @@ deterministic generator. The six-step process with the ground rules is in
   from Appendix A (§A.1/§A.2) with §4 as the normative anchor.
 - **USB 2.0 specification** (USB-IF, §9.1) — source of the
   `usb2-device-states` case, transcribed from Figure 9-1 and Table 9-1.
+- **Wikipedia, "Lights Out (game)"** and **Jaap's Puzzle Page, "Lights
+  Out"** — sources of the `lightsout3` case, transcribed from the Gameplay
+  and Strategy sentences with the 3×3 board size recorded as a variant
+  boundary.
 - **the field-trial blind-test project** — transcription and two-round blind
   verification for the five cases above; the sealed-truth reconciliation is
   recorded in each case's `expected.json` provenance.

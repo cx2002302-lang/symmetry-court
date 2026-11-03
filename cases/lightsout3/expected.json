@@ -1,0 +1,114 @@
+{
+ "case": "lightsout3",
+ "provenance": {
+  "recorded": "2026-11-04, observed from a live three-way arbitration run (`python -X utf8 -m symmetry_court arbitrate --emit-expected-template`); the receipt is verdicts/lightsout3.verdict.json; the gate (`python -X utf8 -m symmetry_court selftest`) replays the case and compares these rows field-by-field",
+  "reading_guide": "relabel row = engine's relabel frame (court-stamped copy; on this 9-action/9-bit model that frame resolves to the bitstring judge, which reads actions as bit flips -- a structural mismatch for a position-button system, recorded as the diagnostic column); fixed row = buttons pinned (--strict); the explicit declarations of g1/g4/g5 are adjudicated by the vendored engine directly (receipts in receipts/) and by the compare subcommand's declared-caliber gate arm; networkx columns = independent juror (the automorphism-set cross-check is skipped at 512 states per the court's scale guard, the O(E) direct edge-set check is the primary)"
+ },
+ "groups": {
+  "g1_rot90_map": {
+   "claim": "defendant A: rotating the 3x3 board 90 degrees clockwise and moving the buttons with it (the top-left button becomes the top-right button, and so on around the rotation) preserves the puzzle exactly -- buttons are bound to board positions, so the true symmetry carries its own button renaming; declared under the explicit caliber with per-element action maps",
+   "relabel": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "bitstring",
+    "note": "court-stamped relabel frame resolves to the bitstring judge on this 9-action/9-bit model (n_actions <= n_bits), which reads actions as bit flips -- a structural mismatch for a position-button system; diagnostic column, not expected to flip"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict"
+   },
+   "networkx": {
+    "structure_symmetry": true,
+    "labeled_symmetry": false
+   },
+   "note": "the explicit declaration is adjudicated by the vendored engine directly (receipts/check.g1_rot90_map.json, engine run without --strict: pass, worst_tv 0.0, homomorphism_checked full) and by the compare subcommand's declared-caliber gate arm; the relabel column here resolves to the bitstring judge, which on this 9-action/9-bit model derives the action renaming from the state permutation itself (buttons are bit positions), so the relabel column passes in step with the explicit reading (contrast mini2048, where 4 actions on 8 bits made the same frame a structural mismatch); the fixed column is the buttons-pinned contrast"
+  },
+  "g2_rot90_nomap": {
+   "claim": "defendant B: the same 90-degree rotation with the buttons PINNED (the top-left button must stay the top-left button) -- the naive-intuition claim that 'the board looks the same rotated', filed deliberately under the fixed caliber to show it is the button renaming, not the state permutation, that makes defendant A true",
+   "relabel": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "bitstring",
+    "note": "court-stamped relabel frame resolves to the bitstring judge on this 9-action/9-bit model (n_actions <= n_bits), which reads actions as bit flips -- a structural mismatch for a position-button system; diagnostic column, not expected to flip"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict",
+    "note": "buttons pinned: the rotation claim is genuinely false under this caliber (TV 1.0 -- e.g. the all-off state: the top-left button lights lamps {0,1,3} in the original but {1,2,5} in the rotated reading); the relabel column passes because the bitstring judge derives the action renaming from the permutation itself -- the caliber, not the permutation, decides (same structure as mini2048's g1/g2 pair)"
+   },
+   "networkx": {
+    "structure_symmetry": true,
+    "labeled_symmetry": false
+   }
+  },
+  "g3_complement": {
+   "claim": "positive control: the all-lamps complement map pi(s) = 511 XOR s (every lamp flipped) commutes with every button press because toggling is XOR, so it is a genuine symmetry under the pinned-button reading and should be admitted",
+   "relabel": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "bitstring",
+    "note": "court-stamped relabel frame resolves to the bitstring judge on this 9-action/9-bit model (n_actions <= n_bits), which reads actions as bit flips -- a structural mismatch for a position-button system; diagnostic column, not expected to flip"
+   },
+   "fixed": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "strict",
+    "note": "fixed-caliber positive control: the complement commutes with every press and renames nothing, so the pinned reading is the true reading; this case has no padding states (toggle-matrix rank 9), so the trivial control is the complement map rather than a padding swap (see the group file's deviation note)"
+   },
+   "networkx": {
+    "structure_symmetry": true,
+    "labeled_symmetry": true
+   }
+  },
+  "g4_d4_full": {
+   "claim": "main positive control: the FULL 8-element board symmetry group D4 (identity, three rotations, four reflections), each element carrying its own button renaming -- the second non-trivial positive control of this court, after mini2048's D4 and on a different mechanism (toggle algebra instead of merge-and-slide)",
+   "relabel": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "bitstring",
+    "note": "court-stamped relabel frame resolves to the bitstring judge on this 9-action/9-bit model (n_actions <= n_bits), which reads actions as bit flips -- a structural mismatch for a position-button system; diagnostic column, not expected to flip"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict"
+   },
+   "networkx": {
+    "structure_symmetry": true,
+    "labeled_symmetry": false
+   },
+   "note": "the explicit declaration is adjudicated by the vendored engine directly (receipts/check.g4_d4_full.json, engine run without --strict: pass, worst_tv 0.0, homomorphism_checked full) and by the compare subcommand's declared-caliber gate arm; the relabel column here resolves to the bitstring judge, which on this 9-action/9-bit model derives the action renaming from the state permutation itself (buttons are bit positions), so the relabel column passes in step with the explicit reading (contrast mini2048, where 4 actions on 8 bits made the same frame a structural mismatch); the fixed column is the buttons-pinned contrast"
+  },
+  "g5_d4_x_c2": {
+   "claim": "the direct product D4 x C2 (order 16): the board group and the all-lamps complement generate it because the complement commutes with every D4 element (asserted by the generator); each element (d, c^k) carries the button renaming of its D4 partner d -- the complement itself renames nothing",
+   "relabel": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "bitstring",
+    "note": "court-stamped relabel frame resolves to the bitstring judge on this 9-action/9-bit model (n_actions <= n_bits), which reads actions as bit flips -- a structural mismatch for a position-button system; diagnostic column, not expected to flip"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict"
+   },
+   "networkx": {
+    "structure_symmetry": true,
+    "labeled_symmetry": false
+   },
+   "note": "the explicit declaration is adjudicated by the vendored engine directly (receipts/check.g5_d4_x_c2.json, engine run without --strict: pass, worst_tv 0.0, homomorphism_checked full) and by the compare subcommand's declared-caliber gate arm; the relabel column here resolves to the bitstring judge, which on this 9-action/9-bit model derives the action renaming from the state permutation itself (buttons are bit positions), so the relabel column passes in step with the explicit reading (contrast mini2048, where 4 actions on 8 bits made the same frame a structural mismatch); the fixed column is the buttons-pinned contrast"
+  }
+ }
+}

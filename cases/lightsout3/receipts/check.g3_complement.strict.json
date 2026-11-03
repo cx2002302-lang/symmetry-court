@@ -1,0 +1,47 @@
+{
+ "command": "check",
+ "verdict": "pass",
+ "exit_code": 0,
+ "reason": "两层判据均通过：转移等变（max TV=0.00e+00 ≤ tol=1e-09）+ 奖励剖面（n_bad=0）",
+ "note": null,
+ "semantics": {
+  "action": "fixed",
+  "judge": "strict",
+  "declared": true,
+  "assumed": false,
+  "source": "flag_strict"
+ },
+ "semantics_assumed": false,
+ "n_bits": 9,
+ "n_states": 512,
+ "n_actions": 9,
+ "group": {
+  "n_states": 512,
+  "order": 2,
+  "n_orbits": 256,
+  "compression": 2.0,
+  "input_elements": 2,
+  "unique_elements": 2,
+  "duplicates_dropped": 0,
+  "input_was_closed_group": true,
+  "elements_added_by_closure": 0,
+  "generators_found": 1
+ },
+ "layer_transition": {
+  "passed": true,
+  "tol": 1e-09,
+  "mode": "all_elements",
+  "judge": "strict",
+  "n_checked": 2,
+  "n_failed": 0,
+  "worst_tv": 0.0,
+  "worst_tv_is_inf": false,
+  "first_bad": null
+ },
+ "layer_reward_profile": {
+  "passed": true,
+  "n_pair": 256,
+  "n_bad": 0,
+  "sec": 0.008009195327758789
+ }
+}
