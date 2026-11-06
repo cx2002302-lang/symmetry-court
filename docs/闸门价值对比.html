@@ -32,7 +32,7 @@
 
 <header>
   <h1>闸门价值对比：用 vs 不用</h1>
-  <div class="tag">11 个真实系统 · 41 个合并主张 · 同一份数据跑两种决策方式（闸门臂按群声明分派口径 · 数字全部回源 comparison.*.json）</div>
+  <div class="tag">12 个真实系统 · 45 个合并主张 · 同一份数据跑两种决策方式（闸门臂按群声明分派口径 · 数字全部回源 comparison.*.json）</div>
 </header>
 
 <section>
@@ -59,8 +59,8 @@
 </section>
 
 <section>
-  <h2>核心结果：朴素臂的 21 次放行里，4 次合并会真改行为</h2>
-  <div class="lead">11 案 41 群（compare v2：闸门臂按各群声明口径对账；2026-11-04 起兼容逐元素 action_maps，见下方"口径尊重"节；2026-11-04 加入 lightsout3 与 sliding2x3 案后刷新）。朴素臂（只看结构）共放行 <b>21</b> 次合并——其中 <b>17 次恰好安全</b>（8 次填充态对换，压缩 1.001–1.143×；9 次声明口径真对称：2048 案 g1/g3/g4、Lights Out 案 g1/g3/g4/g5 与滑块案 sliding2x3 的 g1/g4，声明口径下逐格零改），<b>4 次是陷阱</b>：TCP 孪生对（FIN-WAIT-2 ↔ CLOSING，6 格）、2048 案键钉死的 90° 旋转（740 格）、Lights Out 案键钉死的 90° 旋转（12288 格）与滑块案方向钉死的左右镜像（1440 格）。2048 案的 3 个声明口径主张（g1/g3/g4）、Lights Out 案的 3 个 explicit 主张（g1/g4/g5）与滑块案的 2 个 explicit 主张（g1/g4）闸门均<b>放行</b>——2048 案三群曾于 2026-11-03 因引擎 explicit 层的单映射局限被误拒，上游 2026-11-04 以逐元素 action_maps 修复后翻案兑现（下节详述）。闸门臂放行 <b>17</b> 次全部零破坏，总耗时约 <b>7.4 秒</b>（41 群 11 案，单机实测求和，精确值见 json）。</div>
+  <h2>核心结果：朴素臂的 25 次放行里，5 次合并会真改行为</h2>
+  <div class="lead">12 案 45 群（compare v2：闸门臂按各群声明口径对账；2026-11-04 起兼容逐元素 action_maps，见下方"口径尊重"节；2026-11-04 加入 lightsout3 与 sliding2x3 案、2026-11-07 加入 hanoi3 案后刷新）。朴素臂（只看结构）共放行 <b>25</b> 次合并——其中 <b>20 次恰好安全</b>（9 次填充态对换，压缩 1.001–1.143×；11 次声明口径真对称：2048 案 g1/g3/g4、Lights Out 案 g1/g3/g4/g5、滑块案 sliding2x3 的 g1/g4 与汉诺塔案 hanoi3 的 g1/g3，声明口径下逐格零改），<b>5 次是陷阱</b>：TCP 孪生对（FIN-WAIT-2 ↔ CLOSING，6 格）、2048 案键钉死的 90° 旋转（740 格）、Lights Out 案键钉死的 90° 旋转（12288 格）、滑块案方向钉死的左右镜像（1440 格）与汉诺塔案柱对钉死的 A↔B 换柱（122 格）。2048 案的 3 个声明口径主张（g1/g3/g4）、Lights Out 案的 3 个 explicit 主张（g1/g4/g5）、滑块案的 2 个 explicit 主张（g1/g4）与汉诺塔案的 2 个 explicit 主张（g1/g3）闸门均<b>放行</b>——2048 案三群曾于 2026-11-03 因引擎 explicit 层的单映射局限被误拒，上游 2026-11-04 以逐元素 action_maps 修复后翻案兑现（下节详述）。闸门臂放行 <b>20</b> 次全部零破坏，总耗时约 <b>8.8 秒</b>（45 群 12 案，单机实测求和，精确值见 json）。</div>
   <svg viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg">
     <!-- TCP 放大镜 -->
     <rect x="30" y="30" width="840" height="120" rx="12" fill="#fef2f2" stroke="#dc2626" stroke-width="2"/>
@@ -72,10 +72,10 @@
     <text x="700" y="132" font-size="13" fill="#059669" font-weight="bold">用闸：exit 1 拒答（≈0.2 秒）</text>
     <!-- 汇总条 -->
     <g font-size="14">
-      <text x="60" y="196" fill="#1a1a2e" font-weight="bold">两臂总分（11 案 41 群）</text>
-      <text x="60" y="228" fill="#92400e">朴素臂：放行 21 · 真破坏 4 次（TCP 孪生 6 格 + 2048 键钉死旋转 740 格 + Lights Out 键钉死旋转 12288 格 + 滑块方向钉死镜像 1440 格）· 无从得知自己错了</text>
-      <text x="60" y="258" fill="#065f46">闸门臂：放行 17（全部安全，压缩照拿）· 拦下 24（全部拦对；曾经的 3 次口径局限误拒已随 2026-11-04 上游修复翻案，见下节）· 放行群破坏格 0（判据性质）</text>
-      <text x="60" y="286" fill="#55566b" font-size="12.5">闸门成本：41 群 × check 共约 7 秒（单机量级，实测求和 7.4 秒）——一次静默错误协议实现的排查成本通常以人天计</text>
+      <text x="60" y="196" fill="#1a1a2e" font-weight="bold">两臂总分（12 案 45 群）</text>
+      <text x="60" y="228" fill="#92400e">朴素臂：放行 25 · 真破坏 5 次（TCP 孪生 6 格 + 2048 键钉死旋转 740 格 + Lights Out 键钉死旋转 12288 格 + 滑块方向钉死镜像 1440 格 + 汉诺塔柱对钉死换柱 122 格）· 无从得知自己错了</text>
+      <text x="60" y="258" fill="#065f46">闸门臂：放行 20（全部安全，压缩照拿）· 拦下 25（全部拦对；曾经的 3 次口径局限误拒已随 2026-11-04 上游修复翻案，见下节）· 放行群破坏格 0（判据性质）</text>
+      <text x="60" y="286" fill="#55566b" font-size="12.5">闸门成本：45 群 × check 共约 9 秒（单机量级，实测求和 8.8 秒）——一次静默错误协议实现的排查成本通常以人天计</text>
     </g>
   </svg>
   <div class="ok"><b>一句话：闸门不是每次都救命——它救的正是"结构一样、事件不一样"这一类你用眼睛和结构工具都看不出的坑；其余时候它花几秒钟给你一张"压缩无害"的收据。（它也曾误拒：mini2048 案 2026-11-03 当场抓到引擎 explicit 层的单映射局限，误拒全程公开记录；上游 2026-11-04 修复后 g1/g3/g4 翻案兑现，见下节——错判史同样保留，不删。）</b></div>
@@ -83,7 +83,7 @@
 
 <section>
   <h2>逐案明细</h2>
-  <div class="lead">法庭三案（本仓 cases/，收据 verdicts/comparison.*.json）＋ 实战盲测五案（field-trial 项目案卷，同格式复跑）＋ 2048 案 mini2048（六群，explicit 口径真实系统样本与单映射局限翻案史）＋ Lights Out 案 lightsout3（五群，2026-11-04 入卷：第二份 explicit 真实系统案卷、第二个非平凡真对称正控，与 mini2048 同群不同机理——Toggle 代数 vs 合并滑动）＋ 滑块案 sliding2x3（四群，2026-11-04 入卷：第三份 explicit 真实系统案卷、第三个非平凡真对称正控——非正方形矩形上的 V4，第三种群结构，且带 304 个真实填充态——pads 正控回归 explicit 案卷）。</div>
+  <div class="lead">法庭三案（本仓 cases/，收据 verdicts/comparison.*.json）＋ 实战盲测五案（field-trial 项目案卷，同格式复跑）＋ 2048 案 mini2048（六群，explicit 口径真实系统样本与单映射局限翻案史）＋ Lights Out 案 lightsout3（五群，2026-11-04 入卷：第二份 explicit 真实系统案卷、第二个非平凡真对称正控，与 mini2048 同群不同机理——Toggle 代数 vs 合并滑动）＋ 滑块案 sliding2x3（四群，2026-11-04 入卷：第三份 explicit 真实系统案卷、第三个非平凡真对称正控——非正方形矩形上的 V4，第三种群结构，且带 304 个真实填充态——pads 正控回归 explicit 案卷）＋ 汉诺塔案 hanoi3（四群，2026-11-07 入卷：第四份 explicit 真实系统案卷、第四个非平凡真对称正控——完整柱重标群 S3，第四种群结构且首个非交换群，也是首个『动作 = 有序柱对』语义的案，带 5 个真实填充态——pads 正控继续在列）。</div>
   <table>
     <tr><th>案（系统）</th><th>群（主张）</th><th>朴素臂</th><th>闸门</th><th>破坏格</th><th>压缩读数(若真)</th></tr>
     <tr><td rowspan="4">tcp<br>RFC 9293</td><td>swap（孪生对）</td><td class="bad">合并 ⚠️</td><td class="good">拒答 ✓</td><td class="bad">6</td><td>—</td></tr>
@@ -127,14 +127,18 @@
     <tr><td>g2 hflip 方向钉死（fixed）</td><td>合并</td><td class="good">拒答 ✓</td><td>1440</td><td>—</td></tr>
     <tr><td>g3 pads（填充态对换）</td><td>合并</td><td class="good">放行 ✓</td><td>0</td><td>1.001×（1023 轨道）</td></tr>
     <tr><td>g4 全 V4（explicit，逐元素映射）</td><td>合并</td><td class="good">放行 ✓（声明口径）</td><td>0*</td><td>2.116×（484 轨道）</td></tr>
+    <tr><td rowspan="4">hanoi3<br>汉诺塔（Wikipedia 规则）<br>3 盘确定性变体</td><td>g1 A↔B 换柱+改有序对（explicit，逐元素映射）</td><td>合并</td><td class="good">放行 ✓（声明口径）</td><td>0*</td><td>1.684×（19 轨道）</td></tr>
+    <tr><td>g2 换柱 柱对钉死（fixed）</td><td>合并</td><td class="good">拒答 ✓</td><td>122</td><td>—</td></tr>
+    <tr><td>g4 pads（填充态对换）</td><td>合并</td><td class="good">放行 ✓</td><td>0</td><td>1.032×（31 轨道）</td></tr>
+    <tr><td>g3 全 S3（explicit，逐元素映射）</td><td>合并</td><td class="good">放行 ✓（声明口径）</td><td>0*</td><td>3.200×（10 轨道）</td></tr>
   </table>
-  <div class="note"><b>诚实声明（四条）</b>：① 朴素臂是<b>决策方式的代理</b>（"结构像就合并"），不是某个具体第三方工具——但这正是 networkx 不带标签口径的同类做法，TCP 孪生案里它确实判"可换"；② "破坏格"按<b>该群声明口径</b>逐格对账计（合并后行为会改变的 (状态×事件) 数）：带 * 的行是 explicit 群按其声明口径改名事件后对账——2026-11-04 起声明为<b>逐元素映射</b>（每元素配各自的 ρ，g1/g3/g4 全为 0，与引擎放行判据同口径），其余行按事件名钉死口径；fixed 口径对照数在 comparison.mini2048.json 的 broken_real_cells_fixed（g1=740、g3=130、g4=1480）；lightsout3 案同式：声明口径放行群破坏格 0（g1/g4/g5 带 * 行），fixed 口径对照数在 comparison.lightsout3.json 的 broken_real_cells_fixed（g1=12288、g4=24576、g5=49152）；sliding2x3 案同式：声明口径放行群破坏格 0（g1/g4 带 * 行），fixed 口径对照数在 comparison.sliding2x3.json 的 broken_real_cells_fixed（g1=1440、g4=5760）；协议类案卷奖励全零，判定全在转移层（lightsout3 与 sliding2x3 两案奖励全零属游戏设计：原版无计分，见各自 model.json 规则引证）；③ 闸门放行群破坏格恒为 0 是<b>判据的数学性质</b>（pass 要求逐格 TV≤1e-9），不是本次运行的巧合。闸门耗时为单机量级记录，精确值在 comparison.*.json；④ <b>历史（2026-11-03 收据，保留）</b>：当时群文件只能带一个单全局 action_map，g1/g4 的对账数（500/1240）是"把 rot90 的映射强加给闭包群每个元素"的结果，闸门据此误拒三个真对称——上游 2026-11-04 逐元素 action_maps 修复后，g1/g3/g4 按各自映射逐格对账为 0 并翻案放行（收据 <code>cases/mini2048/receipts/</code>）；g2 键钉死 740 格、g5 假群 190 格照旧拒答，g6 照旧放行。mini2048 本次放行 g1/g3/g4/g6，压缩读数均为实跑轨道读数。</div>
+  <div class="note"><b>诚实声明（四条）</b>：① 朴素臂是<b>决策方式的代理</b>（"结构像就合并"），不是某个具体第三方工具——但这正是 networkx 不带标签口径的同类做法，TCP 孪生案里它确实判"可换"；② "破坏格"按<b>该群声明口径</b>逐格对账计（合并后行为会改变的 (状态×事件) 数）：带 * 的行是 explicit 群按其声明口径改名事件后对账——2026-11-04 起声明为<b>逐元素映射</b>（每元素配各自的 ρ，g1/g3/g4 全为 0，与引擎放行判据同口径），其余行按事件名钉死口径；fixed 口径对照数在 comparison.mini2048.json 的 broken_real_cells_fixed（g1=740、g3=130、g4=1480）；lightsout3 案同式：声明口径放行群破坏格 0（g1/g4/g5 带 * 行），fixed 口径对照数在 comparison.lightsout3.json 的 broken_real_cells_fixed（g1=12288、g4=24576、g5=49152）；sliding2x3 案同式：声明口径放行群破坏格 0（g1/g4 带 * 行），fixed 口径对照数在 comparison.sliding2x3.json 的 broken_real_cells_fixed（g1=1440、g4=5760）；hanoi3 案同式：声明口径放行群破坏格 0（g1/g3 带 * 行），fixed 口径对照数在 comparison.hanoi3.json 的 broken_real_cells_fixed（g1=122、g3=630）；协议类案卷奖励全零，判定全在转移层（lightsout3 与 sliding2x3 两案奖励全零属游戏设计：原版无计分，见各自 model.json 规则引证）；③ 闸门放行群破坏格恒为 0 是<b>判据的数学性质</b>（pass 要求逐格 TV≤1e-9），不是本次运行的巧合。闸门耗时为单机量级记录，精确值在 comparison.*.json；④ <b>历史（2026-11-03 收据，保留）</b>：当时群文件只能带一个单全局 action_map，g1/g4 的对账数（500/1240）是"把 rot90 的映射强加给闭包群每个元素"的结果，闸门据此误拒三个真对称——上游 2026-11-04 逐元素 action_maps 修复后，g1/g3/g4 按各自映射逐格对账为 0 并翻案放行（收据 <code>cases/mini2048/receipts/</code>）；g2 键钉死 740 格、g5 假群 190 格照旧拒答，g6 照旧放行。mini2048 本次放行 g1/g3/g4/g6，压缩读数均为实跑轨道读数。</div>
 </section>
 
 <section>
   <h2>怎么复跑</h2>
   <div class="lead">compare 已是法庭正式子命令（纯标准库；v2 起按群声明分派口径：explicit 群原样跑、fixed/无声明群 --strict）：</div>
-  <pre style="background:#0f172a;color:#e2e8f0;border-radius:10px;padding:16px 18px;font-size:13.5px;overflow-x:auto;"># 法庭自有九案（含 mini2048 与收编五案）
+  <pre style="background:#0f172a;color:#e2e8f0;border-radius:10px;padding:16px 18px;font-size:13.5px;overflow-x:auto;"># 法庭自有十二案（含 mini2048/lightsout3/sliding2x3/hanoi3 与收编五案）
 python -X utf8 -m symmetry_court compare
 
 # 任意同格式案卷集（例：实战盲测五案的原始目录）
@@ -158,6 +162,11 @@ python -X utf8 -m symmetry_court compare --root &lt;cases目录&gt; --out &lt;�
 <section>
   <h2>滑块正控案 sliding2x3：第三个非平凡真对称正控（2026-11-04 入卷）</h2>
   <div class="lead"><b>第三种群结构、pads 正控回归</b>：2×3 棋盘是非正方形矩形，完整几何对称群是 4 阶 Klein 四元群 <b>V4 = C2 × C2</b>（恒等 / 左右镜像 / 上下镜像 / 180° 旋转）——不存在 90° 旋转，生成器穷举 720 个格子双射对邻接图逐一机器验证"恰 4 个幸存"，案卷因此集齐三种被放行的群结构：D4（mini2048、lightsout3）、D4×C2（lightsout3 g5）、V4（本案）。机理是<b>邻接</b>：一条规则——一块滑一格进相邻空位（<a href="https://en.wikipedia.org/wiki/15_puzzle">Wikipedia "15 puzzle"</a>："Tiles in the same row or column of the open position can be moved by sliding them horizontally or vertically, respectively."），棋盘镜像自带被迫的方向改名（hflip：left↔right；vflip：up↔down；rot180：两者都换）。案卷四群：g1 左右镜像 C2（explicit）<b>放行</b>，664 轨道（1.542×）；g2 同一镜像方向钉死（fixed）<b>拒答</b>，钉死口径下 1440 个行为格被改写——朴素臂看不见这道坎，闸门拦下；g3 填充态对换（fixed）<b>放行</b>，1023 轨道（1.001×）——<b>pads 正控回归</b>：本案 1024 态中 720 个真排列 + 304 个真实填充态（未用编码秩），lightsout3 无填充态案之后平凡正控恢复 pads 形态（定位如实记录：mini2048 本就配对 explicit 与真实填充态及 pads 正控，本案在 V4 结构上再次配对）；g4 全 V4（explicit，主正控）<b>放行</b>，484 轨道（2.116×）——Burnside 交叉验证 (720+0+0+0)/4 = 180 个真态轨道 + 304 个填充单点。Johnson & Story 奇偶分裂（一半起始局面无解）记录不修复：两类都是真态，BFS 实测恰达 360。收据：<code>cases/sliding2x3/receipts/</code>（引擎声明口径 live 跑）+ <code>verdicts/sliding2x3.verdict.json</code>（三方庭审）+ <code>verdicts/comparison.sliding2x3.json</code>（本页读数）。</div>
+</section>
+
+<section>
+  <h2>汉诺塔正控案 hanoi3：第四个非平凡真对称正控（2026-11-07 入卷）</h2>
+  <div class="lead"><b>第四种群结构、首个『动作 = 有序对』语义、pads 正控继续</b>：汉诺塔的柱名除恒等外别无内容，三根柱的任何重标都精确保持移动机制——完整柱重标群是 <b>S3</b>（6 阶：恒等 / 3 个对换 / 2 个轮换），生成器动态机器验证：6 个柱置换的每一个都恰有一个被迫的有序对改名（穷举全部 6! = 720 个动作排列），六个 (π, ρ(π)) 配对在全部 36 个有序对上满足同态律；两个非柱重标的假状态映射（盘对换、盘轮换）任何改名都不成立。这是本案卷第四个被放行的群结构（D4、D4×C2、V4 之后），且是第一个非交换群。<b>动作语义是首次出现的有序柱对</b> (X, Y) = "取 X 柱顶盘放到 Y 柱"（<a href="https://en.wikipedia.org/wiki/Tower_of_Hanoi">Wikipedia "Tower of Hanoi"</a>："Each move consists of taking the upper disk from one of the stacks and placing it on top of another stack or on an empty rod."），柱重标把动作按有序对一起改名 (X, Y) ↦ (πX, πY)——源文自己写明这一对称（"the problem is symmetric for permutations of the names of the pegs (symmetric group S3)"）。案卷四群：g1 A↔B 换柱 C2（explicit）<b>放行</b>，19 轨道（1.684×）——Burnside：(27+1)/2 = 14 个真态轨道（A↔B 只固定全盘在未换柱 C 上的那个态）+ 5 个填充单点；g2 同一换柱柱对钉死（fixed）<b>拒答</b>，钉死口径下 122 个行为格被改写——朴素臂看不见这道坎，闸门拦下（本案卷第 5 个有害朴素放行）；g4 填充态对换（fixed）<b>放行</b>，31 轨道（1.032×）——<b>pads 正控继续</b>：本案 32 态中 27 个真排列 + 5 个真实填充态（未用三进制秩），mini2048 g6、sliding2x3 g3 之后 pads 形态保持；g3 全 S3（explicit，主正控）<b>放行</b>，10 轨道（3.200×）——Burnside：(27+3)/6 = 5 个真态轨道（大小 3,6,6,6,6）+ 5 个填充单点。源文算术全程机器断言：每真态恰 3 个合法有序对（三个角态恰 2 个，"every node has three edges to other nodes, except the three corner nodes, which have two"）；BFS 自目标可达全部 27 真态；起点到目标恰 7 = 2³ − 1 步（"With three disks, the puzzle can be solved in seven moves"）。奖励全零属设计（谜题无计分），完成条件（整叠到 C 柱）记录在 meta.win_condition。relabel 列读法：6 动作 > 5 位，盖章 relabel 框架解析为 <b>generalized</b> 判官，从状态置换自身推导动作改名——与被迫的逐元素有序对映射重合，该列与 explicit 收据同判放行（对比 mini2048/sliding2x3 的位串诊断列拒答）。32 态在规模护栏内，陪审团自同构枚举实跑：720 个结构自同构（6 真态 S3 重标 × 5! 填充排列）对 120 个带标签自同构（5! 填充排列 × 真态恒等）——独立机器验证"带标签真态空间的自同构群恰为 S3"。收据：<code>cases/hanoi3/receipts/</code>（引擎声明口径 live 跑）+ <code>verdicts/hanoi3.verdict.json</code>（三方庭审）+ <code>verdicts/comparison.hanoi3.json</code>（本页读数）。</div>
 </section>
 
 <footer>

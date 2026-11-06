@@ -1,14 +1,14 @@
 {
  "generated": "see per-case comparison.<case>.json for provenance",
- "cases": 11,
- "groups": 41,
- "naive_admits": 21,
- "naive_harmful": 4,
- "naive_broken": 14474,
- "gate_admits": 17,
+ "cases": 12,
+ "groups": 45,
+ "naive_admits": 25,
+ "naive_harmful": 5,
+ "naive_broken": 14596,
+ "gate_admits": 20,
  "gate_broken": 0,
- "gate_explicit_groups": 8,
- "gate_seconds": 7.4,
+ "gate_explicit_groups": 10,
+ "gate_seconds": 8.8,
  "gate_admitted_broken_is_zero_by_definition": "pass requires worst_tv <= 1e-9 on every cell",
  "rows": [
   {
@@ -87,6 +87,50 @@
    "gate_saved_this_merge": false,
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 11
+  },
+  {
+   "case": "hanoi3",
+   "group": "g1_swap_ab_map.json",
+   "naive_structure_admits": true,
+   "gate_exit": 0,
+   "broken_real_cells_fixed": 122,
+   "compression_if_true": 1.684,
+   "gate_saved_this_merge": false,
+   "gate_caliber": "explicit",
+   "broken_by_gate_caliber": 0
+  },
+  {
+   "case": "hanoi3",
+   "group": "g2_swap_nomap.json",
+   "naive_structure_admits": true,
+   "gate_exit": 1,
+   "broken_real_cells_fixed": 122,
+   "compression_if_true": 1.684,
+   "gate_saved_this_merge": true,
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 122
+  },
+  {
+   "case": "hanoi3",
+   "group": "g3_s3_full.json",
+   "naive_structure_admits": true,
+   "gate_exit": 0,
+   "broken_real_cells_fixed": 630,
+   "compression_if_true": 3.2,
+   "gate_saved_this_merge": false,
+   "gate_caliber": "explicit",
+   "broken_by_gate_caliber": 0
+  },
+  {
+   "case": "hanoi3",
+   "group": "g4_pads.json",
+   "naive_structure_admits": true,
+   "gate_exit": 0,
+   "broken_real_cells_fixed": 0,
+   "compression_if_true": 1.032,
+   "gate_saved_this_merge": false,
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 0
   },
   {
    "case": "imap",

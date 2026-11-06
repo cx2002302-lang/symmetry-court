@@ -90,7 +90,7 @@ means every verdict in the repository still matches its expected record.
 Since v2, compare dispatches the caliber per group declaration (groups
 declaring `explicit` run as declared, without `--strict`; groups declaring
 `fixed` or none run `--strict`; since 2026-11-04 this includes the
-per-element `action_maps` form). Across the 11-case / 41-group ledger every
+per-element `action_maps` form). Across the 12-case / 45-group ledger every
 gate admission is zero-damage by construction. The `mini2048` case (2048
 merge mechanics, 2×2 variant, D4) is the explicit caliber's first
 real-system docket: its "should-admit" is machine-asserted by the case
@@ -108,13 +108,33 @@ court's third non-trivial positive control: a third group structure (the
 Klein four-group on a non-square rectangle, machine-verified as the full
 geometric group), and the pads positive control returns alongside the
 explicit caliber (304 real padding states, after `lightsout3`'s no-padding
-entry). The ledger's gate admissions stand at 17 with zero damage
-throughout, and the four genuinely harmful naive admits (TCP twins, 6
-cells; keys-pinned rotations and mirror, 740 + 12288 + 1440 cells) are all
-refused (see [docs/闸门价值对比.html](docs/闸门价值对比.html),
+entry). The `hanoi3` case (Tower of Hanoi move mechanics, 3-disk variant,
+S3 — 2026-11-07) is the fourth real-system docket of that caliber and the
+court's fourth non-trivial positive control: a fourth group structure (the
+full peg-relabel group S3, order 6, the first non-abelian one), and the
+docket's first entry whose action semantics is an ordered pair of rods —
+a relabeling renames the actions as ordered pairs (X, Y) ↦ (πX, πY).
+Across the 12-case / 45-group ledger, the structure-only naive
+arm would admit 25 groups, of which 5 are genuinely harmful — those 5 would
+silently rewrite 14596 real behavior cells (TCP twins, 6 cells;
+keys-pinned rotations and mirror, 740 + 12288 + 1440 cells; the
+pairs-pinned rod swap of `hanoi3`, 122 cells) — and the gate
+refuses exactly those 5. (The gate arm's 20 admissions carry zero damage,
+but that zero is guaranteed by construction, not independent evidence: by
+the criterion's definition a pass requires `worst_tv <= 1e-9` on every
+cell — receipt `gate_admitted_broken_is_zero_by_definition`;
+`compare.py:326` comments it as "zero by criterion definition" — so the
+zero is a consequence of the definition, not a separately measured
+result. On the figure "5": it is `naive_harmful`, defined at
+`compare.py:323` as `n_saved` — the count of harmful merges the gate
+caught, not the total number of naive-admitted harmful groups; the
+per-row detail keeps a separate contrast column `broken_real_cells_fixed`
+(15 of the naive-admitted rows have `>0`).) See
+[docs/闸门价值对比.html](docs/闸门价值对比.html),
 [cases/mini2048/README.md](cases/mini2048/README.md),
-[cases/lightsout3/README.md](cases/lightsout3/README.md) and
-[cases/sliding2x3/README.md](cases/sliding2x3/README.md)).
+[cases/lightsout3/README.md](cases/lightsout3/README.md),
+[cases/sliding2x3/README.md](cases/sliding2x3/README.md) and
+[cases/hanoi3/README.md](cases/hanoi3/README.md).
 
 ### How to read a verdict
 
@@ -137,12 +157,12 @@ call, and the next section is the checklist for it.
 
 ## The docket
 
-The docket holds 11 cases: five incorporated from the field-trial blind-test
+The docket holds 12 cases: five incorporated from the field-trial blind-test
 project (model/groups/generator/README copied byte-identical; their verdicts
 reconcile group-by-group with field-trial's sealed truth, 15/15 groups — see
-each case's `expected.json` provenance) and six transcribed in this
+each case's `expected.json` provenance) and seven transcribed in this
 repository (`tcp`, `dhcp`, `imap`, `mini2048`, `lightsout3`,
-`sliding2x3`). Receipt:
+`sliding2x3`, `hanoi3`). Receipt:
 `python -X utf8 -m symmetry_court list` over `cases/`. Every number below is
 backed by the named receipt file in this repository — no number here comes
 from memory.
@@ -160,6 +180,7 @@ from memory.
 | `mini2048` | 2048 merge mechanics (2×2 deterministic variant) | gabrielecirulli/2048 `js/game_manager.js` (`move()` L130-191, direction numbering L131), corroborated by Wikipedia Gameplay | 256 states (81 real + 175 padding), 4 direction keys, score rewards | rot90 with renamed keys (explicit) vs the same rotation with keys pinned (fixed) — the caliber, not the permutation, decides | reject (exit 1, worst_tv 1.0; bitstring diagnostic — see note) | reject (exit 1, worst_tv 1.0) | explicit caliber with per-element maps admits rot90/flip/D4 since 2026-11-04 (70/136/55 orbits); keys-pinned reading stays a non-symmetry (structure-only: yes) |
 | `lightsout3` | Lights Out toggle mechanics (3×3 deterministic variant) | Wikipedia "Lights Out (game)" (Gameplay + Strategy sentences) + Jaap's Puzzle Page (the rules page Wikipedia cites); 3×3 recorded as a variant boundary (the Tiger original is 5×5) | 512 states (all real, no padding), 9 buttons, rewards all zero (the source game has no score) | rot90 with renamed buttons (explicit) vs the same rotation with buttons pinned (fixed) — same group as `mini2048`, different mechanism (toggle algebra) | pass (exit 0, worst_tv 0.0; the bitstring judge's π-derived renaming coincides with the per-element button maps — see note) | reject (exit 1, worst_tv 1.0) | explicit caliber with per-element maps admits rot90/D4/D4×C2 (140/102/51 orbits), the fixed complement control passes (256 orbits); the keys-pinned rotation stays a non-symmetry (structure-only: yes) |
 | `sliding2x3` | Sliding-puzzle move mechanics (2×3 deterministic variant, n-puzzle family; Klotski is the sliding-block cognate) | Wikipedia "15 puzzle" (lead + Solvability sentences) + Wikipedia "Sliding puzzle" (lead sentences); 2×3 recorded as a variant boundary (the canonical n-puzzle is 4×4; the 8 puzzle is 3×3) | 1024 states (720 real arrangements + 304 padding), 4 slide directions, rewards all zero (the puzzle has no score) | hflip with renamed directions (explicit) vs the same mirror with directions pinned (fixed) — a third group structure: V4 on a non-square rectangle (no 90° rotation exists) | reject (exit 1, worst_tv 1.0; bitstring diagnostic — see note) | reject (exit 1, worst_tv 1.0) | explicit caliber with per-element maps admits hflip/V4 (664/484 orbits), the fixed pads control passes (1023 orbits); the directions-pinned mirror stays a non-symmetry (structure-only: yes) |
+| `hanoi3` | Tower of Hanoi move mechanics (3-disk deterministic variant) | Wikipedia "Tower of Hanoi" (lead rules + objective + minimum-moves + graph + S3-symmetry sentences); 3 disks recorded as a variant boundary (the source takes "a number of disks"; toy versions commonly 7–9) | 32 states (27 real arrangements + 5 padding), 6 ordered rod-pair actions, rewards all zero (the puzzle has no score) | A↔B rod swap with renamed ordered pairs (explicit) vs the same swap with pairs pinned (fixed) — a fourth group structure: the full peg-relabel group S3 (order 6, first non-abelian), and the docket's first ordered-pair action semantics | pass (exit 0, worst_tv 0.0; the relabel frame resolves to the generalized judge, which derives the renaming from the state permutation — see note) | reject (exit 1, worst_tv 1.0) | explicit caliber with per-element maps admits swap_ab/S3 (19/10 orbits), the fixed pads control passes (31 orbits); the pairs-pinned swap stays a non-symmetry (structure-only: yes) |
 
 Notes on the `tcp` row: the state count includes 5 padding states required by
 the engine's bit-string convention (16 total, 11 protocol states); the
@@ -294,6 +315,58 @@ structural mismatch recorded as the diagnostic column (same shape as
 skipped by the court's scale guard; the O(E) direct edge-set check is the
 primary. Case write-up with the verified 4-element map table:
 [cases/sliding2x3/README.md](cases/sliding2x3/README.md).
+
+Notes on the `hanoi3` row (2026-11-07): the deterministic move core of the
+Tower of Hanoi transcribed at 3 disks / 3 rods (A, B, C); every generating
+rule cites Wikipedia's Tower-of-Hanoi lead/rules/objective/minimum-moves/
+graph sentences in `model.json → meta.rules_with_citations`; the 3-disk
+size is a recorded variant boundary (the source takes "a number of disks";
+toy versions commonly have around 7 to 9). 32 states = 2⁵: the 3³ = 27
+disk-to-rod assignments are the real states (state = the base-3 numeral
+p0 + 3·p1 + 9·p2); ranks 27..31 are unused encoding space — **5 padding
+states** (every action self-loops, reward 0), so the pads control continues
+on this docket (after `mini2048`'s g6 and `sliding2x3`'s g3). Rewards are
+all zero by design (the puzzle has no score); the win condition (the entire
+stack on rod C, state 26) is a goal property in `meta.win_condition`, and
+the model machine-asserts the source's arithmetic on every run: every real
+state has exactly 3 legal ordered pairs except the three corner states,
+which have 2 ("every node has three edges to other nodes, except the three
+corner nodes, which have two"); BFS from the goal reaches all 27 real
+states; the start-to-goal distance is exactly 7 = 2³ − 1 ("With three
+disks, the puzzle can be solved in seven moves"). The actions are the six
+**ordered rod pairs** (X, Y) — the docket's first entry whose action
+semantics is an ordered pair rather than a named direction or button — so a
+peg relabeling renames the actions with the rods: (X, Y) ↦ (πX, πY). The
+defendant groups: g1 (the A↔B swap + per-element ordered-pair maps,
+explicit) and g3 (the FULL peg-relabel group S3 = C3 × C2, order 6 — the
+fourth non-trivial positive control of this court, the first non-abelian
+one) pass under their declared caliber (19 and 10 orbits, 1.684× and
+3.200×; Burnside: g1 real orbits (27+1)/2 = 14 — only the all-on-rod-C
+state survives the A↔B swap — plus 5 pad singletons; g3 real orbits
+(27+3)/6 = 5, sizes 3,6,6,6,6, plus 5 pad singletons). The generator
+machine-verifies S3 dynamically: every one of the 6 rod permutations has
+exactly one forced ordered-pair renaming (exhaustive over all 6! = 720
+action permutations) and the six (π, ρ(π)) pairs satisfy the homomorphism
+law over all 36 ordered pairs; two fake state maps that are not peg
+relabelings (a disk swap; a disk cycle) admit no renaming at all. g2 (the
+same swap, pairs pinned) is refused: the naive structure-only arm admits
+it, and the cell-by-cell ledger counts 122 broken (state × event) cells
+under the pinned reading. g4 — the swap of padding states 27 and 31,
+fixed — is the trivial positive control (31 orbits, 1.032×). The relabel
+column here is the court-stamped relabel frame resolving to the
+**generalized** judge (six actions cannot be indexed as bit flips of a
+5-bit state), which derives the renaming from the state permutation itself
+— coinciding with the forced per-element maps — so the column passes in
+step with the explicit receipts (contrast `mini2048`/`sliding2x3`, where
+the same frame resolves to the bitstring judge and rejects as a
+diagnostic). At 32 states the jury's automorphism-set cross-check runs
+under the court's scale guard and enumerates 720 structural automorphisms
+(6 real-state S3 relabelings × 5! padding permutations) against 120
+labeled ones (5! padding permutations × identity on the real states) — an
+independent machine verification that the labeled real state space's
+automorphism group is exactly the rod-relabel group S3. Case write-up with
+the verified 6-element map table:
+[cases/hanoi3/README.md](cases/hanoi3/README.md).
 
 ## Which "identical"? — three questions
 

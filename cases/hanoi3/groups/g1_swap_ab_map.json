@@ -1,0 +1,101 @@
+{
+ "n_states": 32,
+ "elements": [
+  [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15,
+   16,
+   17,
+   18,
+   19,
+   20,
+   21,
+   22,
+   23,
+   24,
+   25,
+   26,
+   27,
+   28,
+   29,
+   30,
+   31
+  ],
+  [
+   13,
+   12,
+   14,
+   10,
+   9,
+   11,
+   16,
+   15,
+   17,
+   4,
+   3,
+   5,
+   1,
+   0,
+   2,
+   7,
+   6,
+   8,
+   22,
+   21,
+   23,
+   19,
+   18,
+   20,
+   25,
+   24,
+   26,
+   27,
+   28,
+   29,
+   30,
+   31
+  ]
+ ],
+ "semantics": {
+  "action": "explicit",
+  "action_maps": [
+   [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   [
+    2,
+    3,
+    0,
+    1,
+    5,
+    4
+   ]
+  ]
+ },
+ "meta": {
+  "claim": "defendant A: swapping rods A and B and renaming the ordered-pair actions with the rods ('the move A->B' becomes 'the move B->A', every pair renamed (X,Y) -> (piX,piY)) preserves the puzzle exactly -- ordered pairs are bound to rod identity, so the true symmetry carries its own action renaming; declared under the explicit caliber with per-element action maps",
+  "construction": "order-2 group {id, swap_ab} as state permutations; semantics.action_maps = the per-element derived renamings, one bijection per element, parallel to elements (meta.per_element_action_maps holds the full derivation table; rho(identity)=id; the homomorphism law is asserted by this generator and re-checked by the engine at load)",
+  "why_it_is_a_symmetry": "the move rule is defined through rod identity alone (upper disk of the source rod, larger-or-empty target); swapping the rods and renaming the ordered pairs commutes with every move on every one of the 32 states (asserted exhaustively by the generator over all 6! = 720 ordered-pair permutations, exactly one valid map per element)",
+  "caliber_note": "explicit declaration: the ordered-pair names are bound to rod identity ('take rod A's upper disk to rod B'), so they travel with the rod swap",
+  "regenerate": "python -X utf8 cases/hanoi3/make_hanoi3.py"
+ }
+}

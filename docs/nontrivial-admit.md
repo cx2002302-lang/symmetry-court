@@ -238,8 +238,9 @@ The docket rows in `README.md` / `README.zh-CN.md` and
   `verdicts/comparison.mini2048.json` — the gate-value ledger rows quoted
   in §4; `verdicts/comparison.summary.json` — the docket totals (at this
   document's writing 9 cases / 32 groups; since 2026-11-04 the ledger also
-  carries `lightsout3` — 10 cases / 37 groups, see §9 — and
-  `sliding2x3` — 11 cases / 41 groups, see §10).
+  carries `lightsout3` — 10 cases / 37 groups, see §9 —,
+  `sliding2x3` — 11 cases / 41 groups, see §10 — and, since 2026-11-07,
+  `hanoi3` — 12 cases / 45 groups, see §11).
 - `cases/mini2048/README.md` (+ `README.zh-CN.md`) — the case's own
   diagnostic write-up, including the verified 8-element map table.
 
@@ -349,3 +350,83 @@ permutations** asserts exactly one ρ(π) per element plus the
 homomorphism law on every run (`--check`, exit 0); it also pre-registers
 the fake control readings (a cyclic column shift and a top-row left swap
 admit no ρ at all) without spending group files on them.
+
+## 11. The fourth non-trivial admit: `hanoi3` (2026-11-07)
+
+The explicit caliber's fourth real-system filing, a fourth group
+structure, and the docket's first entry whose **action semantics is an
+ordered pair**: a Tower of Hanoi action is not a named direction or button
+but the ordered pair of rods (X, Y) — "take the upper disk of rod X, place
+it on rod Y" ("Each move consists of taking the upper disk from one of the
+stacks and placing it on top of another stack or on an empty rod." —
+Wikipedia, "Tower of Hanoi"). Rod names carry no geometry beyond their
+identity, so every relabeling of the three rods preserves the mechanics:
+the peg-relabel group is the full symmetric group **S3** (order 6: identity,
+3 transpositions, 2 three-cycles) — the first non-abelian structure
+admitted on this docket, after D4 (mini2048, lightsout3), D4 × C2
+(lightsout3's g5) and V4 (sliding2x3). The source itself states the
+symmetry in solution terms: *"the problem is symmetric for permutations of
+the names of the pegs (symmetric group S3)."* A relabeling renames the
+actions as ordered pairs (X, Y) ↦ (πX, πY), the renaming is forced per
+element, and π ↦ ρ(π) is a group homomorphism.
+
+The case transcribes the 3-disk deterministic variant with citations to
+Wikipedia's Tower-of-Hanoi article; 32 states = 2⁵, of which the 3³ = 27
+disk-to-rod assignments are real (state = the base-3 numeral p0 + 3·p1 +
+9·p2) and 5 unused ranks are **real padding states** (every action
+self-loops, reward 0). Rewards all zero by design (the puzzle has no
+score); the win condition (the entire stack on rod C, state 26) is a goal
+property in `meta.win_condition`. The generator machine-asserts the
+source's arithmetic on every run: every real state has exactly 3 legal
+ordered pairs except the three corner states, which have 2 ("every node
+has three edges to other nodes, except the three corner nodes, which have
+two"); BFS from the goal reaches all 27 real states; the start-to-goal
+distance is exactly 7 = 2³ − 1 ("With three disks, the puzzle can be
+solved in seven moves").
+
+What the case adds, receipt-backed (`cases/hanoi3/receipts/`,
+`verdicts/hanoi3.verdict.json`, `verdicts/comparison.hanoi3.json`;
+gate replay: 450 contract fields green, 2026-11-07):
+
+- **g3_s3_full (S3, 6 elements) — pass** under its declared per-element
+  maps, worst_tv 0.0, `homomorphism_checked: full`: the fourth non-trivial
+  positive control. **10 orbits** (compression 3.200×) — computed live,
+  not projected (Burnside over the real states: identity fixes 27, each
+  transposition fixes the 1 all-on-the-unswapped-rod state, each rotation
+  fixes nothing, so (27+3)/6 = 5 real orbits of sizes 3,6,6,6,6, plus 5
+  fixed padding singletons).
+- **g1_swap_ab_map (order 2)** — pass, **19 orbits** (1.684×): real
+  orbits (27+1)/2 = 14, plus 5 pad singletons.
+- **g4_pads (fixed, positive control)** — pass, 31 orbits (1.032×): the
+  pads swap continues on this docket after `mini2048`'s g6 and
+  `sliding2x3`'s g3.
+- **g2_swap_nomap (fixed)** — reject, as it should be: with the ordered
+  pairs pinned the claim is genuinely false, and the cell-by-cell ledger
+  counts **122** broken (state × event) cells (`broken_real_cells_fixed`)
+  — the naive structure-only arm admits this merge; the gate refuses it
+  (the docket's fifth harmful naive admit).
+
+The relabel column reads differently from the previous two puzzle cases:
+at 6 actions on a 5-bit model the court-stamped relabel frame resolves to
+the **generalized** judge (six actions cannot be indexed as bit flips of a
+5-bit state, so no bitstring reading arises), which derives the action
+renaming from the state permutation itself — coinciding with the forced
+per-element ordered-pair maps — so the column passes in step with the
+explicit receipts (contrast `mini2048`/`sliding2x3`, where the same frame
+resolves to the bitstring judge and rejects as a diagnostic). At 32 states
+the jury's automorphism-set cross-check runs under the court's scale
+guard: **720 structural automorphisms** (6 real-state S3 relabelings × 5!
+padding permutations) against **120 labeled** ones (5! padding
+permutations × identity on the real states) — an independent machine
+verification that the labeled real state space's automorphism group is
+exactly the rod-relabel group S3.
+
+The generator (`cases/hanoi3/make_hanoi3.py`) runs this case's method at
+6 actions: exhaustive search over **all 6! = 720 ordered-pair
+permutations** asserts exactly one ρ(π) per element plus the homomorphism
+law over all **36 ordered pairs** of S3 on every run (`--check`, exit 0);
+it also pre-registers the fake control readings (a rod-wise disk swap and
+a disk cycle admit no ρ at all — sizes are attached to disk identity, not
+positions) without spending group files on them, and cross-validates the
+legal-move function against an independent stack-based implementation on
+every (state, action) pair.

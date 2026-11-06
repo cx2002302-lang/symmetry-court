@@ -1,0 +1,93 @@
+{
+ "case": "hanoi3",
+ "provenance": {
+  "recorded": "2026-11-07, observed from a live three-way arbitration run (`python -X utf8 -m symmetry_court arbitrate --emit-expected-template`); the receipt is verdicts/hanoi3.verdict.json; the gate (`python -X utf8 -m symmetry_court selftest`) replays the case and compares these rows field-by-field",
+  "reading_guide": "relabel row = engine's relabel frame (court-stamped copy; on this 6-action/5-bit model that frame resolves to the generalized judge -- six actions cannot be indexed as bit flips of a 5-bit state -- which derives the action renaming from the state permutation, coinciding with the forced per-element ordered-pair maps, so the column passes in step with the explicit receipts); fixed row = ordered pairs pinned (--strict); the explicit declarations of g1/g3 are adjudicated by the vendored engine directly (receipts in receipts/) and by the compare subcommand's declared-caliber gate arm; networkx columns = independent juror (at 32 states the automorphism-set cross-check runs under the court's scale guard, and the O(E) direct edge-set check remains the primary)"
+ },
+ "groups": {
+  "g1_swap_ab_map": {
+   "claim": "defendant A: swapping rods A and B and renaming the ordered-pair actions with the rods ('the move A->B' becomes 'the move B->A', every pair renamed (X,Y) -> (piX,piY)) preserves the puzzle exactly -- ordered pairs are bound to rod identity, so the true symmetry carries its own action renaming; declared under the explicit caliber with per-element action maps",
+   "relabel": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "generalized",
+    "note": "court-stamped relabel frame resolves to the generalized judge on this 6-action/5-bit model (six actions cannot be indexed as bit flips of a 5-bit state, so no bitstring reading arises); the generalized judge derives the action renaming from the state permutation itself, which coincides with the forced per-element ordered-pair maps, so the column passes in step with the explicit receipts (contrast mini2048/sliding2x3, where the same frame resolves to the bitstring judge and rejects as a diagnostic)"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict"
+   },
+   "networkx": {
+    "structure_symmetry": true,
+    "labeled_symmetry": false
+   },
+   "note": "the explicit declaration is adjudicated by the vendored engine directly (receipts/check.g1_swap_ab_map.json, engine run without --strict: pass, worst_tv 0.0, homomorphism_checked full) and by the compare subcommand's declared-caliber gate arm; the relabel column here resolves to the generalized judge, which derives the action renaming from the state permutation itself -- on this model that derivation coincides with the forced per-element ordered-pair maps, so the column passes in step with the explicit receipts (contrast mini2048/sliding2x3, where the same frame resolves to the bitstring judge and rejects as a diagnostic; contrast lightsout3, where 9 actions = 9 bits made the bitstring derivation coincide with the per-element button maps); the fixed column is the pairs-pinned contrast"
+  },
+  "g2_swap_nomap": {
+   "claim": "defendant B: the same A<->B rod swap with the ordered pairs PINNED (the move A->B must stay the move A->B) -- the naive-intuition claim that 'the tower looks the same with the rods relabeled', filed deliberately under the fixed caliber to show it is the ordered-pair renaming, not the state permutation, that makes defendant A true",
+   "relabel": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "generalized",
+    "note": "court-stamped relabel frame resolves to the generalized judge on this 6-action/5-bit model (six actions cannot be indexed as bit flips of a 5-bit state, so no bitstring reading arises); the generalized judge derives the action renaming from the state permutation itself, which coincides with the forced per-element ordered-pair maps, so the column passes in step with the explicit receipts (contrast mini2048/sliding2x3, where the same frame resolves to the bitstring judge and rejects as a diagnostic)"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict",
+    "note": "ordered pairs pinned: the rod-swap claim is genuinely false under this caliber (TV 1.0 -- the relabeled tower answers the move A->B with a move between unswapped rods, 1/2 elements failing); the relabel column passes here because the generalized judge derives the renaming from the state permutation -- the caliber, not the permutation, decides (compare mini2048's g1/g2 pair, where the bitstring judge rejected both)"
+   },
+   "networkx": {
+    "structure_symmetry": true,
+    "labeled_symmetry": false
+   }
+  },
+  "g4_pads": {
+   "claim": "positive control: padding states 27 and 31 have the same behavior shape (every action a single self-loop, reward 0), so the swap is a genuine symmetry under the pinned-pair reading and should be admitted everywhere",
+   "relabel": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "generalized",
+    "note": "court-stamped relabel frame resolves to the generalized judge on this 6-action/5-bit model (six actions cannot be indexed as bit flips of a 5-bit state, so no bitstring reading arises); the generalized judge derives the action renaming from the state permutation itself, which coincides with the forced per-element ordered-pair maps, so the column passes in step with the explicit receipts (contrast mini2048/sliding2x3, where the same frame resolves to the bitstring judge and rejects as a diagnostic)"
+   },
+   "fixed": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "strict",
+    "note": "fixed-caliber positive control: the two padding rows are the same behavior shape (every action a single self-loop with reward 0) and reference no rod, so the pinned reading is the true reading; this case has 5 real padding states (unused base-3 ranks 27..31), so the pads swap continues on the docket (see the group file's note)"
+   },
+   "networkx": {
+    "structure_symmetry": true,
+    "labeled_symmetry": true
+   }
+  },
+  "g3_s3_full": {
+   "claim": "main positive control: the FULL peg-relabel group S3 = C3 x C2 (order 6: identity, swaps A<->B / A<->C / B<->C, rotations A->B->C->A / A->C->B->A), each element carrying its own ordered-pair renaming (X,Y) -> (piX,piY) -- the fourth non-trivial positive control of this court, after mini2048's D4, lightsout3's D4 and sliding2x3's V4, the first non-abelian one, and the docket's first entry whose action space is ordered rod pairs",
+   "relabel": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "generalized",
+    "note": "court-stamped relabel frame resolves to the generalized judge on this 6-action/5-bit model (six actions cannot be indexed as bit flips of a 5-bit state, so no bitstring reading arises); the generalized judge derives the action renaming from the state permutation itself, which coincides with the forced per-element ordered-pair maps, so the column passes in step with the explicit receipts (contrast mini2048/sliding2x3, where the same frame resolves to the bitstring judge and rejects as a diagnostic)"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict"
+   },
+   "networkx": {
+    "structure_symmetry": true,
+    "labeled_symmetry": false
+   },
+   "note": "the explicit declaration is adjudicated by the vendored engine directly (receipts/check.g3_s3_full.json, engine run without --strict: pass, worst_tv 0.0, homomorphism_checked full) and by the compare subcommand's declared-caliber gate arm; the relabel column here resolves to the generalized judge, which derives the action renaming from the state permutation itself -- on this model that derivation coincides with the forced per-element ordered-pair maps, so the column passes in step with the explicit receipts (contrast mini2048/sliding2x3, where the same frame resolves to the bitstring judge and rejects as a diagnostic; contrast lightsout3, where 9 actions = 9 bits made the bitstring derivation coincide with the per-element button maps); the fixed column is the pairs-pinned contrast"
+  }
+ }
+}

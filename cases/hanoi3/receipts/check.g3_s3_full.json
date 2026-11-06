@@ -1,0 +1,98 @@
+{
+ "command": "check",
+ "verdict": "pass",
+ "exit_code": 0,
+ "reason": "两层判据均通过：转移等变（max TV=0.00e+00 ≤ tol=1e-09）+ 奖励剖面（n_bad=0）",
+ "note": null,
+ "semantics": {
+  "action": "explicit",
+  "judge": "explicit",
+  "declared": true,
+  "assumed": false,
+  "source": "group_file",
+  "action_maps": [
+   [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   [
+    1,
+    0,
+    4,
+    5,
+    2,
+    3
+   ],
+   [
+    2,
+    3,
+    0,
+    1,
+    5,
+    4
+   ],
+   [
+    3,
+    2,
+    5,
+    4,
+    0,
+    1
+   ],
+   [
+    4,
+    5,
+    1,
+    0,
+    3,
+    2
+   ],
+   [
+    5,
+    4,
+    3,
+    2,
+    1,
+    0
+   ]
+  ],
+  "homomorphism_checked": "full"
+ },
+ "semantics_assumed": false,
+ "n_bits": 5,
+ "n_states": 32,
+ "n_actions": 6,
+ "group": {
+  "n_states": 32,
+  "order": 6,
+  "n_orbits": 10,
+  "compression": 3.2,
+  "input_elements": 6,
+  "unique_elements": 6,
+  "duplicates_dropped": 0,
+  "input_was_closed_group": true,
+  "elements_added_by_closure": 0,
+  "generators_found": 2
+ },
+ "layer_transition": {
+  "passed": true,
+  "tol": 1e-09,
+  "mode": "all_elements",
+  "judge": "explicit",
+  "n_checked": 6,
+  "n_failed": 0,
+  "worst_tv": 0.0,
+  "worst_tv_is_inf": false,
+  "first_bad": null
+ },
+ "layer_reward_profile": {
+  "passed": true,
+  "n_pair": 63,
+  "n_bad": 0,
+  "sec": 0.0
+ }
+}

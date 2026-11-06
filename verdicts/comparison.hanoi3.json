@@ -1,0 +1,158 @@
+{
+ "case": "hanoi3",
+ "provenance": {
+  "gate": "vendored wuxing_gua check, caliber per group declaration (compare v2; per-element action_maps recognized since 2026-11-04): groups declaring semantics.action=explicit with a valid action_map (single, legacy) or action_maps (per-element) run as declared (no --strict); groups declaring fixed or no declaration run --strict (live run)",
+  "naive_arm": "structure-only edge-set invariance proxy (see module docstring)",
+  "damage": "cell-by-cell ledger over model trans, same caliber as the gate arm per group (explicit groups: events renamed per the declared mapping — per-element groups use each element's own map; others: event names pinned); fixed-caliber damage kept per row in broken_real_cells_fixed for contrast"
+ },
+ "summary": {
+  "case": "hanoi3",
+  "n_states": 32,
+  "n_actions": 6,
+  "n_groups": 4,
+  "naive_admits": 4,
+  "naive_harmful_admits": 1,
+  "naive_broken_real_cells": 122,
+  "gate_admits": 3,
+  "gate_admitted_broken_cells": 0,
+  "gate_saved_merges": 1,
+  "gate_explicit_groups": 2,
+  "gate_total_seconds_rounded": 0.8
+ },
+ "rows": [
+  {
+   "group": "g1_swap_ab_map.json",
+   "claim": "defendant A: swapping rods A and B and renaming the ordered-pair actions with the rods ('the move A->B' becomes 'the move B->A', every pair renamed (X,Y) -> (piX,piY)) preserves the puzzle exactly -- ordered pairs are bound to rod identity, so the true symmetry carries its own action renaming; declared under the explicit caliber with per-element action maps",
+   "naive_structure_admits": true,
+   "gate_exit": 0,
+   "gate_verdict": "pass",
+   "gate_admits": true,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 122,
+   "real_cells": 192,
+   "would_be_orbits_if_merged": 19,
+   "compression_if_true": 1.684,
+   "gate_saved_this_merge": false,
+   "gate_strict": false,
+   "damage_caliber": "explicit",
+   "declared_action_map_kind": "per_element",
+   "declared_action_map": null,
+   "declared_action_maps": [
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5
+    ],
+    [
+     2,
+     3,
+     0,
+     1,
+     5,
+     4
+    ]
+   ],
+   "broken_real_cells_declared": 0
+  },
+  {
+   "group": "g2_swap_nomap.json",
+   "claim": "defendant B: the same A<->B rod swap with the ordered pairs PINNED (the move A->B must stay the move A->B) -- the naive-intuition claim that 'the tower looks the same with the rods relabeled', filed deliberately under the fixed caliber to show it is the ordered-pair renaming, not the state permutation, that makes defendant A true",
+   "naive_structure_admits": true,
+   "gate_exit": 1,
+   "gate_verdict": "reject",
+   "gate_admits": false,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 122,
+   "real_cells": 192,
+   "would_be_orbits_if_merged": 19,
+   "compression_if_true": 1.684,
+   "gate_saved_this_merge": true
+  },
+  {
+   "group": "g3_s3_full.json",
+   "claim": "main positive control: the FULL peg-relabel group S3 = C3 x C2 (order 6: identity, swaps A<->B / A<->C / B<->C, rotations A->B->C->A / A->C->B->A), each element carrying its own ordered-pair renaming (X,Y) -> (piX,piY) -- the fourth non-trivial positive control of this court, after mini2048's D4, lightsout3's D4 and sliding2x3's V4, the first non-abelian one, and the docket's first entry whose action space is ordered rod pairs",
+   "naive_structure_admits": true,
+   "gate_exit": 0,
+   "gate_verdict": "pass",
+   "gate_admits": true,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 630,
+   "real_cells": 192,
+   "would_be_orbits_if_merged": 10,
+   "compression_if_true": 3.2,
+   "gate_saved_this_merge": false,
+   "gate_strict": false,
+   "damage_caliber": "explicit",
+   "declared_action_map_kind": "per_element",
+   "declared_action_map": null,
+   "declared_action_maps": [
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5
+    ],
+    [
+     1,
+     0,
+     4,
+     5,
+     2,
+     3
+    ],
+    [
+     2,
+     3,
+     0,
+     1,
+     5,
+     4
+    ],
+    [
+     3,
+     2,
+     5,
+     4,
+     0,
+     1
+    ],
+    [
+     4,
+     5,
+     1,
+     0,
+     3,
+     2
+    ],
+    [
+     5,
+     4,
+     3,
+     2,
+     1,
+     0
+    ]
+   ],
+   "broken_real_cells_declared": 0
+  },
+  {
+   "group": "g4_pads.json",
+   "claim": "positive control: padding states 27 and 31 have the same behavior shape (every action a single self-loop, reward 0), so the swap is a genuine symmetry under the pinned-pair reading and should be admitted everywhere",
+   "naive_structure_admits": true,
+   "gate_exit": 0,
+   "gate_verdict": "pass",
+   "gate_admits": true,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 0,
+   "real_cells": 192,
+   "would_be_orbits_if_merged": 31,
+   "compression_if_true": 1.032,
+   "gate_saved_this_merge": false
+  }
+ ]
+}
