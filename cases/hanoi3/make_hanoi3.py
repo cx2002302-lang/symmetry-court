@@ -966,7 +966,7 @@ def build_model(sym, tags):
                 "machine-asserted BFS distance); the puzzle does not lock "
                 "on the goal, so it is an ordinary state of the transition "
                 "system and goals=[] in this model" % (GOAL_STATE,
-                                                        dist[GOAL_STATE])),
+                                                       dist[START_STATE])),
             "rules_with_citations": RULES,
             "edge_rule_tags": {
                 "layout": (
