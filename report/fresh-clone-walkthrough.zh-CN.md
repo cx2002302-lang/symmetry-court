@@ -175,6 +175,30 @@ argparse 把 `--case` 唯一前缀匹配到 `--cases-dir`，工具报
 关于 networkx 是唯一安装（引擎 vendored 且零依赖）的说法与 `pyproject.toml`
 及 §2 的 vendored 重哈希行相符。
 
+> **已解（2026-11-07）——F2 空环境演练完成。** 依赖安装步在项目外临时目录的
+> 一次性 venv 中重跑（`python -X utf8 -m venv <temp>/venv`；全新解释器唯一的
+> 包是 pip 25.0.1——无 networkx，别无他物），quick start 随后在本 HEAD
+> （`9c074ce`，开跑前 `git status --porcelain` 为空）的新鲜 clone 内、仅用该
+> venv 解释器重跑。命令序列全部退出码 0：`python -X utf8 -m pip install
+> networkx` → `Successfully installed networkx-3.7`；随后为封死缓存捷径，
+> 卸载后以 `python -X utf8 -m pip install --no-cache-dir networkx` 重装
+> （缓存被禁后 pip 无本地 wheel 可退，跑的就是从零抓取本身）→ 退出码 0。
+> 终态环境：networkx 3.7 + pip 25.0.1，别无他物。quick start 的单案序列随后
+> 在 networkx 3.7 下实跑，全部退出码 0：`list`（12 案全 `expected=yes
+> verdict=yes`；引擎 vendored 在位，selftest 内 NOTICE 清单重哈希通过）、
+> `selftest`（`SELFTEST PASS（重放契约字段 450 个）`）、`arbitrate --case
+> tcp`（1 案受审；双生子行为 relabel pass / fixed reject / nx 分列，与案卷
+> 一致）、`discover --case tcp`（阶 120 = 5!、12 条精确轨道、闸门臂 pass、
+> 4/4 expected 对账、冒烟双向成立）。与已提交收据逐叶对账（无任何排除）：
+> 三份 `tcp` 收据共 4581 个叶子字段，4574 一致、7 处差异——两处
+> `generated_utc` 时间戳、一处 `sealed_truth.reason` 调用说明、三处随运行
+> 而变的计时字段（量级不变；精确值以各收据的 `timing_seconds` 为准），另有
+> 一处新的如实观察：`tcp.verdict.json → tools.networkx` 已提交版记
+> `3.6.1`、实跑版记 `3.7`——该字段记录的是真正参与运行的陪审库版本；陪审库
+> 领先一个大版本，全部 verdict、tv、判语叶子仍逐叶一致。candidate 群文件
+> 重生成字节全等（sha256 一致）。本次全程无一处 `Requirement already
+> satisfied`：依赖步已在空环境中验证。
+
 观察（非摩擦）：(a) 三份收据中唯一非确定性的叶子就是上面两个
 `generated_utc` 与一处 `sealed_truth.reason` 字符串；(b) 本次走查实测耗时
 量级——selftest 低段个位数分钟，单案 arbitrate 秒级，单案 discover 一秒
