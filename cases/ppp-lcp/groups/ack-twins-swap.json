@@ -1,0 +1,53 @@
+{
+ "n_states": 16,
+ "elements": [
+  [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15
+  ],
+  [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   8,
+   7,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15
+  ]
+ ],
+ "semantics": {
+  "action": "fixed"
+ },
+ "meta": {
+  "claim": "defendant A (claim): the negotiation automaton is initiator/responder symmetric at the Ack twins -- Ack-Rcvd and Ack-Sent are the two one-step-from-Open states, and sec.4.2 describes them in near-verbatim mirror sentences: 'Ack-Received': 'a Configure-Request has been sent and a Configure-Ack has been received. The Restart timer is still running, since a Configure-Ack has not yet been sent' (snapshot txt:945-949) vs 'Ack-Sent': 'a Configure-Request and a Configure-Ack have both been sent, but a Configure-Ack has not yet been received. The Restart timer is running' (snapshot txt:951-956) -- so swapping states 7 <-> 8 with every other state fixed should map the negotiation race onto itself.",
+  "construction": "order-2 group swapping Ack-Rcvd <-> Ack-Sent (states 7 <-> 8); all other states fixed",
+  "why_it_looks_legal": "both twins sit between Req-Sent and Opened with the Restart timer running, both drain to Stopped on TO-/RXJ- (txt:789, txt:801) and to Closing on Close (txt:786), and both fall to Starting on Down (txt:784) -- the sec.4.2 sentences are mirror-written",
+  "why_it_is_not_a_symmetry": "the table breaks the swap even before event names are pinned: among declared cells Ack-Rcvd has 6 edges into Req-Sent (TO+ txt:788, RCA txt:793, RCN txt:794, RTR txt:796, RTA txt:797, RXJ+ txt:800) and 4 self-loops (Open txt:785, RCR- txt:792, RUC txt:799, RXR txt:803), while Ack-Sent has 2 edges into Req-Sent (RCR- txt:792, RTR txt:796) and 8 self-loops (Open, TO+, RCR+, RCN, RTA, RUC, RXJ+, RXR -- txt:785-803); a swap cannot map 6-to-Req-Sent onto 2-to-Req-Sent. The direction of completion also flips: Ack-Rcvd finishes on RCR+ (sca,tlu/9 txt:791) while Ack-Sent finishes on RCA (irc,tlu/9 txt:793)",
+  "engineering_anchor": "the twin reading is how one shared table serves both negotiation roles: whoever still owes the Configure-Ack is the mirror of whoever still waits for it (sec.4.2 txt:945-956); the RFC itself flags the crossed case as an anomaly, not a symmetry (footnote x, txt:822)",
+  "semantics_note": "event-class model: semantics declared \"fixed\" (protocol-true reading); the relabel row is the diagnostic contrast reading",
+  "regenerate": "python -X utf8 field-trial2/cases/ppp-lcp/make_ppp_lcp.py"
+ }
+}

@@ -1,0 +1,37 @@
+{
+ "n_states": 8,
+ "elements": [
+  [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  [
+   0,
+   2,
+   1,
+   3,
+   4,
+   5,
+   6,
+   7
+  ]
+ ],
+ "semantics": {
+  "action": "fixed"
+ },
+ "meta": {
+  "claim": "defendant A (claim): the two TCP-acquisition states are twins -- Connect is 'waiting for the TCP connection to be completed' (snapshot txt:3012-3013) and Active is 'trying to acquire a peer by listening for, and accepting, a TCP connection' (txt:3257-3258) -- and they run the same machinery: both drop to Idle on ManualStop (txt:3017-3036 / txt:3262-3278), both enter OpenSent on DelayOpenTimer expiry and on TCP success (txt:3054-3061 + txt:3089-3100 / txt:3292-3313 + txt:3340-3350), both reach OpenConfirm on a delayed OPEN (Event 20; txt:3127-3161 / txt:3378-3404), both sink to Idle on TcpConnectionFails (txt:3117-3125 / txt:3355-3376) -- so swapping states 1 <-> 2 should map the connection-establishment half of the FSM onto itself.",
+  "construction": "order-2 group swapping Connect <-> Active (states 1 <-> 2); all other states fixed",
+  "why_it_looks_legal": "sec.8.2.1.1 says the roles converge: 'When a BGP speaker is configured as active, it may end up on either the active or passive side of the connection that eventually gets established. Once the TCP connection is completed, it doesn't matter which end was active and which was passive' (snapshot txt:2870-2874); the two state paragraphs are near-parallel prose, and the TCP-failure exits both read 'changes its state to Idle'",
+  "why_it_is_not_a_symmetry": "the swap fails on named edges: (a) the start fan-in is attribute-linked -- Idle reaches Connect through Events 1/3 (txt:2947-2962) and Active through Events 4/5 (txt:2975-2988), so the swap demands Idle --Event 1--> Active, which no paragraph declares; (b) OpenSent's TcpConnectionFails (Event 18) exits to Active only (txt:3569-3579) -- the swap demands a mirror exit to Connect, which does not exist; (c) the retry-restart rows point differently -- in Connect, Event 9 'stays in the Connect state' (txt:3052), in Active it 'changes its state to Connect' (txt:3290), so the swap demands Active --Event 9--> Active; (d) renaming cannot repair (c): Connect declares three self-transitions under Events 9/14/15 (txt:3052, txt:3063-3069) while Active declares only two, under Events 14/15 (txt:3318-3324) -- any action renaming would have to send three distinct Connect self-transitions onto Active's two self-transition events, a pigeonhole with no solution",
+  "engineering_anchor": "the active/passive distinction is a TCP-layer role, not a second machine: sec.8.2.1 defines outgoing/incoming connections (txt:2828-2832) and the difference ends at 'which side of the TCP connection has port number 179' (txt:2874-2875); the FSM keeps the two states distinct exactly because the listening side never dials -- the optional-event split (Events 1/3 vs 4/5) is the RFC's own machine-readable form of that distinction",
+  "semantics_note": "event-class model: semantics declared \"fixed\" (protocol-true reading); the relabel row is the diagnostic contrast reading",
+  "regenerate": "python -X utf8 field-trial2/cases/bgp-fsm/make_bgp_fsm.py"
+ }
+}

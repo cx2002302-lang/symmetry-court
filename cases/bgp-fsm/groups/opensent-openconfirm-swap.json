@@ -1,0 +1,36 @@
+{
+ "n_states": 8,
+ "elements": [
+  [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  [
+   0,
+   1,
+   2,
+   4,
+   3,
+   5,
+   6,
+   7
+  ]
+ ],
+ "semantics": {
+  "action": "fixed"
+ },
+ "meta": {
+  "claim": "defendant C: OpenSent and OpenConfirm are the two mid-negotiation states -- OpenSent 'waits for an OPEN message from its peer' (txt:3497) and OpenConfirm 'waits for a KEEPALIVE or NOTIFICATION message' (txt:3710); both drain to Idle on the administrative and hold-time events in the same prose pattern ('changes its state to Idle' per paragraph, txt:3502-3558 / txt:3715-3773) -- so maybe states 3 <-> 4 can be swapped alone",
+  "construction": "order-2 group swapping OpenSent <-> OpenConfirm (states 3 <-> 4) only",
+  "why_it_looks_legal": "both states sit between the OPEN exchange and session establishment, both are entered from the TCP-acquisition half, and both carry the same paragraph skeleton of NOTIFICATION-plus-Idle drains",
+  "why_it_is_not_a_symmetry": "their completion edges point at different shores: OpenSent's Event 19 (BGPOpen) advances to OpenConfirm (txt:3591-3606) while OpenConfirm's Event 19 drops to Idle (collision branch, txt:3828-3846); OpenSent's Event 18 (TcpConnectionFails) escapes to Active (txt:3569-3579) while OpenConfirm's Event 18 drops to Idle (txt:3792-3815); and OpenConfirm's Event 26 advances to Established (txt:3898-3903) while OpenSent's Event 26 lands in the FSM-error catch-all --> Idle (txt:3682-3706) -- the swap also demands an OpenSent --Event 26--> Established edge and an OpenConfirm --Event 19--> OpenConfirm edge, neither of which any paragraph declares",
+  "semantics_note": "control group: the transcription says the swap breaks at the structure level (Events 18/19/26 targets differ); the verdict rows live in expected.json and come from the arbitration run, not from this note",
+  "regenerate": "python -X utf8 field-trial2/cases/bgp-fsm/make_bgp_fsm.py"
+ }
+}

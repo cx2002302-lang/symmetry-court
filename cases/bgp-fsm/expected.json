@@ -1,0 +1,86 @@
+{
+ "case": "bgp-fsm",
+ "provenance": {
+  "recorded": "2026-11-08 adoption into the official docket: the case bundle was copied byte-identical from the field-trial2 blind-trial round-2 case directory (8/8 files sha256-equal at copy time; oracle-input hashes match field-trial2/sealed/manifest.json), then the rows below were re-observed live in this repository via `python -X utf8 -m symmetry_court arbitrate --emit-expected-template --case bgp-fsm` -- relabel/fixed are this run's measured rows, field-for-field identical to the round-2 records; the receipt is verdicts/bgp-fsm.verdict.json; the gate (`python -X utf8 -m symmetry_court selftest`) replays the case and compares these rows field-by-field",
+  "reading_guide": "relabel row = actions may be renamed along with states (diagnostic contrast reading for an event-class model); fixed row = event names pinned (the protocol-true reading, declared in each group file); networkx columns = independent juror",
+  "networkx_source": "networkx columns are carried from the field-trial2 sealed truth (field-trial2/sealed/bgp-fsm.truth.json, independent oracle w2-independent-oracle, write-once after sealing 2026-11-07T18:34:44Z, sha256 listed in field-trial2/sealed/manifest.json); the round-2 unsealing reconciliation matched the tool on 60/60 checks (12 candidate groups x 5 axes: fixed / relabel / binding / networkx-structure / networkx-labeled; false positives 0, false negatives 0; report: field-trial2/report/reconciliation.md), and this adoption run's live networkx jury reproduced the same two columns for all 4 groups"
+ },
+ "groups": {
+  "connect-active-swap": {
+   "claim": "defendant A (claim): the two TCP-acquisition states are twins -- Connect is 'waiting for the TCP connection to be completed' (snapshot txt:3012-3013) and Active is 'trying to acquire a peer by listening for, and accepting, a TCP connection' (txt:3257-3258) -- and they run the same machinery: both drop to Idle on ManualStop (txt:3017-3036 / txt:3262-3278), both enter OpenSent on DelayOpenTimer expiry and on TCP success (txt:3054-3061 + txt:3089-3100 / txt:3292-3313 + txt:3340-3350), both reach OpenConfirm on a delayed OPEN (Event 20; txt:3127-3161 / txt:3378-3404), both sink to Idle on TcpConnectionFails (txt:3117-3125 / txt:3355-3376) -- so swapping states 1 <-> 2 should map the connection-establishment half of the FSM onto itself.",
+   "relabel": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "generalized"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict"
+   },
+   "networkx": {
+    "structure_symmetry": false,
+    "labeled_symmetry": false
+   }
+  },
+  "openconfirm-established-swap": {
+   "claim": "defendant B: OpenConfirm and Established are the two session-live states -- both answer ManualStop, AutomaticStop and HoldTimer expiry with a NOTIFICATION and a drop to Idle (txt:3715-3746, txt:3748-3773 / txt:3940-3974, txt:3988-4005), both keep the session alive on their periodic machinery (OpenConfirm 'remains in the OpenConfirmed state' on Event 11, txt:3775-3782; Established 'remains in the Established state' on Events 26/27, txt:4095-4111), and both sink to Idle on NOTIFICATION or TCP failure (txt:3792-3826 / txt:4064-4078) -- so maybe states 4 <-> 5 can be swapped alone",
+   "relabel": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "generalized"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict"
+   },
+   "networkx": {
+    "structure_symmetry": false,
+    "labeled_symmetry": false
+   }
+  },
+  "opensent-openconfirm-swap": {
+   "claim": "defendant C: OpenSent and OpenConfirm are the two mid-negotiation states -- OpenSent 'waits for an OPEN message from its peer' (txt:3497) and OpenConfirm 'waits for a KEEPALIVE or NOTIFICATION message' (txt:3710); both drain to Idle on the administrative and hold-time events in the same prose pattern ('changes its state to Idle' per paragraph, txt:3502-3558 / txt:3715-3773) -- so maybe states 3 <-> 4 can be swapped alone",
+   "relabel": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "generalized"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict"
+   },
+   "networkx": {
+    "structure_symmetry": false,
+    "labeled_symmetry": false
+   }
+  },
+  "pads": {
+   "claim": "positive control: padding states 6 and 7 have byte-identical rows (every event self-loops, reward 0), so the swap is a genuine symmetry under BOTH readings and should be admitted everywhere",
+   "relabel": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "generalized"
+   },
+   "fixed": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "strict"
+   },
+   "networkx": {
+    "structure_symmetry": true,
+    "labeled_symmetry": true
+   }
+  }
+ }
+}

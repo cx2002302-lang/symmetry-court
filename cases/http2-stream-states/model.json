@@ -1,0 +1,1103 @@
+{
+ "n_bits": 4,
+ "n_actions": 8,
+ "n_states": 16,
+ "goals": [],
+ "meta": {
+  "source_system": "HTTP/2 stream state machine (one stream as seen by one endpoint), transcribed from RFC 9113 section 5.1 Figure 2 and the per-state bullet lists. RFC 9113 is a public standard (Internet Standards Track technical specification; obsoletes RFC 7540).",
+  "variant": "http2-rfc9113",
+  "source_citation": "RFC 9113 (June 2022), section 5.1 'Stream States', Figure 2 + per-state bullet lists + the END_STREAM separate-event paragraph. Per-edge citations in meta.edges_with_citations.",
+  "state_names": [
+   "idle",
+   "reserved (local)",
+   "reserved (remote)",
+   "open",
+   "half-closed (local)",
+   "half-closed (remote)",
+   "closed"
+  ],
+  "action_names": [
+   "send PP",
+   "recv PP",
+   "send H",
+   "recv H",
+   "send R",
+   "recv R",
+   "send ES",
+   "recv ES"
+  ],
+  "real_states": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6
+  ],
+  "semantics_class": "event: the actions are protocol frame events (with the figure's own PP/H/ES/R abbreviations); their names are part of the behavior and do not follow state renamings -- candidate groups in groups/ declare semantics \"fixed\". The relabel rows in expected.json are the diagnostic contrast reading, not the protocol-true one.",
+  "encoding": "states 7..15 = unreachable padding (self-loop only); undeclared (state, event) pairs self-loop with reward 0",
+  "reward_rule": "rewards all zero: the stream-state layer defines no payoff; the reward layer carries no information, all conclusions come from the transition layer",
+  "edges_with_citations": [
+   {
+    "from": "idle",
+    "event": "send PP",
+    "to": "reserved (local)",
+    "citation": "RFC 9113 sec.5.1 Figure 2 + RFC 9113 sec.5.1 'idle' bullet list"
+   },
+   {
+    "from": "idle",
+    "event": "recv PP",
+    "to": "reserved (remote)",
+    "citation": "RFC 9113 sec.5.1 Figure 2 + RFC 9113 sec.5.1 'idle' bullet list"
+   },
+   {
+    "from": "idle",
+    "event": "send H",
+    "to": "open",
+    "citation": "RFC 9113 sec.5.1 Figure 2 + RFC 9113 sec.5.1 'idle' bullet list"
+   },
+   {
+    "from": "idle",
+    "event": "recv H",
+    "to": "open",
+    "citation": "RFC 9113 sec.5.1 Figure 2 + RFC 9113 sec.5.1 'idle' bullet list"
+   },
+   {
+    "from": "reserved (local)",
+    "event": "send H",
+    "to": "half-closed (remote)",
+    "citation": "RFC 9113 sec.5.1 Figure 2 + RFC 9113 sec.5.1 'reserved (local)' bullet list"
+   },
+   {
+    "from": "reserved (local)",
+    "event": "send R",
+    "to": "closed",
+    "citation": "RFC 9113 sec.5.1 Figure 2 + RFC 9113 sec.5.1 'reserved (local)' bullet list"
+   },
+   {
+    "from": "reserved (local)",
+    "event": "recv R",
+    "to": "closed",
+    "citation": "RFC 9113 sec.5.1 Figure 2"
+   },
+   {
+    "from": "reserved (remote)",
+    "event": "recv H",
+    "to": "half-closed (local)",
+    "citation": "RFC 9113 sec.5.1 Figure 2 + RFC 9113 sec.5.1 'reserved (remote)' bullet list"
+   },
+   {
+    "from": "reserved (remote)",
+    "event": "send R",
+    "to": "closed",
+    "citation": "RFC 9113 sec.5.1 Figure 2 + RFC 9113 sec.5.1 'reserved (remote)' bullet list"
+   },
+   {
+    "from": "reserved (remote)",
+    "event": "recv R",
+    "to": "closed",
+    "citation": "RFC 9113 sec.5.1 Figure 2"
+   },
+   {
+    "from": "open",
+    "event": "send ES",
+    "to": "half-closed (local)",
+    "citation": "RFC 9113 sec.5.1 Figure 2 + RFC 9113 sec.5.1 'open' bullet list"
+   },
+   {
+    "from": "open",
+    "event": "recv ES",
+    "to": "half-closed (remote)",
+    "citation": "RFC 9113 sec.5.1 Figure 2 + RFC 9113 sec.5.1 'open' bullet list"
+   },
+   {
+    "from": "open",
+    "event": "send R",
+    "to": "closed",
+    "citation": "RFC 9113 sec.5.1 Figure 2 + RFC 9113 sec.5.1 'open' bullet list"
+   },
+   {
+    "from": "open",
+    "event": "recv R",
+    "to": "closed",
+    "citation": "RFC 9113 sec.5.1 Figure 2"
+   },
+   {
+    "from": "half-closed (local)",
+    "event": "recv ES",
+    "to": "closed",
+    "citation": "RFC 9113 sec.5.1 Figure 2 + RFC 9113 sec.5.1 'half-closed (local)' bullet list"
+   },
+   {
+    "from": "half-closed (local)",
+    "event": "send R",
+    "to": "closed",
+    "citation": "RFC 9113 sec.5.1 Figure 2 + RFC 9113 sec.5.1 'half-closed (local)' bullet list"
+   },
+   {
+    "from": "half-closed (local)",
+    "event": "recv R",
+    "to": "closed",
+    "citation": "RFC 9113 sec.5.1 Figure 2 + RFC 9113 sec.5.1 'half-closed (local)' bullet list"
+   },
+   {
+    "from": "half-closed (remote)",
+    "event": "send ES",
+    "to": "closed",
+    "citation": "RFC 9113 sec.5.1 Figure 2 + RFC 9113 sec.5.1 'half-closed (remote)' bullet list"
+   },
+   {
+    "from": "half-closed (remote)",
+    "event": "send R",
+    "to": "closed",
+    "citation": "RFC 9113 sec.5.1 Figure 2 + RFC 9113 sec.5.1 'half-closed (remote)' bullet list"
+   },
+   {
+    "from": "half-closed (remote)",
+    "event": "recv R",
+    "to": "closed",
+    "citation": "RFC 9113 sec.5.1 Figure 2 + RFC 9113 sec.5.1 'half-closed (remote)' bullet list"
+   }
+  ],
+  "transcription_notes": [
+   "NOT COLLECTED  idle -> closed via a higher-valued intervening stream identifier: sec.5.1 'idle' bullet says 'Opening a stream with a higher-valued stream identifier causes the stream to transition immediately to a closed state; note that this transition is not shown in the diagram.' The RFC itself omits it from Figure 2; not transcribed (same policy as the tcp case's treatment of the any-state RST note).",
+   "KEPT via the separate-event rule: 'For the purpose of state transitions, the END_STREAM flag is processed as a separate event to the frame that bears it; a HEADERS frame with the END_STREAM flag set can cause two state transitions.' (sec.5.1, right after Figure 2). Hence 'send ES' / 'recv ES' are standalone events and a HEADERS frame with ES chains two edges (e.g. idle --send H--> open --send ES--> half-closed (local)).",
+   "NOT COLLECTED (no state transition): PRIORITY and WINDOW_UPDATE frames may be received in reserved (local), reserved (remote) and the half-closed states, and PRIORITY on closed streams, without any state transition (the per-state frame-type lists); CONTINUATION frames 'do not result in state transitions' (sec.5.1 note after Figure 2). No edges for them.",
+   "NOT COLLECTED (connection-level error exits): receiving any frame other than HEADERS or PRIORITY on an idle stream (and the per-state frame-type bans) is a CONNECTION error of type PROTOCOL_ERROR (sec.5.1), not a stream-state transition; the connection-error path is outside this case's scope.",
+   "NOT COLLECTED: closed-state late-frame handling (sec.5.1 'closed': minimal processing and discard; WINDOW_UPDATE or RST_STREAM may arrive for a short period after closing) causes no transition out of closed; Figure 2 draws no outgoing arrow from closed and none is transcribed.",
+   "KEPT, re-scoped: 'Receiving a PUSH_PROMISE frame also causes the promised stream to become \"reserved (remote)\", even when the PUSH_PROMISE frame is received on a closed stream.' (sec.5.1 'closed'). The re-reserved stream is the PROMISED (idle) stream, a different stream; its idle --recv PP--> reserved (remote) edge is already collected. No extra edge for the closed stream itself."
+  ],
+  "regenerate": "python -X utf8 field-trial2/cases/http2-stream-states/make_http2.py"
+ },
+ "trans": [
+  [
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     8,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     8,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     8,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     8,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     8,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     8,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     8,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     8,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     9,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     9,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     9,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     9,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     9,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     9,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     9,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     9,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     10,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     11,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     12,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     13,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     14,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     15,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     0.0
+    ]
+   ]
+  ]
+ ]
+}

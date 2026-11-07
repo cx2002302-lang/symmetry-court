@@ -1,0 +1,2356 @@
+{
+ "n_bits": 3,
+ "n_actions": 28,
+ "n_states": 8,
+ "goals": [],
+ "meta": {
+  "source_system": "BGP-4 peer finite state machine (one FSM as seen by one endpoint for one configured peer), transcribed from RFC 4271 section 8. RFC 4271 is a public standard (Internet Standards Track; the BGP-4 specification).",
+  "variant": "bgp-fsm-rfc4271",
+  "source_citation": "RFC 4271 (January 2006), section 8 'BGP Finite State Machine (FSM)': the event list of sec.8.1.1-8.1.5 (Events 1-28, numbering per sec.8.2.1.4) plus the per-state paragraphs of sec.8.2.2. Per-edge citations with snapshot line ranges in meta.edges_with_citations.",
+  "state_names": [
+   "Idle",
+   "Connect",
+   "Active",
+   "OpenSent",
+   "OpenConfirm",
+   "Established"
+  ],
+  "action_names": [
+   "ManualStart",
+   "ManualStop",
+   "AutomaticStart",
+   "ManualStart_with_PassiveTcpEstablishment",
+   "AutomaticStart_with_PassiveTcpEstablishment",
+   "AutomaticStart_with_DampPeerOscillations",
+   "AutomaticStart_with_DampPeerOscillations_and_PassiveTcpEstablishment",
+   "AutomaticStop",
+   "ConnectRetryTimer_Expires",
+   "HoldTimer_Expires",
+   "KeepaliveTimer_Expires",
+   "DelayOpenTimer_Expires",
+   "IdleHoldTimer_Expires",
+   "TcpConnection_Valid",
+   "Tcp_CR_Invalid",
+   "Tcp_CR_Acked",
+   "TcpConnectionConfirmed",
+   "TcpConnectionFails",
+   "BGPOpen",
+   "BGPOpen_with_DelayOpenTimer_running",
+   "BGPHeaderErr",
+   "BGPOpenMsgErr",
+   "OpenCollisionDump",
+   "NotifMsgVerErr",
+   "NotifMsg",
+   "KeepAliveMsg",
+   "UpdateMsg",
+   "UpdateMsgErr"
+  ],
+  "real_states": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5
+  ],
+  "semantics_class": "event: the actions are protocol events (sec.8.1's own event names, administrative / timer / TCP / message classes); their names are part of the behavior and do not follow state renamings -- candidate groups in groups/ declare semantics \"fixed\". The relabel rows in expected.json are the diagnostic contrast reading, not the protocol-true one.",
+  "encoding": "states 6..7 = unreachable padding (self-loop only); undeclared (state, event) pairs self-loop with reward 0",
+  "reward_rule": "rewards all zero: the BGP FSM defines no payoff; the reward layer carries no information, all conclusions come from the transition layer",
+  "edges_with_citations": [
+   {
+    "from": "Idle",
+    "event": "ManualStart",
+    "rfc_event_number": 1,
+    "to": "Connect",
+    "citation": "RFC 4271 sec.8.2.2 'Idle state', 'In response to a ManualStart event (Event 1) or an AutomaticStart event (Event 3)' paragraph: 'changes its state to Connect' (snapshot txt:2947-2962)"
+   },
+   {
+    "from": "Idle",
+    "event": "AutomaticStart",
+    "rfc_event_number": 3,
+    "to": "Connect",
+    "citation": "RFC 4271 sec.8.2.2 'Idle state', 'In response to a ManualStart event (Event 1) or an AutomaticStart event (Event 3)' paragraph: 'changes its state to Connect' (snapshot txt:2947-2962)"
+   },
+   {
+    "from": "Idle",
+    "event": "ManualStart_with_PassiveTcpEstablishment",
+    "rfc_event_number": 4,
+    "to": "Active",
+    "citation": "RFC 4271 sec.8.2.2 'Idle state', 'In response to a ManualStart_with_PassiveTcpEstablishment event (Event 4) or AutomaticStart_with_PassiveTcpEstablishment event (Event 5)' paragraph: 'changes its state to Active' (snapshot txt:2975-2988)"
+   },
+   {
+    "from": "Idle",
+    "event": "AutomaticStart_with_PassiveTcpEstablishment",
+    "rfc_event_number": 5,
+    "to": "Active",
+    "citation": "RFC 4271 sec.8.2.2 'Idle state', 'In response to a ManualStart_with_PassiveTcpEstablishment event (Event 4) or AutomaticStart_with_PassiveTcpEstablishment event (Event 5)' paragraph: 'changes its state to Active' (snapshot txt:2975-2988)"
+   },
+   {
+    "from": "Connect",
+    "event": "ManualStop",
+    "rfc_event_number": 2,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Connect State', 'In response to a ManualStop event (Event 2)' paragraph: 'changes its state to Idle' (snapshot txt:3017-3036)"
+   },
+   {
+    "from": "Connect",
+    "event": "ConnectRetryTimer_Expires",
+    "rfc_event_number": 9,
+    "to": "Connect",
+    "citation": "RFC 4271 sec.8.2.2 'Connect State', 'In response to the ConnectRetryTimer_Expires event (Event 9)' paragraph: 'stays in the Connect state' (snapshot txt:3038-3052)"
+   },
+   {
+    "from": "Connect",
+    "event": "DelayOpenTimer_Expires",
+    "rfc_event_number": 12,
+    "to": "OpenSent",
+    "citation": "RFC 4271 sec.8.2.2 'Connect State', 'If the DelayOpenTimer_Expires event (Event 12) occurs in the Connect state' paragraph: 'changes its state to OpenSent' (snapshot txt:3054-3061)"
+   },
+   {
+    "from": "Connect",
+    "event": "TcpConnection_Valid",
+    "rfc_event_number": 14,
+    "to": "Connect",
+    "citation": "RFC 4271 sec.8.2.2 'Connect State', 'If the BGP FSM receives a TcpConnection_Valid event (Event 14)' paragraph: 'the connection remains in the Connect state' (snapshot txt:3063-3065)"
+   },
+   {
+    "from": "Connect",
+    "event": "Tcp_CR_Invalid",
+    "rfc_event_number": 15,
+    "to": "Connect",
+    "citation": "RFC 4271 sec.8.2.2 'Connect State', 'If the BGP FSM receives a Tcp_CR_Invalid event (Event 15)' paragraph: 'remains in the Connect state' (snapshot txt:3067-3069)"
+   },
+   {
+    "from": "Connect",
+    "event": "Tcp_CR_Acked",
+    "rfc_event_number": 16,
+    "to": "OpenSent",
+    "citation": "RFC 4271 sec.8.2.2 'Connect State', 'If the TCP connection succeeds (Event 16 or Event 17)' paragraph, DelayOpen=FALSE branch: 'changes its state to OpenSent' (snapshot txt:3089-3100) [the DelayOpen=TRUE branch 'stays in the Connect state' (txt:3071-3087) is attribute-conditional, NOT COLLECTED -- see transcription_notes]"
+   },
+   {
+    "from": "Connect",
+    "event": "TcpConnectionConfirmed",
+    "rfc_event_number": 17,
+    "to": "OpenSent",
+    "citation": "RFC 4271 sec.8.2.2 'Connect State', 'If the TCP connection succeeds (Event 16 or Event 17)' paragraph, DelayOpen=FALSE branch: 'changes its state to OpenSent' (snapshot txt:3089-3100) [the DelayOpen=TRUE branch 'stays in the Connect state' (txt:3071-3087) is attribute-conditional, NOT COLLECTED -- see transcription_notes]"
+   },
+   {
+    "from": "Connect",
+    "event": "TcpConnectionFails",
+    "rfc_event_number": 18,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Connect State', 'If the TCP connection fails (Event 18)' paragraph, DelayOpenTimer-not-running branch: 'changes its state to Idle' (snapshot txt:3117-3125) [the DelayOpenTimer-running branch 'changes its state to Active' (txt:3104-3115) is attribute-conditional, NOT COLLECTED -- see transcription_notes]"
+   },
+   {
+    "from": "Connect",
+    "event": "BGPOpen_with_DelayOpenTimer_running",
+    "rfc_event_number": 20,
+    "to": "OpenConfirm",
+    "citation": "RFC 4271 sec.8.2.2 'Connect State', 'If an OPEN message is received while the DelayOpenTimer is running (Event 20)' paragraph: 'changes its state to OpenConfirm' (snapshot txt:3127-3161)"
+   },
+   {
+    "from": "Connect",
+    "event": "BGPHeaderErr",
+    "rfc_event_number": 21,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Connect State', 'If BGP message header checking (Event 21) or OPEN message checking detects an error (Event 22)' paragraph: 'changes its state to Idle' (snapshot txt:3167-3186)"
+   },
+   {
+    "from": "Connect",
+    "event": "BGPOpenMsgErr",
+    "rfc_event_number": 22,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Connect State', 'If BGP message header checking (Event 21) or OPEN message checking detects an error (Event 22)' paragraph: 'changes its state to Idle' (snapshot txt:3167-3186)"
+   },
+   {
+    "from": "Connect",
+    "event": "NotifMsgVerErr",
+    "rfc_event_number": 24,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Connect State', 'If a NOTIFICATION message is received with a version error (Event 24)' paragraph: 'changes its state to Idle' (snapshot txt:3188-3224) [both DelayOpenTimer branches land on Idle]"
+   },
+   {
+    "from": "Connect",
+    "event": "AutomaticStop",
+    "rfc_event_number": 8,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Connect State', catch-all 'In response to any other events (Events 8, 10-11, 13, 19, 23, 25-28)' paragraph: 'changes its state to Idle' (snapshot txt:3226-3244)"
+   },
+   {
+    "from": "Connect",
+    "event": "HoldTimer_Expires",
+    "rfc_event_number": 10,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Connect State', catch-all 'In response to any other events (Events 8, 10-11, 13, 19, 23, 25-28)' paragraph: 'changes its state to Idle' (snapshot txt:3226-3244)"
+   },
+   {
+    "from": "Connect",
+    "event": "KeepaliveTimer_Expires",
+    "rfc_event_number": 11,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Connect State', catch-all 'In response to any other events (Events 8, 10-11, 13, 19, 23, 25-28)' paragraph: 'changes its state to Idle' (snapshot txt:3226-3244)"
+   },
+   {
+    "from": "Connect",
+    "event": "IdleHoldTimer_Expires",
+    "rfc_event_number": 13,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Connect State', catch-all 'In response to any other events (Events 8, 10-11, 13, 19, 23, 25-28)' paragraph: 'changes its state to Idle' (snapshot txt:3226-3244)"
+   },
+   {
+    "from": "Connect",
+    "event": "BGPOpen",
+    "rfc_event_number": 19,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Connect State', catch-all 'In response to any other events (Events 8, 10-11, 13, 19, 23, 25-28)' paragraph: 'changes its state to Idle' (snapshot txt:3226-3244)"
+   },
+   {
+    "from": "Connect",
+    "event": "OpenCollisionDump",
+    "rfc_event_number": 23,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Connect State', catch-all 'In response to any other events (Events 8, 10-11, 13, 19, 23, 25-28)' paragraph: 'changes its state to Idle' (snapshot txt:3226-3244)"
+   },
+   {
+    "from": "Connect",
+    "event": "NotifMsg",
+    "rfc_event_number": 25,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Connect State', catch-all 'In response to any other events (Events 8, 10-11, 13, 19, 23, 25-28)' paragraph: 'changes its state to Idle' (snapshot txt:3226-3244)"
+   },
+   {
+    "from": "Connect",
+    "event": "KeepAliveMsg",
+    "rfc_event_number": 26,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Connect State', catch-all 'In response to any other events (Events 8, 10-11, 13, 19, 23, 25-28)' paragraph: 'changes its state to Idle' (snapshot txt:3226-3244)"
+   },
+   {
+    "from": "Connect",
+    "event": "UpdateMsg",
+    "rfc_event_number": 27,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Connect State', catch-all 'In response to any other events (Events 8, 10-11, 13, 19, 23, 25-28)' paragraph: 'changes its state to Idle' (snapshot txt:3226-3244)"
+   },
+   {
+    "from": "Connect",
+    "event": "UpdateMsgErr",
+    "rfc_event_number": 28,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Connect State', catch-all 'In response to any other events (Events 8, 10-11, 13, 19, 23, 25-28)' paragraph: 'changes its state to Idle' (snapshot txt:3226-3244)"
+   },
+   {
+    "from": "Active",
+    "event": "ManualStop",
+    "rfc_event_number": 2,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Active State', 'In response to a ManualStop event (Event 2)' paragraph: 'changes its state to Idle' (snapshot txt:3262-3278)"
+   },
+   {
+    "from": "Active",
+    "event": "ConnectRetryTimer_Expires",
+    "rfc_event_number": 9,
+    "to": "Connect",
+    "citation": "RFC 4271 sec.8.2.2 'Active State', 'In response to a ConnectRetryTimer_Expires event (Event 9)' paragraph: 'changes its state to Connect' (snapshot txt:3280-3290)"
+   },
+   {
+    "from": "Active",
+    "event": "DelayOpenTimer_Expires",
+    "rfc_event_number": 12,
+    "to": "OpenSent",
+    "citation": "RFC 4271 sec.8.2.2 'Active State', 'If the local system receives a DelayOpenTimer_Expires event (Event 12)' paragraph: 'changes its state to OpenSent' (snapshot txt:3292-3313)"
+   },
+   {
+    "from": "Active",
+    "event": "TcpConnection_Valid",
+    "rfc_event_number": 14,
+    "to": "Active",
+    "citation": "RFC 4271 sec.8.2.2 'Active State', 'If the local system receives a TcpConnection_Valid event (Event 14)' paragraph: 'stays in the Active state' (snapshot txt:3318-3320)"
+   },
+   {
+    "from": "Active",
+    "event": "Tcp_CR_Invalid",
+    "rfc_event_number": 15,
+    "to": "Active",
+    "citation": "RFC 4271 sec.8.2.2 'Active State', 'If the local system receives a Tcp_CR_Invalid event (Event 15)' paragraph: 'stays in the Active State' (snapshot txt:3322-3324)"
+   },
+   {
+    "from": "Active",
+    "event": "Tcp_CR_Acked",
+    "rfc_event_number": 16,
+    "to": "OpenSent",
+    "citation": "RFC 4271 sec.8.2.2 'Active State', 'In response to the success of a TCP connection (Event 16 or Event 17)' paragraph, DelayOpen=FALSE branch: 'changes its state to OpenSent' (snapshot txt:3340-3350) [the DelayOpen=TRUE branch 'stays in the Active state' (txt:3330-3338) is attribute-conditional, NOT COLLECTED -- see transcription_notes]"
+   },
+   {
+    "from": "Active",
+    "event": "TcpConnectionConfirmed",
+    "rfc_event_number": 17,
+    "to": "OpenSent",
+    "citation": "RFC 4271 sec.8.2.2 'Active State', 'In response to the success of a TCP connection (Event 16 or Event 17)' paragraph, DelayOpen=FALSE branch: 'changes its state to OpenSent' (snapshot txt:3340-3350) [the DelayOpen=TRUE branch 'stays in the Active state' (txt:3330-3338) is attribute-conditional, NOT COLLECTED -- see transcription_notes]"
+   },
+   {
+    "from": "Active",
+    "event": "TcpConnectionFails",
+    "rfc_event_number": 18,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Active State', 'If the local system receives a TcpConnectionFails event (Event 18)' paragraph (no DelayOpenTimer branch in this state's prose): 'changes its state to Idle' (snapshot txt:3355-3376)"
+   },
+   {
+    "from": "Active",
+    "event": "BGPOpen_with_DelayOpenTimer_running",
+    "rfc_event_number": 20,
+    "to": "OpenConfirm",
+    "citation": "RFC 4271 sec.8.2.2 'Active State', 'If an OPEN message is received and the DelayOpenTimer is running (Event 20)' paragraph: 'changes its state to OpenConfirm' (snapshot txt:3378-3404)"
+   },
+   {
+    "from": "Active",
+    "event": "BGPHeaderErr",
+    "rfc_event_number": 21,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Active State', 'If BGP message header checking (Event 21) or OPEN message checking detects an error (Event 22)' paragraph: 'changes its state to Idle' (snapshot txt:3410-3438)"
+   },
+   {
+    "from": "Active",
+    "event": "BGPOpenMsgErr",
+    "rfc_event_number": 22,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Active State', 'If BGP message header checking (Event 21) or OPEN message checking detects an error (Event 22)' paragraph: 'changes its state to Idle' (snapshot txt:3410-3438)"
+   },
+   {
+    "from": "Active",
+    "event": "NotifMsgVerErr",
+    "rfc_event_number": 24,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Active State', 'If a NOTIFICATION message is received with a version error (Event 24)' paragraph: 'changes its state to Idle' (snapshot txt:3440-3468) [both DelayOpenTimer branches land on Idle]"
+   },
+   {
+    "from": "Active",
+    "event": "AutomaticStop",
+    "rfc_event_number": 8,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Active State', catch-all 'In response to any other event (Events 8, 10-11, 13, 19, 23, 25-28)' paragraph: 'changes its state to Idle' (snapshot txt:3479-3493)"
+   },
+   {
+    "from": "Active",
+    "event": "HoldTimer_Expires",
+    "rfc_event_number": 10,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Active State', catch-all 'In response to any other event (Events 8, 10-11, 13, 19, 23, 25-28)' paragraph: 'changes its state to Idle' (snapshot txt:3479-3493)"
+   },
+   {
+    "from": "Active",
+    "event": "KeepaliveTimer_Expires",
+    "rfc_event_number": 11,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Active State', catch-all 'In response to any other event (Events 8, 10-11, 13, 19, 23, 25-28)' paragraph: 'changes its state to Idle' (snapshot txt:3479-3493)"
+   },
+   {
+    "from": "Active",
+    "event": "IdleHoldTimer_Expires",
+    "rfc_event_number": 13,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Active State', catch-all 'In response to any other event (Events 8, 10-11, 13, 19, 23, 25-28)' paragraph: 'changes its state to Idle' (snapshot txt:3479-3493)"
+   },
+   {
+    "from": "Active",
+    "event": "BGPOpen",
+    "rfc_event_number": 19,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Active State', catch-all 'In response to any other event (Events 8, 10-11, 13, 19, 23, 25-28)' paragraph: 'changes its state to Idle' (snapshot txt:3479-3493)"
+   },
+   {
+    "from": "Active",
+    "event": "OpenCollisionDump",
+    "rfc_event_number": 23,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Active State', catch-all 'In response to any other event (Events 8, 10-11, 13, 19, 23, 25-28)' paragraph: 'changes its state to Idle' (snapshot txt:3479-3493)"
+   },
+   {
+    "from": "Active",
+    "event": "NotifMsg",
+    "rfc_event_number": 25,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Active State', catch-all 'In response to any other event (Events 8, 10-11, 13, 19, 23, 25-28)' paragraph: 'changes its state to Idle' (snapshot txt:3479-3493)"
+   },
+   {
+    "from": "Active",
+    "event": "KeepAliveMsg",
+    "rfc_event_number": 26,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Active State', catch-all 'In response to any other event (Events 8, 10-11, 13, 19, 23, 25-28)' paragraph: 'changes its state to Idle' (snapshot txt:3479-3493)"
+   },
+   {
+    "from": "Active",
+    "event": "UpdateMsg",
+    "rfc_event_number": 27,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Active State', catch-all 'In response to any other event (Events 8, 10-11, 13, 19, 23, 25-28)' paragraph: 'changes its state to Idle' (snapshot txt:3479-3493)"
+   },
+   {
+    "from": "Active",
+    "event": "UpdateMsgErr",
+    "rfc_event_number": 28,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Active State', catch-all 'In response to any other event (Events 8, 10-11, 13, 19, 23, 25-28)' paragraph: 'changes its state to Idle' (snapshot txt:3479-3493)"
+   },
+   {
+    "from": "OpenSent",
+    "event": "ManualStop",
+    "rfc_event_number": 2,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'OpenSent', 'If a ManualStop event (Event 2) is issued in the OpenSent state' paragraph: 'changes its state to Idle' (snapshot txt:3502-3515)"
+   },
+   {
+    "from": "OpenSent",
+    "event": "AutomaticStop",
+    "rfc_event_number": 8,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'OpenSent', 'If an AutomaticStop event (Event 8) is issued in the OpenSent state' paragraph: 'changes its state to Idle' (snapshot txt:3517-3540)"
+   },
+   {
+    "from": "OpenSent",
+    "event": "HoldTimer_Expires",
+    "rfc_event_number": 10,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'OpenSent', 'If the HoldTimer_Expires (Event 10)' paragraph: 'changes its state to Idle' (snapshot txt:3542-3558)"
+   },
+   {
+    "from": "OpenSent",
+    "event": "TcpConnectionFails",
+    "rfc_event_number": 18,
+    "to": "Active",
+    "citation": "RFC 4271 sec.8.2.2 'OpenSent', 'If a TcpConnectionFails event (Event 18) is received' paragraph: 'changes its state to Active' (snapshot txt:3569-3579)"
+   },
+   {
+    "from": "OpenSent",
+    "event": "BGPOpen",
+    "rfc_event_number": 19,
+    "to": "OpenConfirm",
+    "citation": "RFC 4271 sec.8.2.2 'OpenSent', 'If there are no errors in the OPEN message (Event 19)' paragraph: 'changes its state to OpenConfirm' (snapshot txt:3591-3606)"
+   },
+   {
+    "from": "OpenSent",
+    "event": "BGPHeaderErr",
+    "rfc_event_number": 21,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'OpenSent', 'If the BGP message header checking (Event 21) or OPEN message checking detects an error (Event 22)' paragraph: 'changes its state to Idle' (snapshot txt:3615-3632)"
+   },
+   {
+    "from": "OpenSent",
+    "event": "BGPOpenMsgErr",
+    "rfc_event_number": 22,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'OpenSent', 'If the BGP message header checking (Event 21) or OPEN message checking detects an error (Event 22)' paragraph: 'changes its state to Idle' (snapshot txt:3615-3632)"
+   },
+   {
+    "from": "OpenSent",
+    "event": "OpenCollisionDump",
+    "rfc_event_number": 23,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'OpenSent', 'If such an event [OpenCollisionDump (Event 23)] is received in the OpenSent state' paragraph: 'changes its state to Idle' (snapshot txt:3651-3669)"
+   },
+   {
+    "from": "OpenSent",
+    "event": "NotifMsgVerErr",
+    "rfc_event_number": 24,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'OpenSent', 'If a NOTIFICATION message is received with a version error (Event 24)' paragraph: 'changes its state to Idle' (snapshot txt:3671-3680)"
+   },
+   {
+    "from": "OpenSent",
+    "event": "ConnectRetryTimer_Expires",
+    "rfc_event_number": 9,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'OpenSent', catch-all 'In response to any other event (Events 9, 11-13, 20, 25-28)' paragraph: 'changes its state to Idle' (snapshot txt:3682-3706)"
+   },
+   {
+    "from": "OpenSent",
+    "event": "KeepaliveTimer_Expires",
+    "rfc_event_number": 11,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'OpenSent', catch-all 'In response to any other event (Events 9, 11-13, 20, 25-28)' paragraph: 'changes its state to Idle' (snapshot txt:3682-3706)"
+   },
+   {
+    "from": "OpenSent",
+    "event": "DelayOpenTimer_Expires",
+    "rfc_event_number": 12,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'OpenSent', catch-all 'In response to any other event (Events 9, 11-13, 20, 25-28)' paragraph: 'changes its state to Idle' (snapshot txt:3682-3706)"
+   },
+   {
+    "from": "OpenSent",
+    "event": "IdleHoldTimer_Expires",
+    "rfc_event_number": 13,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'OpenSent', catch-all 'In response to any other event (Events 9, 11-13, 20, 25-28)' paragraph: 'changes its state to Idle' (snapshot txt:3682-3706)"
+   },
+   {
+    "from": "OpenSent",
+    "event": "BGPOpen_with_DelayOpenTimer_running",
+    "rfc_event_number": 20,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'OpenSent', catch-all 'In response to any other event (Events 9, 11-13, 20, 25-28)' paragraph: 'changes its state to Idle' (snapshot txt:3682-3706)"
+   },
+   {
+    "from": "OpenSent",
+    "event": "NotifMsg",
+    "rfc_event_number": 25,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'OpenSent', catch-all 'In response to any other event (Events 9, 11-13, 20, 25-28)' paragraph: 'changes its state to Idle' (snapshot txt:3682-3706)"
+   },
+   {
+    "from": "OpenSent",
+    "event": "KeepAliveMsg",
+    "rfc_event_number": 26,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'OpenSent', catch-all 'In response to any other event (Events 9, 11-13, 20, 25-28)' paragraph: 'changes its state to Idle' (snapshot txt:3682-3706)"
+   },
+   {
+    "from": "OpenSent",
+    "event": "UpdateMsg",
+    "rfc_event_number": 27,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'OpenSent', catch-all 'In response to any other event (Events 9, 11-13, 20, 25-28)' paragraph: 'changes its state to Idle' (snapshot txt:3682-3706)"
+   },
+   {
+    "from": "OpenSent",
+    "event": "UpdateMsgErr",
+    "rfc_event_number": 28,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'OpenSent', catch-all 'In response to any other event (Events 9, 11-13, 20, 25-28)' paragraph: 'changes its state to Idle' (snapshot txt:3682-3706)"
+   },
+   {
+    "from": "OpenConfirm",
+    "event": "ManualStop",
+    "rfc_event_number": 2,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'OpenConfirm State', 'In response to a ManualStop event (Event 2) initiated by the operator' paragraph: 'changes its state to Idle' (snapshot txt:3715-3728)"
+   },
+   {
+    "from": "OpenConfirm",
+    "event": "AutomaticStop",
+    "rfc_event_number": 8,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'OpenConfirm State', 'In response to the AutomaticStop event initiated by the system (Event 8)' paragraph: 'changes its state to Idle' (snapshot txt:3730-3746)"
+   },
+   {
+    "from": "OpenConfirm",
+    "event": "HoldTimer_Expires",
+    "rfc_event_number": 10,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'OpenConfirm State', 'If the HoldTimer_Expires event (Event 10) occurs before a KEEPALIVE message is received' paragraph: 'changes its state to Idle' (snapshot txt:3748-3773)"
+   },
+   {
+    "from": "OpenConfirm",
+    "event": "KeepaliveTimer_Expires",
+    "rfc_event_number": 11,
+    "to": "OpenConfirm",
+    "citation": "RFC 4271 sec.8.2.2 'OpenConfirm State', 'If the local system receives a KeepaliveTimer_Expires event (Event 11)' paragraph: 'remains in the OpenConfirmed state' (snapshot txt:3775-3782) [the RFC's printed spelling 'OpenConfirmed']"
+   },
+   {
+    "from": "OpenConfirm",
+    "event": "TcpConnectionFails",
+    "rfc_event_number": 18,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'OpenConfirm State', 'If the local system receives a TcpConnectionFails event (Event 18) from the underlying TCP or a NOTIFICATION message (Event 25)' paragraph: 'changes its state to Idle' (snapshot txt:3792-3815)"
+   },
+   {
+    "from": "OpenConfirm",
+    "event": "NotifMsg",
+    "rfc_event_number": 25,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'OpenConfirm State', 'If the local system receives a TcpConnectionFails event (Event 18) from the underlying TCP or a NOTIFICATION message (Event 25)' paragraph: 'changes its state to Idle' (snapshot txt:3792-3815)"
+   },
+   {
+    "from": "OpenConfirm",
+    "event": "NotifMsgVerErr",
+    "rfc_event_number": 24,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'OpenConfirm State', 'If the local system receives a NOTIFICATION message with a version error (NotifMsgVerErr (Event 24))' paragraph: 'changes its state to Idle' (snapshot txt:3817-3826)"
+   },
+   {
+    "from": "OpenConfirm",
+    "event": "BGPOpen",
+    "rfc_event_number": 19,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'OpenConfirm State', 'If the local system receives a valid OPEN message (BGPOpen (Event 19))' paragraph, connection-collision-drop branch: 'changes its state to Idle' (snapshot txt:3828-3846) [the no-collision case carries no declared transition -- see transcription_notes]"
+   },
+   {
+    "from": "OpenConfirm",
+    "event": "BGPHeaderErr",
+    "rfc_event_number": 21,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'OpenConfirm State', 'If the BGP message header checking (BGPHeaderErr (Event 21)) or OPEN message checking detects an error (BGPOpenMsgErr (Event 22))' paragraph: 'changes its state to Idle' (snapshot txt:3848-3874)"
+   },
+   {
+    "from": "OpenConfirm",
+    "event": "BGPOpenMsgErr",
+    "rfc_event_number": 22,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'OpenConfirm State', 'If the BGP message header checking (BGPHeaderErr (Event 21)) or OPEN message checking detects an error (BGPOpenMsgErr (Event 22))' paragraph: 'changes its state to Idle' (snapshot txt:3848-3874)"
+   },
+   {
+    "from": "OpenConfirm",
+    "event": "OpenCollisionDump",
+    "rfc_event_number": 23,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'OpenConfirm State', 'When the local system receives an OpenCollisionDump event (Event 23)' paragraph: 'changes its state to Idle' (snapshot txt:3876-3896)"
+   },
+   {
+    "from": "OpenConfirm",
+    "event": "KeepAliveMsg",
+    "rfc_event_number": 26,
+    "to": "Established",
+    "citation": "RFC 4271 sec.8.2.2 'OpenConfirm State', 'If the local system receives a KEEPALIVE message (KeepAliveMsg (Event 26))' paragraph: 'changes its state to Established' (snapshot txt:3898-3903)"
+   },
+   {
+    "from": "OpenConfirm",
+    "event": "ConnectRetryTimer_Expires",
+    "rfc_event_number": 9,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'OpenConfirm State', catch-all 'In response to any other event (Events 9, 12-13, 20, 27-28)' paragraph: 'changes its state to Idle' (snapshot txt:3905-3930)"
+   },
+   {
+    "from": "OpenConfirm",
+    "event": "DelayOpenTimer_Expires",
+    "rfc_event_number": 12,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'OpenConfirm State', catch-all 'In response to any other event (Events 9, 12-13, 20, 27-28)' paragraph: 'changes its state to Idle' (snapshot txt:3905-3930)"
+   },
+   {
+    "from": "OpenConfirm",
+    "event": "IdleHoldTimer_Expires",
+    "rfc_event_number": 13,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'OpenConfirm State', catch-all 'In response to any other event (Events 9, 12-13, 20, 27-28)' paragraph: 'changes its state to Idle' (snapshot txt:3905-3930)"
+   },
+   {
+    "from": "OpenConfirm",
+    "event": "BGPOpen_with_DelayOpenTimer_running",
+    "rfc_event_number": 20,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'OpenConfirm State', catch-all 'In response to any other event (Events 9, 12-13, 20, 27-28)' paragraph: 'changes its state to Idle' (snapshot txt:3905-3930)"
+   },
+   {
+    "from": "OpenConfirm",
+    "event": "UpdateMsg",
+    "rfc_event_number": 27,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'OpenConfirm State', catch-all 'In response to any other event (Events 9, 12-13, 20, 27-28)' paragraph: 'changes its state to Idle' (snapshot txt:3905-3930)"
+   },
+   {
+    "from": "OpenConfirm",
+    "event": "UpdateMsgErr",
+    "rfc_event_number": 28,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'OpenConfirm State', catch-all 'In response to any other event (Events 9, 12-13, 20, 27-28)' paragraph: 'changes its state to Idle' (snapshot txt:3905-3930)"
+   },
+   {
+    "from": "Established",
+    "event": "ManualStop",
+    "rfc_event_number": 2,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Established State', 'In response to a ManualStop event (initiated by an operator) (Event 2)' paragraph: 'changes its state to Idle' (snapshot txt:3940-3955)"
+   },
+   {
+    "from": "Established",
+    "event": "AutomaticStop",
+    "rfc_event_number": 8,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Established State', 'In response to an AutomaticStop event (Event 8)' paragraph: 'changes its state to Idle' (snapshot txt:3957-3974)"
+   },
+   {
+    "from": "Established",
+    "event": "HoldTimer_Expires",
+    "rfc_event_number": 10,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Established State', 'If the HoldTimer_Expires event occurs (Event 10)' paragraph: 'changes its state to Idle' (snapshot txt:3988-4005)"
+   },
+   {
+    "from": "Established",
+    "event": "TcpConnectionFails",
+    "rfc_event_number": 18,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Established State', 'If the local system receives a NOTIFICATION message (Event 24 or Event 25) or a TcpConnectionFails (Event 18) from the underlying TCP' paragraph: 'changes its state to Idle' (snapshot txt:4064-4078)"
+   },
+   {
+    "from": "Established",
+    "event": "NotifMsgVerErr",
+    "rfc_event_number": 24,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Established State', 'If the local system receives a NOTIFICATION message (Event 24 or Event 25) or a TcpConnectionFails (Event 18) from the underlying TCP' paragraph: 'changes its state to Idle' (snapshot txt:4064-4078)"
+   },
+   {
+    "from": "Established",
+    "event": "NotifMsg",
+    "rfc_event_number": 25,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Established State', 'If the local system receives a NOTIFICATION message (Event 24 or Event 25) or a TcpConnectionFails (Event 18) from the underlying TCP' paragraph: 'changes its state to Idle' (snapshot txt:4064-4078)"
+   },
+   {
+    "from": "Established",
+    "event": "KeepAliveMsg",
+    "rfc_event_number": 26,
+    "to": "Established",
+    "citation": "RFC 4271 sec.8.2.2 'Established State', 'If the local system receives a KEEPALIVE message (Event 26)' paragraph: 'remains in the Established state' (snapshot txt:4095-4101)"
+   },
+   {
+    "from": "Established",
+    "event": "UpdateMsg",
+    "rfc_event_number": 27,
+    "to": "Established",
+    "citation": "RFC 4271 sec.8.2.2 'Established State', 'If the local system receives an UPDATE message (Event 27)' paragraph: 'remains in the Established state' (snapshot txt:4103-4111)"
+   },
+   {
+    "from": "Established",
+    "event": "UpdateMsgErr",
+    "rfc_event_number": 28,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Established State', 'If the local system receives an UPDATE message, and the UPDATE message error handling procedure (see Section 6.3) detects an error (Event 28)' paragraph: 'changes its state to Idle' (snapshot txt:4113-4132)"
+   },
+   {
+    "from": "Established",
+    "event": "ConnectRetryTimer_Expires",
+    "rfc_event_number": 9,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Established State', catch-all 'In response to any other event (Events 9, 12-13, 20-22)' paragraph: 'changes its state to Idle' (snapshot txt:4134-4160)"
+   },
+   {
+    "from": "Established",
+    "event": "DelayOpenTimer_Expires",
+    "rfc_event_number": 12,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Established State', catch-all 'In response to any other event (Events 9, 12-13, 20-22)' paragraph: 'changes its state to Idle' (snapshot txt:4134-4160)"
+   },
+   {
+    "from": "Established",
+    "event": "IdleHoldTimer_Expires",
+    "rfc_event_number": 13,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Established State', catch-all 'In response to any other event (Events 9, 12-13, 20-22)' paragraph: 'changes its state to Idle' (snapshot txt:4134-4160)"
+   },
+   {
+    "from": "Established",
+    "event": "BGPOpen_with_DelayOpenTimer_running",
+    "rfc_event_number": 20,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Established State', catch-all 'In response to any other event (Events 9, 12-13, 20-22)' paragraph: 'changes its state to Idle' (snapshot txt:4134-4160)"
+   },
+   {
+    "from": "Established",
+    "event": "BGPHeaderErr",
+    "rfc_event_number": 21,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Established State', catch-all 'In response to any other event (Events 9, 12-13, 20-22)' paragraph: 'changes its state to Idle' (snapshot txt:4134-4160)"
+   },
+   {
+    "from": "Established",
+    "event": "BGPOpenMsgErr",
+    "rfc_event_number": 22,
+    "to": "Idle",
+    "citation": "RFC 4271 sec.8.2.2 'Established State', catch-all 'In response to any other event (Events 9, 12-13, 20-22)' paragraph: 'changes its state to Idle' (snapshot txt:4134-4160)"
+   }
+  ],
+  "transcription_notes": [
+   "KEPT (one FSM per connection): the model transcribes ONE endpoint's automaton -- sec.8.2.1: 'BGP MUST maintain a separate FSM for each configured peer' (snapshot txt:2825); the two-peer collision resolution of sec.6.8 is a cross-connection procedure, not a state of one FSM, and the model does not merge two peers into one machine.",
+   "KEPT (base-attributes policy): the sec.8.2.2 prose branches on the optional session attributes of sec.8.1.1; the transcription takes the base configuration (DelayOpen=FALSE, PassiveTcpEstablishment=FALSE, DampPeerOscillations=FALSE, SendNOTIFICATIONwithoutOPEN=FALSE, CollisionDetectEstablishedState=FALSE), the parameterization sec.8.2.1.3 itself sketches: 'If an Optional Session attribute cannot be set to TRUE, the events supporting that set of options do not have to be supported' (txt:2885-2895). Events that are separate numbered events (4, 5, 12, 13, 20) are transcribed at their own declared outcomes even though they presuppose an attribute -- the RFC numbers them as events in their own right (sec.8.2.1.4, txt:2923-2928).",
+   "NOT COLLECTED (attribute-conditional branches, one per paragraph branch): Connect Events 16/17 DelayOpen=TRUE branch 'stays in the Connect state' (txt:3071-3087); Connect Event 18 DelayOpenTimer-running branch 'changes its state to Active' (txt:3104-3115); Active Events 16/17 DelayOpen=TRUE branch 'stays in the Active state' (txt:3330-3338); Established Events 19/23 CollisionDetectEstablishedState branch (txt:4039-4062) -- base reading: 'Normally, a Detect Collision will be ignored in the Established state' (sec.8.1.5 Event 23 attribute status, txt:2319-2325). Each collected edge's citation names its branch.",
+   "NOT COLLECTED (Idle damping group): Events 6, 7 and 13 in Idle -- 'If the DampPeerOscillations attribute is set to TRUE, the following three additional events may occur within the Idle state' ... 'The method of preventing persistent peer oscillation is outside the scope of this document' (txt:2993-3005): no transition is declared, so the pairs collapse to the policy self-loop (reward 0).",
+   "NOT COLLECTED (explicit no-change / ignored): Idle Events 2 and 8 'are ignored in the Idle state' (txt:2964-2965) and the Idle catch-all 'Any other event (Events 9-12, 15-28) received in the Idle state does not cause change in the state of the local system' (txt:3007-3008); the start events (Events 1, 3-7) 'are ignored' in Connect (txt:3015), Active (txt:3260), OpenSent (txt:3499-3500), OpenConfirm (txt:3712-3713) and Established (txt:3937-3938). All collapse to the same self-loop as undeclared pairs, per the tcp/http2/ppp encoding policy.",
+   "NOT COLLECTED (tracked/ignored, no declared transition): OpenSent Events 14/16/17 'This second TCP connection is tracked per Connection Collision processing (Section 6.8) until an OPEN message is received' (txt:3560-3564) and Event 15 'is ignored' (txt:3566-3567); OpenConfirm Events 14/16/17 'needs to track the second connection' (txt:3784-3787) and Event 15 'will ignore the second connection attempt' (txt:3789-3790); Established Event 14 'will cause the second connection to be tracked' (txt:4019-4020), Event 15 'will be ignored' (txt:4022-4023), Events 16/17 'SHALL be tracked until it sends an OPEN message' (txt:4025-4027). No state-change sentence appears in any of these paragraphs.",
+   "NOT COLLECTED (no transition phrase): Established Event 11's paragraph declares actions only -- 'sends a KEEPALIVE message, and restarts its KeepaliveTimer, unless the negotiated HoldTime value is zero' (txt:4007-4013) -- with no state-change sentence, in contrast to OpenConfirm Event 11 which says 'remains in the OpenConfirmed state' (txt:3782). Transcribed as undeclared (policy self-loop).",
+   "KEPT (conditional branch, protocol-internal condition): OpenConfirm Event 19's paragraph declares only the collision-drop branch 'changes its state to Idle' (txt:3828-3846); the no-collision case carries no declared transition. The declared branch is transcribed and the condition is named in the edge's citation -- collision handling is core sec.6.8 machinery, not an optional session attribute, so this branch is in base scope.",
+   "KEPT (event naming and numbering): event names are sec.8.1's printed names in RFC event-number order; the action index = event number - 1. Event 20 is printed 'BGPOpen with DelayOpenTimer running' (txt:2710) and appears in the model as 'BGPOpen_with_DelayOpenTimer_running'; Event 7's header wraps across two snapshot lines (txt:2490-2491) and the model uses the unwrapped form. The numbering 1-28 is the RFC's own (sec.8.2.1.4, txt:2923-2928).",
+   "KEPT (state naming and order): the six state names follow sec.8.2.2's own paragraph order Idle / Connect / Active / OpenSent / OpenConfirm / Established (headers at txt:2941, txt:3010, txt:3255, txt:3495, txt:3708, txt:3932); slots 6-7 are padding. OpenConfirm Event 11's prose spells the state 'OpenConfirmed' (txt:3782) -- the model keeps the header spelling 'OpenConfirm' (txt:3708).",
+   "KEPT (actions not modeled): every transition paragraph's action bullets (send NOTIFICATION/KEEPALIVE/OPEN, restart timers, release resources, ConnectRetryCounter updates, damping hooks) are not part of the model layer -- the model encodes (state, event) -> state only, the same transition-layer-only policy as the tcp/http2/ppp cases; the printed transition phrase stays visible in every edge citation.",
+   "KEPT (declared self-transitions): self-transitions the prose states explicitly are transcribed as ordinary edges (from == to): Connect Events 9/14/15 (txt:3052, txt:3063-3069), Active Events 14/15 (txt:3318-3324), OpenConfirm Event 11 (txt:3775-3782), Established Events 26/27 (txt:4095-4111); in the trans matrix they coincide numerically with the policy self-loops."
+  ],
+  "regenerate": "python -X utf8 field-trial2/cases/bgp-fsm/make_bgp_fsm.py"
+ },
+ "trans": [
+  [
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ]
+  ]
+ ]
+}

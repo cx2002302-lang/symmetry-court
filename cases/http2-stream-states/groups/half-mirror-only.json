@@ -1,0 +1,52 @@
+{
+ "n_states": 16,
+ "elements": [
+  [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15
+  ],
+  [
+   0,
+   1,
+   2,
+   3,
+   5,
+   4,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15
+  ]
+ ],
+ "semantics": {
+  "action": "fixed"
+ },
+ "meta": {
+  "claim": "defendant B: half-closed (local) and half-closed (remote) are shape-twins (both drain to closed on three events), so maybe they can be swapped while keeping reserved (local)/(remote) fixed",
+  "construction": "order-2 group swapping half-closed (local) <-> half-closed (remote) (states 4 <-> 5) only",
+  "why_it_looks_legal": "both half-closed states have exactly the same row shape: three outgoing edges, all into closed",
+  "why_it_is_not_a_symmetry": "their IN-edges differ: reserved (remote) --recv H--> half-closed (local) exists, but reserved (remote) -> half-closed (remote) does not; the swap would need reserved (remote) -> half-closed (remote), which no edge provides (same for reserved (local) -> half-closed (local))",
+  "semantics_note": "control: expected to fail BOTH readings (structure itself breaks)",
+  "regenerate": "python -X utf8 field-trial2/cases/http2-stream-states/make_http2.py"
+ }
+}

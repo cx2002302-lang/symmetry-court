@@ -1,0 +1,52 @@
+{
+ "n_states": 16,
+ "elements": [
+  [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15
+  ],
+  [
+   0,
+   1,
+   3,
+   2,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15
+  ]
+ ],
+ "semantics": {
+  "action": "fixed"
+ },
+ "meta": {
+  "claim": "defendant C: Closed and Stopped are the quiet twins -- in neither is a negotiation in flight, in neither does the Restart timer run, and both answer an unwanted Configure-Request with a Terminate-Ack (sec.4.2 'Closed' txt:853-860, 'Stopped' txt:862-872; txt:864 'The Stopped state is the Open counterpart to the Closed state'), so maybe states 2 <-> 3 can be swapped alone",
+  "construction": "order-2 group swapping Closed <-> Stopped (states 2 <-> 3) only",
+  "why_it_looks_legal": "both quiet states self-loop on RTA/RUC/RXJ+/RXR (txt:752, txt:754-758) and both keep RCR-style noise inside themselves with sta actions",
+  "why_it_is_not_a_symmetry": "only Stopped can advance a negotiation: Stopped's RCR+ enters Ack-Sent (irc,scr,sca/8 txt:746) and its RCR- enters Req-Sent (irc,scr,scn/6 txt:747), while Closed's RCR+/RCR- self-loop with sta/2 (txt:746-747); and Closed's Open starts a negotiation into Req-Sent (irc,scr/6 txt:740) while Stopped's Open loops in place (3r txt:740) -- the swap would need Closed->Ack-Sent and Stopped->Req-Sent-via-Open edges, which no cell provides",
+  "semantics_note": "control: expected to fail BOTH readings (structure itself breaks)",
+  "regenerate": "python -X utf8 field-trial2/cases/ppp-lcp/make_ppp_lcp.py"
+ }
+}

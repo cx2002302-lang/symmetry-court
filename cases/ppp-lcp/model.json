@@ -1,0 +1,2614 @@
+{
+ "n_bits": 4,
+ "n_actions": 16,
+ "n_states": 16,
+ "goals": [],
+ "meta": {
+  "source_system": "PPP Link Control Protocol option-negotiation automaton (one automaton as seen by one endpoint), transcribed from RFC 1661 section 4 and its sec.4.1 State Transition Table. RFC 1661 is a public standard (Internet Standards Track; STD 51).",
+  "variant": "ppp-lcp-rfc1661",
+  "source_citation": "RFC 1661 (July 1994), section 4 'The Option Negotiation Automaton', sec.4.1 State Transition Table (both halves, all 16 event rows x 10 state columns) + footnotes p/r/x + sec.4.2 States + sec.4.3 Events. Per-edge citations with snapshot line numbers in meta.edges_with_citations.",
+  "state_names": [
+   "Initial",
+   "Starting",
+   "Closed",
+   "Stopped",
+   "Closing",
+   "Stopping",
+   "Req-Sent",
+   "Ack-Rcvd",
+   "Ack-Sent",
+   "Opened"
+  ],
+  "action_names": [
+   "Up",
+   "Down",
+   "Open",
+   "Close",
+   "TO+",
+   "TO-",
+   "RCR+",
+   "RCR-",
+   "RCA",
+   "RCN",
+   "RTR",
+   "RTA",
+   "RUC",
+   "RXJ+",
+   "RXJ-",
+   "RXR"
+  ],
+  "real_states": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "semantics_class": "event: the actions are protocol events (the table's own row labels Up/Down/Open/Close/TO+/-/RCR+/-/RCA/RCN/RTR/RTA/RUC/RXJ+/-/RXR); their names are part of the behavior and do not follow state renamings -- candidate groups in groups/ declare semantics \"fixed\". The relabel rows in expected.json are the diagnostic contrast reading, not the protocol-true one.",
+  "encoding": "states 10..15 = unreachable padding (self-loop only); undeclared (state, event) pairs and the table's '-' illegal-transition cells self-loop with reward 0",
+  "reward_rule": "rewards all zero: the negotiation automaton defines no payoff; the reward layer carries no information, all conclusions come from the transition layer",
+  "edges_with_citations": [
+   {
+    "from": "Initial",
+    "event": "Up",
+    "to": "Closed",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, Up row, Initial column: '2' (snapshot txt:738)"
+   },
+   {
+    "from": "Starting",
+    "event": "Up",
+    "to": "Req-Sent",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, Up row, Starting column: 'irc,scr/6' (snapshot txt:738)"
+   },
+   {
+    "from": "Closed",
+    "event": "Down",
+    "to": "Initial",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, Down row, Closed column: '0' (snapshot txt:739)"
+   },
+   {
+    "from": "Stopped",
+    "event": "Down",
+    "to": "Starting",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, Down row, Stopped column: 'tls/1' (snapshot txt:739)"
+   },
+   {
+    "from": "Closing",
+    "event": "Down",
+    "to": "Initial",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, Down row, Closing column: '0' (snapshot txt:739)"
+   },
+   {
+    "from": "Stopping",
+    "event": "Down",
+    "to": "Starting",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, Down row, Stopping column: '1' (snapshot txt:739)"
+   },
+   {
+    "from": "Req-Sent",
+    "event": "Down",
+    "to": "Starting",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, Down row, Req-Sent column: '1' (snapshot txt:784)"
+   },
+   {
+    "from": "Ack-Rcvd",
+    "event": "Down",
+    "to": "Starting",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, Down row, Ack-Rcvd column: '1' (snapshot txt:784)"
+   },
+   {
+    "from": "Ack-Sent",
+    "event": "Down",
+    "to": "Starting",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, Down row, Ack-Sent column: '1' (snapshot txt:784)"
+   },
+   {
+    "from": "Opened",
+    "event": "Down",
+    "to": "Starting",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, Down row, Opened column: 'tld/1' (snapshot txt:784)"
+   },
+   {
+    "from": "Initial",
+    "event": "Open",
+    "to": "Starting",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, Open row, Initial column: 'tls/1' (snapshot txt:740)"
+   },
+   {
+    "from": "Starting",
+    "event": "Open",
+    "to": "Starting",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, Open row, Starting column: '1' (snapshot txt:740)"
+   },
+   {
+    "from": "Closed",
+    "event": "Open",
+    "to": "Req-Sent",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, Open row, Closed column: 'irc,scr/6' (snapshot txt:740)"
+   },
+   {
+    "from": "Stopped",
+    "event": "Open",
+    "to": "Stopped",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, Open row, Stopped column: '3r' (snapshot txt:740) + footnote r: Restart option (snapshot txt:820; sec.4.3 'Open' Implementation Option txt:1025-1041)"
+   },
+   {
+    "from": "Closing",
+    "event": "Open",
+    "to": "Stopping",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, Open row, Closing column: '5r' (snapshot txt:740) + footnote r: Restart option (snapshot txt:820; sec.4.3 'Open' Implementation Option txt:1025-1041)"
+   },
+   {
+    "from": "Stopping",
+    "event": "Open",
+    "to": "Stopping",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, Open row, Stopping column: '5r' (snapshot txt:740) + footnote r: Restart option (snapshot txt:820; sec.4.3 'Open' Implementation Option txt:1025-1041)"
+   },
+   {
+    "from": "Req-Sent",
+    "event": "Open",
+    "to": "Req-Sent",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, Open row, Req-Sent column: '6' (snapshot txt:785)"
+   },
+   {
+    "from": "Ack-Rcvd",
+    "event": "Open",
+    "to": "Ack-Rcvd",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, Open row, Ack-Rcvd column: '7' (snapshot txt:785)"
+   },
+   {
+    "from": "Ack-Sent",
+    "event": "Open",
+    "to": "Ack-Sent",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, Open row, Ack-Sent column: '8' (snapshot txt:785)"
+   },
+   {
+    "from": "Opened",
+    "event": "Open",
+    "to": "Opened",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, Open row, Opened column: '9r' (snapshot txt:785) + footnote r: Restart option (snapshot txt:820; sec.4.3 'Open' Implementation Option txt:1025-1041)"
+   },
+   {
+    "from": "Initial",
+    "event": "Close",
+    "to": "Initial",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, Close row, Initial column: '0' (snapshot txt:741)"
+   },
+   {
+    "from": "Starting",
+    "event": "Close",
+    "to": "Initial",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, Close row, Starting column: 'tlf/0' (snapshot txt:741)"
+   },
+   {
+    "from": "Closed",
+    "event": "Close",
+    "to": "Closed",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, Close row, Closed column: '2' (snapshot txt:741)"
+   },
+   {
+    "from": "Stopped",
+    "event": "Close",
+    "to": "Closed",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, Close row, Stopped column: '2' (snapshot txt:741)"
+   },
+   {
+    "from": "Closing",
+    "event": "Close",
+    "to": "Closing",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, Close row, Closing column: '4' (snapshot txt:741)"
+   },
+   {
+    "from": "Stopping",
+    "event": "Close",
+    "to": "Closing",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, Close row, Stopping column: '4' (snapshot txt:741)"
+   },
+   {
+    "from": "Req-Sent",
+    "event": "Close",
+    "to": "Closing",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, Close row, Req-Sent column: 'irc,str/4' (snapshot txt:786)"
+   },
+   {
+    "from": "Ack-Rcvd",
+    "event": "Close",
+    "to": "Closing",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, Close row, Ack-Rcvd column: 'irc,str/4' (snapshot txt:786)"
+   },
+   {
+    "from": "Ack-Sent",
+    "event": "Close",
+    "to": "Closing",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, Close row, Ack-Sent column: 'irc,str/4' (snapshot txt:786)"
+   },
+   {
+    "from": "Opened",
+    "event": "Close",
+    "to": "Closing",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, Close row, Opened column: 'tld,irc,str/4' (snapshot txt:786)"
+   },
+   {
+    "from": "Closing",
+    "event": "TO+",
+    "to": "Closing",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, TO+ row, Closing column: 'str/4' (snapshot txt:743)"
+   },
+   {
+    "from": "Stopping",
+    "event": "TO+",
+    "to": "Stopping",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, TO+ row, Stopping column: 'str/5' (snapshot txt:743)"
+   },
+   {
+    "from": "Req-Sent",
+    "event": "TO+",
+    "to": "Req-Sent",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, TO+ row, Req-Sent column: 'scr/6' (snapshot txt:788)"
+   },
+   {
+    "from": "Ack-Rcvd",
+    "event": "TO+",
+    "to": "Req-Sent",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, TO+ row, Ack-Rcvd column: 'scr/6' (snapshot txt:788)"
+   },
+   {
+    "from": "Ack-Sent",
+    "event": "TO+",
+    "to": "Ack-Sent",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, TO+ row, Ack-Sent column: 'scr/8' (snapshot txt:788)"
+   },
+   {
+    "from": "Closing",
+    "event": "TO-",
+    "to": "Closed",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, TO- row, Closing column: 'tlf/2' (snapshot txt:744)"
+   },
+   {
+    "from": "Stopping",
+    "event": "TO-",
+    "to": "Stopped",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, TO- row, Stopping column: 'tlf/3' (snapshot txt:744)"
+   },
+   {
+    "from": "Req-Sent",
+    "event": "TO-",
+    "to": "Stopped",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, TO- row, Req-Sent column: 'tlf/3p' (snapshot txt:789) + footnote p: Passive option (snapshot txt:818; sec.4.2 'Stopped' Implementation Option txt:894-904)"
+   },
+   {
+    "from": "Ack-Rcvd",
+    "event": "TO-",
+    "to": "Stopped",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, TO- row, Ack-Rcvd column: 'tlf/3p' (snapshot txt:789) + footnote p: Passive option (snapshot txt:818; sec.4.2 'Stopped' Implementation Option txt:894-904)"
+   },
+   {
+    "from": "Ack-Sent",
+    "event": "TO-",
+    "to": "Stopped",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, TO- row, Ack-Sent column: 'tlf/3p' (snapshot txt:789) + footnote p: Passive option (snapshot txt:818; sec.4.2 'Stopped' Implementation Option txt:894-904)"
+   },
+   {
+    "from": "Closed",
+    "event": "RCR+",
+    "to": "Closed",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RCR+ row, Closed column: 'sta/2' (snapshot txt:746)"
+   },
+   {
+    "from": "Stopped",
+    "event": "RCR+",
+    "to": "Ack-Sent",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RCR+ row, Stopped column: 'irc,scr,sca/8' (snapshot txt:746)"
+   },
+   {
+    "from": "Closing",
+    "event": "RCR+",
+    "to": "Closing",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RCR+ row, Closing column: '4' (snapshot txt:746)"
+   },
+   {
+    "from": "Stopping",
+    "event": "RCR+",
+    "to": "Stopping",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RCR+ row, Stopping column: '5' (snapshot txt:746)"
+   },
+   {
+    "from": "Req-Sent",
+    "event": "RCR+",
+    "to": "Ack-Sent",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RCR+ row, Req-Sent column: 'sca/8' (snapshot txt:791)"
+   },
+   {
+    "from": "Ack-Rcvd",
+    "event": "RCR+",
+    "to": "Opened",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RCR+ row, Ack-Rcvd column: 'sca,tlu/9' (snapshot txt:791)"
+   },
+   {
+    "from": "Ack-Sent",
+    "event": "RCR+",
+    "to": "Ack-Sent",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RCR+ row, Ack-Sent column: 'sca/8' (snapshot txt:791)"
+   },
+   {
+    "from": "Opened",
+    "event": "RCR+",
+    "to": "Ack-Sent",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RCR+ row, Opened column: 'tld,scr,sca/8' (snapshot txt:791)"
+   },
+   {
+    "from": "Closed",
+    "event": "RCR-",
+    "to": "Closed",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RCR- row, Closed column: 'sta/2' (snapshot txt:747)"
+   },
+   {
+    "from": "Stopped",
+    "event": "RCR-",
+    "to": "Req-Sent",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RCR- row, Stopped column: 'irc,scr,scn/6' (snapshot txt:747)"
+   },
+   {
+    "from": "Closing",
+    "event": "RCR-",
+    "to": "Closing",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RCR- row, Closing column: '4' (snapshot txt:747)"
+   },
+   {
+    "from": "Stopping",
+    "event": "RCR-",
+    "to": "Stopping",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RCR- row, Stopping column: '5' (snapshot txt:747)"
+   },
+   {
+    "from": "Req-Sent",
+    "event": "RCR-",
+    "to": "Req-Sent",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RCR- row, Req-Sent column: 'scn/6' (snapshot txt:792)"
+   },
+   {
+    "from": "Ack-Rcvd",
+    "event": "RCR-",
+    "to": "Ack-Rcvd",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RCR- row, Ack-Rcvd column: 'scn/7' (snapshot txt:792)"
+   },
+   {
+    "from": "Ack-Sent",
+    "event": "RCR-",
+    "to": "Req-Sent",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RCR- row, Ack-Sent column: 'scn/6' (snapshot txt:792)"
+   },
+   {
+    "from": "Opened",
+    "event": "RCR-",
+    "to": "Req-Sent",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RCR- row, Opened column: 'tld,scr,scn/6' (snapshot txt:792)"
+   },
+   {
+    "from": "Closed",
+    "event": "RCA",
+    "to": "Closed",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RCA row, Closed column: 'sta/2' (snapshot txt:748)"
+   },
+   {
+    "from": "Stopped",
+    "event": "RCA",
+    "to": "Stopped",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RCA row, Stopped column: 'sta/3' (snapshot txt:748)"
+   },
+   {
+    "from": "Closing",
+    "event": "RCA",
+    "to": "Closing",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RCA row, Closing column: '4' (snapshot txt:748)"
+   },
+   {
+    "from": "Stopping",
+    "event": "RCA",
+    "to": "Stopping",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RCA row, Stopping column: '5' (snapshot txt:748)"
+   },
+   {
+    "from": "Req-Sent",
+    "event": "RCA",
+    "to": "Ack-Rcvd",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RCA row, Req-Sent column: 'irc/7' (snapshot txt:793)"
+   },
+   {
+    "from": "Ack-Rcvd",
+    "event": "RCA",
+    "to": "Req-Sent",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RCA row, Ack-Rcvd column: 'scr/6x' (snapshot txt:793) + footnote x: crossed connection (snapshot txt:822; sec.4.3 'RCA' Implementation Note txt:1124-1135)"
+   },
+   {
+    "from": "Ack-Sent",
+    "event": "RCA",
+    "to": "Opened",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RCA row, Ack-Sent column: 'irc,tlu/9' (snapshot txt:793)"
+   },
+   {
+    "from": "Opened",
+    "event": "RCA",
+    "to": "Req-Sent",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RCA row, Opened column: 'tld,scr/6x' (snapshot txt:793) + footnote x: crossed connection (snapshot txt:822; sec.4.3 'RCA' Implementation Note txt:1124-1135)"
+   },
+   {
+    "from": "Closed",
+    "event": "RCN",
+    "to": "Closed",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RCN row, Closed column: 'sta/2' (snapshot txt:749)"
+   },
+   {
+    "from": "Stopped",
+    "event": "RCN",
+    "to": "Stopped",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RCN row, Stopped column: 'sta/3' (snapshot txt:749)"
+   },
+   {
+    "from": "Closing",
+    "event": "RCN",
+    "to": "Closing",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RCN row, Closing column: '4' (snapshot txt:749)"
+   },
+   {
+    "from": "Stopping",
+    "event": "RCN",
+    "to": "Stopping",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RCN row, Stopping column: '5' (snapshot txt:749)"
+   },
+   {
+    "from": "Req-Sent",
+    "event": "RCN",
+    "to": "Req-Sent",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RCN row, Req-Sent column: 'irc,scr/6' (snapshot txt:794)"
+   },
+   {
+    "from": "Ack-Rcvd",
+    "event": "RCN",
+    "to": "Req-Sent",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RCN row, Ack-Rcvd column: 'scr/6x' (snapshot txt:794) + footnote x: crossed connection (snapshot txt:822; sec.4.3 'RCA' Implementation Note txt:1124-1135)"
+   },
+   {
+    "from": "Ack-Sent",
+    "event": "RCN",
+    "to": "Ack-Sent",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RCN row, Ack-Sent column: 'irc,scr/8' (snapshot txt:794)"
+   },
+   {
+    "from": "Opened",
+    "event": "RCN",
+    "to": "Req-Sent",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RCN row, Opened column: 'tld,scr/6x' (snapshot txt:794) + footnote x: crossed connection (snapshot txt:822; sec.4.3 'RCA' Implementation Note txt:1124-1135)"
+   },
+   {
+    "from": "Closed",
+    "event": "RTR",
+    "to": "Closed",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RTR row, Closed column: 'sta/2' (snapshot txt:751)"
+   },
+   {
+    "from": "Stopped",
+    "event": "RTR",
+    "to": "Stopped",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RTR row, Stopped column: 'sta/3' (snapshot txt:751)"
+   },
+   {
+    "from": "Closing",
+    "event": "RTR",
+    "to": "Closing",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RTR row, Closing column: 'sta/4' (snapshot txt:751)"
+   },
+   {
+    "from": "Stopping",
+    "event": "RTR",
+    "to": "Stopping",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RTR row, Stopping column: 'sta/5' (snapshot txt:751)"
+   },
+   {
+    "from": "Req-Sent",
+    "event": "RTR",
+    "to": "Req-Sent",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RTR row, Req-Sent column: 'sta/6' (snapshot txt:796)"
+   },
+   {
+    "from": "Ack-Rcvd",
+    "event": "RTR",
+    "to": "Req-Sent",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RTR row, Ack-Rcvd column: 'sta/6' (snapshot txt:796)"
+   },
+   {
+    "from": "Ack-Sent",
+    "event": "RTR",
+    "to": "Req-Sent",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RTR row, Ack-Sent column: 'sta/6' (snapshot txt:796)"
+   },
+   {
+    "from": "Opened",
+    "event": "RTR",
+    "to": "Stopping",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RTR row, Opened column: 'tld,zrc,sta/5' (snapshot txt:796)"
+   },
+   {
+    "from": "Closed",
+    "event": "RTA",
+    "to": "Closed",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RTA row, Closed column: '2' (snapshot txt:752)"
+   },
+   {
+    "from": "Stopped",
+    "event": "RTA",
+    "to": "Stopped",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RTA row, Stopped column: '3' (snapshot txt:752)"
+   },
+   {
+    "from": "Closing",
+    "event": "RTA",
+    "to": "Closed",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RTA row, Closing column: 'tlf/2' (snapshot txt:752)"
+   },
+   {
+    "from": "Stopping",
+    "event": "RTA",
+    "to": "Stopped",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RTA row, Stopping column: 'tlf/3' (snapshot txt:752)"
+   },
+   {
+    "from": "Req-Sent",
+    "event": "RTA",
+    "to": "Req-Sent",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RTA row, Req-Sent column: '6' (snapshot txt:797)"
+   },
+   {
+    "from": "Ack-Rcvd",
+    "event": "RTA",
+    "to": "Req-Sent",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RTA row, Ack-Rcvd column: '6' (snapshot txt:797)"
+   },
+   {
+    "from": "Ack-Sent",
+    "event": "RTA",
+    "to": "Ack-Sent",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RTA row, Ack-Sent column: '8' (snapshot txt:797)"
+   },
+   {
+    "from": "Opened",
+    "event": "RTA",
+    "to": "Req-Sent",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RTA row, Opened column: 'tld,scr/6' (snapshot txt:797)"
+   },
+   {
+    "from": "Closed",
+    "event": "RUC",
+    "to": "Closed",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RUC row, Closed column: 'scj/2' (snapshot txt:754)"
+   },
+   {
+    "from": "Stopped",
+    "event": "RUC",
+    "to": "Stopped",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RUC row, Stopped column: 'scj/3' (snapshot txt:754)"
+   },
+   {
+    "from": "Closing",
+    "event": "RUC",
+    "to": "Closing",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RUC row, Closing column: 'scj/4' (snapshot txt:754)"
+   },
+   {
+    "from": "Stopping",
+    "event": "RUC",
+    "to": "Stopping",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RUC row, Stopping column: 'scj/5' (snapshot txt:754)"
+   },
+   {
+    "from": "Req-Sent",
+    "event": "RUC",
+    "to": "Req-Sent",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RUC row, Req-Sent column: 'scj/6' (snapshot txt:799)"
+   },
+   {
+    "from": "Ack-Rcvd",
+    "event": "RUC",
+    "to": "Ack-Rcvd",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RUC row, Ack-Rcvd column: 'scj/7' (snapshot txt:799)"
+   },
+   {
+    "from": "Ack-Sent",
+    "event": "RUC",
+    "to": "Ack-Sent",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RUC row, Ack-Sent column: 'scj/8' (snapshot txt:799)"
+   },
+   {
+    "from": "Opened",
+    "event": "RUC",
+    "to": "Opened",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RUC row, Opened column: 'scj/9' (snapshot txt:799)"
+   },
+   {
+    "from": "Closed",
+    "event": "RXJ+",
+    "to": "Closed",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RXJ+ row, Closed column: '2' (snapshot txt:755)"
+   },
+   {
+    "from": "Stopped",
+    "event": "RXJ+",
+    "to": "Stopped",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RXJ+ row, Stopped column: '3' (snapshot txt:755)"
+   },
+   {
+    "from": "Closing",
+    "event": "RXJ+",
+    "to": "Closing",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RXJ+ row, Closing column: '4' (snapshot txt:755)"
+   },
+   {
+    "from": "Stopping",
+    "event": "RXJ+",
+    "to": "Stopping",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RXJ+ row, Stopping column: '5' (snapshot txt:755)"
+   },
+   {
+    "from": "Req-Sent",
+    "event": "RXJ+",
+    "to": "Req-Sent",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RXJ+ row, Req-Sent column: '6' (snapshot txt:800)"
+   },
+   {
+    "from": "Ack-Rcvd",
+    "event": "RXJ+",
+    "to": "Req-Sent",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RXJ+ row, Ack-Rcvd column: '6' (snapshot txt:800)"
+   },
+   {
+    "from": "Ack-Sent",
+    "event": "RXJ+",
+    "to": "Ack-Sent",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RXJ+ row, Ack-Sent column: '8' (snapshot txt:800)"
+   },
+   {
+    "from": "Opened",
+    "event": "RXJ+",
+    "to": "Opened",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RXJ+ row, Opened column: '9' (snapshot txt:800)"
+   },
+   {
+    "from": "Closed",
+    "event": "RXJ-",
+    "to": "Closed",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RXJ- row, Closed column: 'tlf/2' (snapshot txt:756)"
+   },
+   {
+    "from": "Stopped",
+    "event": "RXJ-",
+    "to": "Stopped",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RXJ- row, Stopped column: 'tlf/3' (snapshot txt:756)"
+   },
+   {
+    "from": "Closing",
+    "event": "RXJ-",
+    "to": "Closed",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RXJ- row, Closing column: 'tlf/2' (snapshot txt:756)"
+   },
+   {
+    "from": "Stopping",
+    "event": "RXJ-",
+    "to": "Stopped",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RXJ- row, Stopping column: 'tlf/3' (snapshot txt:756)"
+   },
+   {
+    "from": "Req-Sent",
+    "event": "RXJ-",
+    "to": "Stopped",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RXJ- row, Req-Sent column: 'tlf/3' (snapshot txt:801)"
+   },
+   {
+    "from": "Ack-Rcvd",
+    "event": "RXJ-",
+    "to": "Stopped",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RXJ- row, Ack-Rcvd column: 'tlf/3' (snapshot txt:801)"
+   },
+   {
+    "from": "Ack-Sent",
+    "event": "RXJ-",
+    "to": "Stopped",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RXJ- row, Ack-Sent column: 'tlf/3' (snapshot txt:801)"
+   },
+   {
+    "from": "Opened",
+    "event": "RXJ-",
+    "to": "Stopping",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RXJ- row, Opened column: 'tld,irc,str/5' (snapshot txt:801)"
+   },
+   {
+    "from": "Closed",
+    "event": "RXR",
+    "to": "Closed",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RXR row, Closed column: '2' (snapshot txt:758)"
+   },
+   {
+    "from": "Stopped",
+    "event": "RXR",
+    "to": "Stopped",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RXR row, Stopped column: '3' (snapshot txt:758)"
+   },
+   {
+    "from": "Closing",
+    "event": "RXR",
+    "to": "Closing",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RXR row, Closing column: '4' (snapshot txt:758)"
+   },
+   {
+    "from": "Stopping",
+    "event": "RXR",
+    "to": "Stopping",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RXR row, Stopping column: '5' (snapshot txt:758)"
+   },
+   {
+    "from": "Req-Sent",
+    "event": "RXR",
+    "to": "Req-Sent",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RXR row, Req-Sent column: '6' (snapshot txt:803)"
+   },
+   {
+    "from": "Ack-Rcvd",
+    "event": "RXR",
+    "to": "Ack-Rcvd",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RXR row, Ack-Rcvd column: '7' (snapshot txt:803)"
+   },
+   {
+    "from": "Ack-Sent",
+    "event": "RXR",
+    "to": "Ack-Sent",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RXR row, Ack-Sent column: '8' (snapshot txt:803)"
+   },
+   {
+    "from": "Opened",
+    "event": "RXR",
+    "to": "Opened",
+    "citation": "RFC 1661 sec.4.1 State Transition Table, RXR row, Opened column: 'ser/9' (snapshot txt:803)"
+   }
+  ],
+  "transcription_notes": [
+   "KEPT (one event, three packets): RXR bundles Receive-Echo-Request / Receive-Echo-Reply / Receive-Discard-Request into a single event: the sec.4 preamble says these packet classes 'are not differentiated in the automaton descriptions ... they always cause the same transitions' (snapshot txt:676-681); the table has one RXR row (txt:758 / txt:803); sec.4.3 defines it (txt:1201-1207).",
+   "KEPT (actions not modeled): each table cell is action/new-state (sec.4.1 preamble txt:726-729). The transcription keeps the transition target; the action lists (tlu/tld/tls/tlf, irc/zrc, scr/sca/scn, str/sta, scj, ser) are not part of the model layer -- the model encodes (state, event) -> state only, the same transition-layer-only policy as the tcp and http2 cases. The printed cell text stays visible in every edge citation.",
+   "NOT COLLECTED ('-' cells): the dash marks an illegal transition (sec.4.1 preamble txt:730-732); 40 of the 160 cells are '-' (Up x states 2..5 txt:738 and x states 6..9 txt:783, Down x Initial/Starting txt:739, TO+ and TO- x states 0..3 txt:743-744 and x Opened txt:788-789, the four receive rows x Initial/Starting txt:746-749 and RTR/RTA/RUC/RXJ+/RXJ-/RXR x Initial/Starting, Up already counted). They encode 'this event does not occur here' and collapse to the same self-loop as undeclared pairs (reward 0), per the tcp/http2 encoding policy.",
+   "KEPT (declared self-transitions): 67 of the 120 declared cells carry a new state equal to the source state (e.g. Open in Starting is plain '1' txt:740, Close in Initial is '0' txt:741, TO+ in Closing is 'str/4' txt:743, RTA in Req-Sent is '6' txt:797, RUC in Opened is 'scj/9' txt:799). All are transcribed as ordinary edges (from == to) so the collected edge set mirrors the table cell for cell; in the trans matrix they coincide numerically with self-loops.",
+   "NOT COLLECTED (footnote semantics): the table's footnote letters p/r/x (txt:818/820/822) annotate implementation options -- Passive, Restart, crossed connection -- that change actions or reading, not the new-state column. The letters are quoted in the affected edges' citations and the option discussions are anchored (p: txt:894-904, r: txt:1025-1041, x: txt:1124-1135).",
+   "NOT COLLECTED (cross-layer propagation): This-Layer-Up/Down actions signal NCP automata (sec.4.3 'Up' txt:979-986, 'Down' txt:1004-1006); that inter-automaton signaling is outside this case's scope (one LCP automaton, one endpoint).",
+   "KEPT (state naming): state_names use the printed table-header abbreviations Req-Sent / Ack-Rcvd / Ack-Sent (txt:736, txt:781); sec.4.2 prints the long forms Request-Sent (txt:931) and Ack-Received (txt:945)."
+  ],
+  "regenerate": "python -X utf8 field-trial2/cases/ppp-lcp/make_ppp_lcp.py"
+ },
+ "trans": [
+  [
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     8,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     0,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     2,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     8,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     9,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     7,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     8,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     8,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     8,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     8,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     9,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     8,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     8,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     8,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     8,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     3,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     8,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     9,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     1,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     9,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     4,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     9,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     9,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     8,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     6,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     9,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     9,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     5,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     9,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     10,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     10,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     11,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     11,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     12,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     12,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     13,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     13,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     14,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     14,
+     0.0
+    ]
+   ]
+  ],
+  [
+   [
+    [
+     1.0,
+     15,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     0.0
+    ]
+   ],
+   [
+    [
+     1.0,
+     15,
+     0.0
+    ]
+   ]
+  ]
+ ]
+}

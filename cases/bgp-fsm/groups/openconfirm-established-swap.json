@@ -1,0 +1,36 @@
+{
+ "n_states": 8,
+ "elements": [
+  [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  [
+   0,
+   1,
+   2,
+   3,
+   5,
+   4,
+   6,
+   7
+  ]
+ ],
+ "semantics": {
+  "action": "fixed"
+ },
+ "meta": {
+  "claim": "defendant B: OpenConfirm and Established are the two session-live states -- both answer ManualStop, AutomaticStop and HoldTimer expiry with a NOTIFICATION and a drop to Idle (txt:3715-3746, txt:3748-3773 / txt:3940-3974, txt:3988-4005), both keep the session alive on their periodic machinery (OpenConfirm 'remains in the OpenConfirmed state' on Event 11, txt:3775-3782; Established 'remains in the Established state' on Events 26/27, txt:4095-4111), and both sink to Idle on NOTIFICATION or TCP failure (txt:3792-3826 / txt:4064-4078) -- so maybe states 4 <-> 5 can be swapped alone",
+  "construction": "order-2 group swapping OpenConfirm <-> Established (states 4 <-> 5) only",
+  "why_it_looks_legal": "both states hold a live session with the same drain-to-Idle skeleton and the same NOTIFICATION handling; on the unlabeled graph both also self-loop on their periodic events",
+  "why_it_is_not_a_symmetry": "OpenConfirm exists to leave itself on Event 26: 'If the local system receives a KEEPALIVE message (KeepAliveMsg (Event 26)) ... changes its state to Established' (txt:3898-3903), while Established's Event 26 'remains in the Established state' (txt:4095-4101) -- the swap demands Established --Event 26--> OpenConfirm, which no paragraph declares; Established additionally self-loops on UPDATE (Event 27, txt:4103-4111) where OpenConfirm's FSM-error catch-all sends Event 27 to Idle (txt:3905-3930); and the in-edges differ -- Established is entered only through OpenConfirm's Event 26, while OpenConfirm is entered from OpenSent's Event 19 (txt:3591-3606) and from Connect/Active's Event 20 (txt:3127-3161, txt:3378-3404)",
+  "semantics_note": "control group: the transcription says the swap breaks at the structure level (the Event 26 target differs); the verdict rows live in expected.json and come from the arbitration run, not from this note",
+  "regenerate": "python -X utf8 field-trial2/cases/bgp-fsm/make_bgp_fsm.py"
+ }
+}

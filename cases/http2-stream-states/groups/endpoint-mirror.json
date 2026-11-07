@@ -1,0 +1,53 @@
+{
+ "n_states": 16,
+ "elements": [
+  [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15
+  ],
+  [
+   0,
+   2,
+   1,
+   3,
+   5,
+   4,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15
+  ]
+ ],
+ "semantics": {
+  "action": "fixed"
+ },
+ "meta": {
+  "claim": "defendant A (claim): the stream state graph is endpoint-role symmetric -- swapping the two endpoint roles (local <-> remote) maps every arrow to an arrow: reserved (local) <-> reserved (remote) (server-push reservation twins), half-closed (local) <-> half-closed (remote), with idle, open and closed fixed. The RFC writes the two reserved states and the two half-closed states as mirror bullet lists, and the RST escape says verbatim 'Either endpoint can send a RST_STREAM frame' in both reserved states.",
+  "construction": "order-2 group: swap reserved (local) <-> reserved (remote) (states 1 <-> 2) AND half-closed (local) <-> half-closed (remote) (states 4 <-> 5)",
+  "why_it_looks_legal": "on the unlabeled graph every edge maps to an edge: idle->res(l)/res(r) are twins, res(l)->hc(r) mirrors res(r)->hc(l), open->hc(l)/hc(r) are twins, and every ->closed edge has its twin",
+  "why_it_is_not_a_symmetry": "the labels move with the roles: 'send PP' on idle->reserved (local) becomes 'recv PP' on idle->reserved (remote); likewise send H/recv H, send ES/recv ES and send R/recv R differ on most edges, so with event names pinned the swap fails -- the two roles are complementary, not identical",
+  "engineering_anchor": "the RFC defines the state machine once and lets both endpoints use it subjectively: 'Both endpoints have a subjective view of the state of a stream' (sec.5.1); the mirror reading is exactly how one shared diagram serves both sides",
+  "semantics_note": "event-class model: semantics declared \"fixed\" (protocol-true reading); the relabel row is the diagnostic contrast reading",
+  "regenerate": "python -X utf8 field-trial2/cases/http2-stream-states/make_http2.py"
+ }
+}

@@ -1,0 +1,86 @@
+{
+ "case": "http2-stream-states",
+ "provenance": {
+  "recorded": "2026-11-08 adoption into the official docket: the case bundle was copied byte-identical from the field-trial2 blind-trial round-2 case directory (8/8 files sha256-equal at copy time; oracle-input hashes match field-trial2/sealed/manifest.json), then the rows below were re-observed live in this repository via `python -X utf8 -m symmetry_court arbitrate --emit-expected-template --case http2-stream-states` -- relabel/fixed are this run's measured rows, field-for-field identical to the round-2 records; the receipt is verdicts/http2-stream-states.verdict.json; the gate (`python -X utf8 -m symmetry_court selftest`) replays the case and compares these rows field-by-field",
+  "reading_guide": "relabel row = actions may be renamed along with states (diagnostic contrast reading for an event-class model); fixed row = event names pinned (the protocol-true reading, declared in each group file); networkx columns = independent juror",
+  "networkx_source": "networkx columns are carried from the field-trial2 sealed truth (field-trial2/sealed/http2-stream-states.truth.json, independent oracle w2-independent-oracle, write-once after sealing 2026-11-07T18:34:44Z, sha256 listed in field-trial2/sealed/manifest.json); the round-2 unsealing reconciliation matched the tool on 60/60 checks (12 candidate groups x 5 axes: fixed / relabel / binding / networkx-structure / networkx-labeled; false positives 0, false negatives 0; report: field-trial2/report/reconciliation.md), and this adoption run's live networkx jury reproduced the same two columns for all 4 groups"
+ },
+ "groups": {
+  "endpoint-mirror": {
+   "claim": "defendant A (claim): the stream state graph is endpoint-role symmetric -- swapping the two endpoint roles (local <-> remote) maps every arrow to an arrow: reserved (local) <-> reserved (remote) (server-push reservation twins), half-closed (local) <-> half-closed (remote), with idle, open and closed fixed. The RFC writes the two reserved states and the two half-closed states as mirror bullet lists, and the RST escape says verbatim 'Either endpoint can send a RST_STREAM frame' in both reserved states.",
+   "relabel": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "generalized"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict"
+   },
+   "networkx": {
+    "structure_symmetry": true,
+    "labeled_symmetry": false
+   }
+  },
+  "half-mirror-only": {
+   "claim": "defendant B: half-closed (local) and half-closed (remote) are shape-twins (both drain to closed on three events), so maybe they can be swapped while keeping reserved (local)/(remote) fixed",
+   "relabel": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "generalized"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict"
+   },
+   "networkx": {
+    "structure_symmetry": false,
+    "labeled_symmetry": false
+   }
+  },
+  "reserved-swap-only": {
+   "claim": "defendant C: reserved (local) and reserved (remote) are server-push twins (both released by RST from either endpoint), so maybe they can be swapped while keeping the half-closed pair fixed",
+   "relabel": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "generalized"
+   },
+   "fixed": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0,
+    "judge": "strict"
+   },
+   "networkx": {
+    "structure_symmetry": false,
+    "labeled_symmetry": false
+   }
+  },
+  "pads": {
+   "claim": "positive control: padding states 7 and 8 have byte-identical rows (every event self-loops, reward 0), so the swap is a genuine symmetry under BOTH readings and should be admitted everywhere",
+   "relabel": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "generalized"
+   },
+   "fixed": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0,
+    "judge": "strict"
+   },
+   "networkx": {
+    "structure_symmetry": true,
+    "labeled_symmetry": true
+   }
+  }
+ }
+}
