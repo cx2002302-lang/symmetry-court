@@ -1,6 +1,6 @@
 {
  "case": "raft-etcd",
- "generated_utc": "2026-11-07T00:30:32Z",
+ "generated_utc": "2026-11-07T01:08:29Z",
  "capability": {
   "name": "discover",
   "semantics": "fixed",
@@ -204,7 +204,7 @@
  "timing_seconds": {
   "graph": 0.0,
   "wl": 0.0,
-  "vf2": 0.015,
+  "vf2": 0.0,
   "orbits_and_generators": 0.0,
   "gate_engine": 0.172
  },

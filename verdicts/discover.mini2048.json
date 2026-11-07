@@ -1,6 +1,6 @@
 {
  "case": "mini2048",
- "generated_utc": "2026-11-07T00:30:32Z",
+ "generated_utc": "2026-11-07T01:08:29Z",
  "capability": {
   "name": "discover",
   "semantics": "fixed",
@@ -4322,7 +4322,7 @@
    "strict": true
   },
   "engine_group_order_reported": 240,
-  "gate_seconds": 0.5
+  "gate_seconds": 0.484
  },
  "reconciliation": {
   "checked": true,
@@ -4436,9 +4436,9 @@
  "timing_seconds": {
   "graph": 0.0,
   "wl": 0.0,
-  "vf2": 1.531,
-  "orbits_and_generators": 0.094,
-  "gate_engine": 0.5
+  "vf2": 1.578,
+  "orbits_and_generators": 0.109,
+  "gate_engine": 0.484
  },
  "provenance": {
   "recorded_from_live_run": true,

@@ -1,6 +1,6 @@
 {
  "case": "hanoi3",
- "generated_utc": "2026-11-07T00:25:34Z",
+ "generated_utc": "2026-11-07T01:03:33Z",
  "capability": {
   "name": "discover",
   "semantics": "fixed",
@@ -4579,8 +4579,8 @@
  "timing_seconds": {
   "graph": 0.0,
   "wl": 0.0,
-  "vf2": 0.015,
-  "orbits_and_generators": 0.016,
+  "vf2": 0.031,
+  "orbits_and_generators": 0.0,
   "gate_engine": 0.203
  },
  "provenance": {

@@ -1,6 +1,6 @@
 {
  "case": "imap",
- "generated_utc": "2026-11-07T00:25:34Z",
+ "generated_utc": "2026-11-07T01:03:33Z",
  "capability": {
   "name": "discover",
   "semantics": "fixed",
@@ -403,7 +403,7 @@
    "strict": true
   },
   "engine_group_order_reported": 24,
-  "gate_seconds": 0.188
+  "gate_seconds": 0.187
  },
  "reconciliation": {
   "checked": true,
@@ -469,9 +469,9 @@
  "timing_seconds": {
   "graph": 0.0,
   "wl": 0.0,
-  "vf2": 0.0,
+  "vf2": 0.016,
   "orbits_and_generators": 0.0,
-  "gate_engine": 0.188
+  "gate_engine": 0.187
  },
  "provenance": {
   "recorded_from_live_run": true,

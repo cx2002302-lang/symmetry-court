@@ -1,6 +1,6 @@
 {
  "case": "hadoop-mr-task",
- "generated_utc": "2026-11-07T00:25:33Z",
+ "generated_utc": "2026-11-07T01:03:33Z",
  "capability": {
   "name": "discover",
   "semantics": "fixed",
@@ -158,7 +158,7 @@
    "strict": true
   },
   "engine_group_order_reported": 1,
-  "gate_seconds": 0.172
+  "gate_seconds": 0.188
  },
  "reconciliation": {
   "checked": true,
@@ -236,7 +236,7 @@
   "wl": 0.0,
   "vf2": 0.0,
   "orbits_and_generators": 0.0,
-  "gate_engine": 0.172
+  "gate_engine": 0.188
  },
  "provenance": {
   "recorded_from_live_run": true,
