@@ -76,6 +76,7 @@ python -X utf8 -m pip install networkx
 
 python -X utf8 -m symmetry_court list        # see the docket
 python -X utf8 -m symmetry_court arbitrate   # run the trial — a verdict table per case
+python -X utf8 -m symmetry_court arbitrate --case tcp   # single-case trial (the same --case flag discover uses; an unknown name exits 3 with the available names)
 python -X utf8 -m symmetry_court compare     # gate-value A/B: naive structural merge vs the gate, per-group damage ledger (caliber per group declaration since v2)
 python -X utf8 -m symmetry_court discover    # fixed-caliber candidate discovery + gate arm (scoped — see its section below)
 python -X utf8 -m symmetry_court selftest    # replay every verdict against expected (exit 0 = green)

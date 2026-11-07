@@ -45,6 +45,7 @@ python -X utf8 -m pip install networkx
 
 python -X utf8 -m symmetry_court list        # 看案卷
 python -X utf8 -m symmetry_court arbitrate   # 开庭——每案出一张判决表
+python -X utf8 -m symmetry_court arbitrate --case tcp   # 单案开庭（与 discover 同一个 --case 旗标；未知名退出码 3 并列出可用案名）
 python -X utf8 -m symmetry_court compare     # 闸门价值对比——朴素合并 vs 过闸，逐群损害台账，口径按群声明分派（v2 起；见 docs/闸门价值对比.html）
 python -X utf8 -m symmetry_court discover    # fixed 口径候选发现 + 闸门臂（划界明确——见下文专节）
 python -X utf8 -m symmetry_court selftest    # 全案重放对 expected（退出码 0 = 全绿）
