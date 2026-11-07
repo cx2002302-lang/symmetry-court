@@ -107,3 +107,84 @@ time.
 ## 6. Wave addendum — 2026-11-03 (integration close-out, docket 9 cases / 32 groups)
 
 - [x] 2026-11-03: full replay green — `python -X utf8 -m symmetry_court selftest` → exit 0, `SELFTEST PASS（重放契约字段 320 个）` (9 cases, incl. `mini2048` 60 fields); `arbitrate` → 9/9 verdicts written; `compare` (v2, caliber per group declaration) → 9 cases / 32 groups, 闸门价值一致性 PASS (gate admits 7, all zero-damage; old-8 per-case receipts zero-drift modulo gate seconds); smoke docket 40 fields PASS + `make_tcp_smoke.py --check` byte-identity OK; vendored 30/30 NOTICE sha256 unchanged; banned-vocabulary / internal-name greps clean in authored text (`docs/nontrivial-admit.md` records the `mini2048` finding: explicit caliber's first real-system sample, engine rejects pending upstream per-element-map fix).
+
+## 7. Gate re-run SOP addendum — 2026-11-07 (selftest exit-1 anomaly, three clean re-runs, 12 cases / 450 fields)
+
+Incident on record: a closure-gate run of `python -X utf8 -m symmetry_court
+selftest` was logged with exit code 1 while its captured stdout was truncated
+(no `FAIL` line visible); a later manual re-run with direct exit capture
+exited 0 and the audit passed, leaving an unexplained contradiction.
+Disposition on 2026-11-07, this tree: three consecutive clean re-runs, each an
+isolated invocation with no pipe anywhere in the command line, stdout/stderr
+redirected to files, `$?` read directly from the gate process —
+
+- [x] run 1 → exit 0, 205 s wall, `SELFTEST PASS（重放契约字段 450 个）`, stderr 0 bytes
+- [x] run 2 → exit 0, 206 s wall, `SELFTEST PASS（重放契约字段 450 个）`, stderr 0 bytes
+- [x] run 3 → exit 0, 206 s wall, `SELFTEST PASS（重放契约字段 450 个）`, stderr 0 bytes
+
+All three replayed all 12 cases field-by-field (40+30+40+30+30+50+60+30+40+
+40+30+30 = 450 contract fields), verified 30/30 NOTICE sha256 entries, engine
+version OK, and left the working tree untouched (receipt comparison is
+read-only). Classification: the exit-1 record is not reproducible and is most
+consistent with a capture artifact of the gate harness (piped invocation /
+truncated log), not with a defect in the gate itself. The original record's
+exact command line was not preserved, so a one-off transient cannot be fully
+excluded from the surviving evidence; the protocol below makes any recurrence
+diagnosable on the spot. No code change was needed or made — judgment
+criteria untouched; `run.bat` audited and already clean (direct
+`|| goto :fail` per step, no pipes).
+
+### Gate re-run SOP (binding for every future gate run)
+
+1. **Never take `$?` after a pipe.** In `cmd | tee f` or `cmd | tail …`, `$?`
+   is the last pipeline element's status, not the gate's. Redirect instead:
+   `python -X utf8 -m symmetry_court selftest > gate_stdout.txt 2> gate_stderr.txt`
+   then read `$?` directly.
+2. **Capture full stdout and stderr to files; never head/truncate them.**
+   Failure details (`FAIL：…` lines, failing group/arm/field, per-case
+   `[replay] case …` headers) are interleaved through the output and the
+   summary is at the end; a head-only capture is what made the incident
+   record undiagnosable.
+3. **Record per run, verbatim:** exit code, wall time, the final summary line
+   (`SELFTEST PASS/FAIL（重放契约字段 N 个）`), stderr byte count.
+4. **On a non-zero exit, archive `gate_stdout.txt`/`gate_stderr.txt` before
+   any re-run**, then read the failing branch (the `[replay] case X` header
+   above the failure) and the failing cell (`group Y arm Z.field: expected …,
+   replay …`).
+5. **One exit-0 re-run does not close an exit-1 record.** Three consecutive
+   clean runs are required; any non-zero among the three = real flake →
+   root-cause before any gate claim.
+
+Exit-code triage map (grounded in the current tree):
+
+- exit 1, `FAIL：<N>/<M> 个契约字段不一致` → replay vs expected mismatch; the
+  named `group Y arm Z.field` line identifies the cell. Live-flake cause to
+  check by the clock: an engine arm subprocess timed out (per-arm limit
+  300 s, `ENGINE_TIMEOUT_DEFAULT` in `symmetry_court/trial.py`; on timeout
+  the arm record gets `engine timeout after 300s` and a null `verdict`, so
+  the contract fields print as `expected 0, replay None`) — typical under
+  heavy concurrent machine load. Fix direction: archive per-arm timings and
+  evolve the `--timeout` value with a written precedent here; never edit
+  `vendored/`.
+- exit 1, `[engine] FAIL` → the engine `--version` probe failed (60 s probe
+  timeout in `symmetry_court/trial.py` `_tools_block`).
+- exit 1, `saved verdict file STALE/unreadable` → the committed receipt in
+  `verdicts/` diverges from `expected.json` (re-mint with `arbitrate`), or
+  was being rewritten concurrently while the gate read it — schedule gate
+  runs so no second writer touches the repo at the same time.
+- exit 1, `[vendored] FAIL` → NOTICE sha256 mismatch, missing file, or an
+  extra non-`.pyc` file under `vendored/` (`vendor_check` in
+  `symmetry_court/selftest.py`). Charter: stop and investigate, never patch
+  vendored files in place.
+- exit 1, `FAIL：重放失败/重放异常` → case-dir integrity (model.json or
+  group files missing/unreadable) — static, not load-dependent.
+- exit 3 → usage-level failure (0 cases tried / unknown case name); distinct
+  from 1; a 0-case gate run never passes silently.
+- There is no total wall-clock limit inside selftest; only per-engine-call
+  timeouts apply. Observed full-replay wall time at a quiet load on the
+  reference machine: 205–206 s (the three runs above).
+
+Reference invocation (clean-protocol form):
+
+    python -X utf8 -m symmetry_court selftest > gate_stdout.txt 2> gate_stderr.txt
+    echo "exit=$?"
