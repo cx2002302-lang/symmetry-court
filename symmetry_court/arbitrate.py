@@ -5,6 +5,8 @@ arbitrate.py —— 开庭：对 cases/ 全案执行三方庭审
 用法（仓库根目录）：
   python -X utf8 -m symmetry_court arbitrate                    # 官方案卷 cases/
   python -X utf8 -m symmetry_court arbitrate --cases-dir smoke  # 烟测案卷
+  python -X utf8 -m symmetry_court arbitrate --case tcp         # 只审名为 tcp 的案
+        # （--case = 精确单案名，与 discover --case 行为一致）
   python -X utf8 -m symmetry_court arbitrate --only tcp         # 只审名字含 tcp 的案
   python -X utf8 -m symmetry_court arbitrate --emit-expected-template
         # 额外打印每个群按 expected.json 契约观察到的行——给案例工程师
@@ -16,8 +18,11 @@ arbitrate.py —— 开庭：对 cases/ 全案执行三方庭审
     networkx@labeled）+ networkx 透明列（structure）+ 一致性判语；
   · 案件目录 = cases-dir 下含 model.json 的子目录（按名排序；无 model.json
     的子目录跳过并提示——兼容案例工程在途状态）；
+  · 0 案受审绝不静默放行（走查 F1 修复，2026-11-07）：筛选后没有案件
+    （--case/--only 无匹配，或案卷本身为空）一律退出码 3 并写 stderr 明示；
   · 退出码：0=全部案件均已开庭并写出判决（个别群 engine 报错也如实记录在
-    判决书里，但会置退出码 1）；1=任一案件无法审理或审理中有错误；3=用法错误。
+    判决书里，但会置退出码 1）；1=任一案件无法审理或审理中有错误；3=用法错误
+    （含 0 案受审、未知案名、未知旗标——argparse 禁用前缀歧义匹配）。
 """
 
 import argparse
@@ -156,13 +161,17 @@ def _emit_expected_template(verdict, stream=sys.stdout):
 def run(argv=None):
     ap = argparse.ArgumentParser(
         prog="python -X utf8 -m symmetry_court arbitrate",
-        description="三方庭审：wuxing-gua 双口径 × networkx 仲裁")
+        description="三方庭审：wuxing-gua 双口径 × networkx 仲裁",
+        allow_abbrev=False)  # 走查 F1：--case 曾被前缀匹配静默解析成 --cases-dir
     ap.add_argument("--cases-dir", default=DEFAULT_CASES_DIR,
                     help="案卷目录（默认 <repo>/cases）")
     ap.add_argument("--verdicts-dir", default=DEFAULT_VERDICTS_DIR,
                     help="判决书输出目录（默认 <repo>/verdicts）")
+    ap.add_argument("--case", default=None, metavar="NAME",
+                    help="只审名字为 NAME 的案件（精确匹配，单案名；"
+                         "与 discover --case 行为一致）")
     ap.add_argument("--only", default=None, metavar="NAME",
-                    help="只审名字包含 NAME 的案件")
+                    help="只审名字包含 NAME 的案件（子串匹配）")
     ap.add_argument("--timeout", type=int, default=ENGINE_TIMEOUT_DEFAULT,
                     help="单次引擎调用超时秒数（默认 %d）" % ENGINE_TIMEOUT_DEFAULT)
     ap.add_argument("--emit-expected-template", action="store_true",
@@ -170,7 +179,11 @@ def run(argv=None):
     ap.add_argument("--quiet", action="store_true", help="只打印错误与退出摘要")
     args = ap.parse_args(argv)
 
-    cases, skipped = _discover_cases(args.cases_dir)
+    all_cases, skipped = _discover_cases(args.cases_dir)
+    available = ", ".join(all_cases) or "(none)"
+    cases = all_cases
+    if args.case:
+        cases = [c for c in cases if c == args.case]
     if args.only:
         cases = [c for c in cases if args.only in c]
     if not args.quiet:
@@ -179,9 +192,20 @@ def run(argv=None):
                  ("；%d 个子目录无 model.json 跳过（在途？）: %s"
                   % (len(skipped), ", ".join(skipped))) if skipped else ""))
     if not cases:
-        print("无案件可审（0 cases）——正式案卷以 cases/ 为准；"
-              "烟测可用 --cases-dir smoke", file=sys.stdout)
-        return EXIT_OK
+        # 走查 F1 修复（2026-11-07）：0 案受审绝不静默 exit 0——
+        # 用法级失败：退出码 3 + stderr 明示，让脚本与人都看得见。
+        if args.case or args.only:
+            picked = ("--case %r（精确单案名）" % args.case) if args.case \
+                else ("--only %r（子串匹配）" % args.only)
+            print("unknown case: %s / available: %s——在案卷 %s 中无匹配；"
+                  "案名可先跑 `list` 查看；烟测卷另见 --cases-dir smoke"
+                  % (picked, available, args.cases_dir), file=sys.stderr)
+        else:
+            print("无案件可审（0 cases）——案卷 %s 不存在、为空或不包含案件"
+                  "目录（案件目录 = 含 model.json 的子目录）；正式案卷以 "
+                  "cases/ 为准，烟测可用 --cases-dir smoke" % args.cases_dir,
+                  file=sys.stderr)
+        return EXIT_USAGE
 
     os.makedirs(args.verdicts_dir, exist_ok=True)
     failures = []

@@ -107,7 +107,7 @@ compare 自 v2 起按各群声明分派口径：声明 `explicit` 的群原样�
 2. **状态改名后，动作名必须跟着改吗？** 改名后若日志、规范、线上含义要继续诚实，动作名必须跟着状态一起重写：**relabel**。若动作名指的是任何内部改名都碰不到的外部事实：**fixed**。
 3. **悄悄重写事件名会弄坏什么公开的东西吗？** 若一次把 `rcv FIN` 悄悄写成 `rcv ACK of FIN` 的压缩会让你的规范撒谎：**fixed**。
 
-拿不准就两套都跑（法庭向来如此），把分歧当发现读。长版指引——含两个能手算复核的最小例子——在 [docs/which-identical.md](docs/which-identical.md)。
+拿不准就两套都跑（法庭向来如此），把分歧当发现读。长版指引——扑克牌与 TCP 双胞胎的通俗导入、三问自判、三个取自案卷收据实数的最小例（`tcp` 的 fixed、`lightsout3` 的 relabel、`mini2048` 的 explicit）、一页『声明→分派→判决』流程图与术语小词典——在 [docs/which-identical.md](docs/which-identical.md)。
 
 ## 候选发现——第四个能力
 
@@ -152,6 +152,7 @@ compare 自 v2 起按各群声明分派口径：声明 `explicit` 的群原样�
 定位口径，明说：在我们检索过的范围内，没有见到这个组合的对标——公开标准的状态机、在两套写明名字的等变口径下受审、配独立陪审团与可复跑判决书。若你知道对标在哪里，我们真心想听：开个 issue。
 
 - 判决引擎为 [wuxing-gua](https://github.com/cx2002302-lang/wuxing-gua)——本法庭所实例化的上游项目；以 04cf0b6 版字节级内嵌（见 [NOTICE](NOTICE)）。
+- 『两种一样』自判指南：[docs/which-identical.md](docs/which-identical.md)——两种『一样』的大白话（扑克牌同点数互换 vs TCP 双胞胎）、三问自判、三个回源案卷收据的最小例（`tcp` fixed / `lightsout3` relabel / `mini2048` explicit）、一页『声明→分派→判决』流程图与术语小词典。
 - 图解版成果一页看懂在上游主仓：[docs/成果介绍-图解版.html](https://github.com/cx2002302-lang/wuxing-gua/blob/main/docs/成果介绍-图解版.html)（[wuxing-gua](https://github.com/cx2002302-lang/wuxing-gua) 仓）——页内每个数字与本法庭回执（`verdicts/comparison.*.json`）对账一致。
 
 ## 许可

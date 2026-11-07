@@ -396,8 +396,10 @@ names**.
    make your spec lie: **fixed**.
 
 Run both standards when unsure (the court always does), and read the
-disagreement as a finding. The long version, with two hand-checkable worked
-examples, is [docs/which-identical.md](docs/which-identical.md).
+disagreement as a finding. The long version — the poker-table intro, the three
+questions, three worked examples read straight off the case receipts, a
+one-page claim-to-verdict chart, and a term glossary — is
+[docs/which-identical.md](docs/which-identical.md).
 
 ## Candidate discovery — the fourth capability
 
@@ -539,6 +541,7 @@ jury and replayable verdict files. If you know of one, we would genuinely
 like to hear about it: open an issue.
 
 - The judge engine is [wuxing-gua](https://github.com/cx2002302-lang/wuxing-gua) — the upstream project this courtroom instantiates; vendored byte-exact at 04cf0b6 (see [NOTICE](NOTICE)).
+- The self-judgment guide for the two standards: [docs/which-identical.md](docs/which-identical.md) — two kinds of "the same" in plain language (poker-table swaps vs the TCP twins), the three questions, three receipt-backed examples from the docket (`tcp` fixed / `lightsout3` relabel / `mini2048` explicit), a one-page declare→dispatch→verdict chart, and a term glossary.
 - The one-page illustrated results tour lives upstream: [docs/成果介绍-图解版.html](https://github.com/cx2002302-lang/wuxing-gua/blob/main/docs/成果介绍-图解版.html) in the [wuxing-gua](https://github.com/cx2002302-lang/wuxing-gua) repository — every number on that page reconciles with this court's receipts (`verdicts/comparison.*.json`).
 
 ## License

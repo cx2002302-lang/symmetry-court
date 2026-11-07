@@ -75,6 +75,12 @@ def _case_brief(cases_dir, verdicts_dir, label):
 
 def cmd_list(args):
     rows = _case_brief(args.cases_dir, args.verdicts_dir, "案卷 docket")
+    if not os.path.isdir(args.cases_dir):
+        # 走查 F1 修复（2026-11-07）：案卷目录不存在也是用法级失败——
+        # 上面已如实打印，这里再把退出码置 3，与其他子命令统一口径。
+        print("list：案卷目录不存在（exit 3）：%s" % args.cases_dir,
+              file=sys.stderr)
+        return EXIT_USAGE
     if os.path.isdir(DEFAULT_SMOKE_DIR):
         _case_brief(DEFAULT_SMOKE_DIR, args.verdicts_dir,
                     "烟测 smoke（非正式案卷，正式以 cases/ 为准）")
@@ -122,18 +128,28 @@ def _discover_case_brief(verdict):
 def cmd_discover(args):
     """discover 子命令：逐案 fixed 口径候选发现 + 闸门臂 + 对账。"""
     from .discover import (AUTOMORPHISM_CAP_DEFAULT, run_discover_case)
-    cases = []
+    all_cases = []
     if os.path.isdir(args.cases_dir):
         for entry in sorted(os.listdir(args.cases_dir)):
             d = os.path.join(args.cases_dir, entry)
             if os.path.isdir(d) and os.path.isfile(os.path.join(d, "model.json")):
-                cases.append(entry)
+                all_cases.append(entry)
+    available = ", ".join(all_cases) or "(none)"
+    cases = all_cases
     if args.case:
         cases = [c for c in cases if c == args.case]
         if not cases:
-            print("未找到案件 %r（--cases-dir=%s）"
-                  % (args.case, args.cases_dir), file=sys.stderr)
+            print("unknown case: %r / available: %s（--cases-dir=%s；"
+                  "--case 为精确单案名，案名可先跑 `list` 查看）"
+                  % (args.case, available, args.cases_dir), file=sys.stderr)
             return EXIT_USAGE
+    if not cases:
+        # 走查 F1 修复（2026-11-07）：0 案受审绝不静默 exit 0——
+        # 用法级失败：退出码 3 + stderr 明示。
+        print("无案件可发现（0 cases）——案卷 %s 不存在、为空或不包含案件目录"
+              "（案件目录 = 含 model.json 的子目录）；正式案卷以 cases/ 为准，"
+              "烟测可用 --cases-dir smoke" % args.cases_dir, file=sys.stderr)
+        return EXIT_USAGE
     if not args.quiet:
         print("候选发现 discover（fixed 口径：事件名钉死；动作改名类候选"
               "由案卷作者显式声明，机器不猜）")
@@ -206,6 +222,16 @@ def main(argv=None):
     if cmd in ("-V", "--version"):
         print("symmetry_court %s" % __version__)
         return EXIT_OK
+    try:
+        return _dispatch(cmd, rest)
+    except SystemExit as e:
+        # 走查 F1 修复（2026-11-07）：argparse 用法错误统一落到本法庭的
+        # 退出码 3（exit 2 也算用法错误——stderr 已由 argparse 写明）。
+        code = e.code if isinstance(e.code, int) else EXIT_USAGE
+        return code if code in (0, 1) else EXIT_USAGE
+
+
+def _dispatch(cmd, rest):
     if cmd == "arbitrate":
         from . import arbitrate
         return arbitrate.main(rest)
@@ -215,7 +241,8 @@ def main(argv=None):
     if cmd == "compare":
         import argparse
         from . import compare
-        ap = argparse.ArgumentParser(prog="symmetry_court compare")
+        ap = argparse.ArgumentParser(prog="symmetry_court compare",
+                                     allow_abbrev=False)
         ap.add_argument("--root", default=None,
                         help="cases 根目录（默认法庭自有 cases/；可指向同格式案卷集）")
         ap.add_argument("--out", default=None,
@@ -228,7 +255,8 @@ def main(argv=None):
         ap = argparse.ArgumentParser(
             prog="symmetry_court discover",
             description="fixed 口径（事件名钉死）候选对称群自动发现 + "
-                        "vendored 引擎闸门臂 + 对既有真值对账")
+                        "vendored 引擎闸门臂 + 对既有真值对账",
+            allow_abbrev=False)  # 走查 F1：禁前缀歧义匹配（全子命令统一口径）
         ap.add_argument("--case", default=None, metavar="NAME",
                         help="只发现名字为 NAME 的案件（默认全部）")
         ap.add_argument("--all", action="store_true",
@@ -252,7 +280,8 @@ def main(argv=None):
         return cmd_discover(args)
     if cmd == "list":
         import argparse
-        ap = argparse.ArgumentParser(prog="symmetry_court list")
+        ap = argparse.ArgumentParser(prog="symmetry_court list",
+                                     allow_abbrev=False)
         ap.add_argument("--cases-dir", default=DEFAULT_CASES_DIR)
         ap.add_argument("--verdicts-dir", default=DEFAULT_VERDICTS_DIR)
         args = ap.parse_args(rest)

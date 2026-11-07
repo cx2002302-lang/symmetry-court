@@ -156,6 +156,20 @@ argparse 把 `--case` 唯一前缀匹配到 `--cases-dir`，工具报
 本加固供维护者参考：在 quick start 里写明 `--only`；和/或 arbitrate 在
 零案受审时退出非零（它已打印警告行——对脚本而言退出码才是陷阱）。
 
+> **已修（2026-11-07）——F1 闭环。** 三条加固全部落地，陷阱本身被移除：
+> （1）`arbitrate` 与 `selftest` 现在接受 `--case NAME`（精确单案名，行为与
+> `discover --case` 一致）；（2）全部子命令零案受审一律响亮失败——未知案名
+> 或空案卷写 stderr 说明并退出码 3，"0 案静默 exit 0" 不再可能（所有
+> argparse 解析器改用 `allow_abbrev=False`，打错的旗标如 `--cas` 也一样
+> 大声报错，未知旗标退出码统一为 3）；（3）`compare`/`discover` 对零案卷
+> 同样拒绝。本报告命令 #5 的复跑：
+> `python -X utf8 -m symmetry_court arbitrate --case tcp` → `案卷 …：1 案受审`、
+> 完整判决表、判决书写出、退出码 0。零匹配形态（`arbitrate --case
+> no-such-case`、`selftest --case no-such-case`，以及 arbitrate/selftest/
+> compare/discover 各自指向空目录的 `--cases-dir`/`--root`）均写 stderr 并
+> 退出码 3。改动后全量门禁复跑：`SELFTEST PASS（重放契约字段 450 个）`、
+> 退出码 0——契约字段零漂移。
+
 **F2——依赖安装步未在空环境中演练。** networkx 3.6.1 已在环境中，pip 报
 `Requirement already satisfied`，从零下载路径本次未验证。已验证的是：README
 关于 networkx 是唯一安装（引擎 vendored 且零依赖）的说法与 `pyproject.toml`

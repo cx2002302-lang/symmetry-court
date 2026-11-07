@@ -63,6 +63,7 @@ from . import DEFAULT_CASES_DIR, DEFAULT_VERDICTS_DIR, VENDORED_DIR
 
 EXIT_OK = 0
 EXIT_FAIL = 1
+EXIT_USAGE = 3
 
 SENTINEL_REWARD = -1.0
 
@@ -509,11 +510,21 @@ def cmd_compare(args):
     cases_root = args.root or DEFAULT_CASES_DIR
     verdicts_dir = args.out or DEFAULT_VERDICTS_DIR
     os.makedirs(verdicts_dir, exist_ok=True)
+    if not os.path.isdir(cases_root):
+        # 走查 F1 修复（2026-11-07）：案卷目录不存在也是用法级失败——
+        # 退出码 3 + stderr 明示（原先此处会以未处理异常栈告终）。
+        print("no such cases dir: %s (the official docket is cases/, "
+              "smoke is --root smoke)" % cases_root, file=sys.stderr)
+        return EXIT_USAGE
     cases = sorted(d for d in os.listdir(cases_root)
                    if os.path.isfile(os.path.join(cases_root, d, "model.json")))
     if not cases:
-        print("no cases under %s" % cases_root)
-        return EXIT_FAIL
+        # 走查 F1 修复（2026-11-07）：0 案受审绝不静默 exit 0——
+        # 用法级失败：退出码 3 + stderr 明示（与其他子命令统一口径）。
+        print("no cases under %s (a case = a subdirectory holding "
+              "model.json); the official docket is cases/, smoke is "
+              "--root smoke" % cases_root, file=sys.stderr)
+        return EXIT_USAGE
     all_rows = []
     totals = {"cases": 0, "groups": 0, "naive_admits": 0, "naive_harmful": 0,
               "naive_broken": 0, "gate_admits": 0, "gate_broken": 0,

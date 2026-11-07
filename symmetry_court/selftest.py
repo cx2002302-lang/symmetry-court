@@ -12,9 +12,11 @@ selftest.py —— 门禁：全案重放对 expected + vendored 完整性
      清单外多出的实体文件（__pycache__/*.pyc 豁免）也算漂移。
   4. 引擎健康：python -X utf8 -m wuxing_gua --version 可解析。
 
-退出码：0=全过；1=任一比对比失败/案件残缺/引擎或 vendored 漂移。
-无案件（0 cases）时退出 0 并明说（空卷宗上门禁空过，README 数字仍须
-有 expected/verdict 收据背书）。
+退出码：0=全过；1=任一比对比失败/案件残缺/引擎或 vendored 漂移；
+3=用法错误（0 案受审、未知案名、未知旗标——argparse 禁用前缀歧义匹配）。
+0 案受审绝不静默放行（走查 F1 修复，2026-11-07：0 案 = 用法级失败，
+退出 3 并写 stderr；README 数字仍须有 expected/verdict 收据背书——
+门禁从不为空卷宗背书）。
 
 expected.json 布局（规约；读取时兼容每群平铺的旧式行）：
   {"case": "...",
@@ -37,6 +39,7 @@ from .trial import ENGINE_TIMEOUT_DEFAULT, try_case, TV_FLOAT_TOL
 
 EXIT_OK = 0
 EXIT_FAIL = 1
+EXIT_USAGE = 3
 
 _NOTICE = os.path.join(REPO_ROOT, "NOTICE")
 _MANIFEST_RE = re.compile(r"^([0-9a-f]{64})  (.+)$")
@@ -161,11 +164,15 @@ def vendor_check():
 def run(argv=None):
     ap = argparse.ArgumentParser(
         prog="python -X utf8 -m symmetry_court selftest",
-        description="门禁：全案重放对 expected + vendored 完整性")
+        description="门禁：全案重放对 expected + vendored 完整性",
+        allow_abbrev=False)  # 走查 F1：禁前缀歧义匹配（--case 曾能静默滑向 --cases-dir）
     ap.add_argument("--cases-dir", default=DEFAULT_CASES_DIR,
                     help="案卷目录（默认 <repo>/cases）")
     ap.add_argument("--verdicts-dir", default=DEFAULT_VERDICTS_DIR,
                     help="判决书目录（默认 <repo>/verdicts，用于过期核对）")
+    ap.add_argument("--case", default=None, metavar="NAME",
+                    help="只重放名为 NAME 的案件（精确匹配，单案名；"
+                         "与 discover/arbitrate --case 行为一致）")
     ap.add_argument("--timeout", type=int, default=ENGINE_TIMEOUT_DEFAULT)
     ap.add_argument("--skip-vendor-check", action="store_true",
                     help="跳过 NOTICE 清单核验（不推荐；调试用）")
@@ -200,17 +207,29 @@ def run(argv=None):
         print("[engine] FAIL：%r" % (e,))
 
     # 2) 全案重放
-    cases = []
+    all_cases = []
     if os.path.isdir(args.cases_dir):
         for entry in sorted(os.listdir(args.cases_dir)):
             d = os.path.join(args.cases_dir, entry)
             if os.path.isdir(d) and os.path.isfile(os.path.join(d, "model.json")):
-                cases.append(entry)
+                all_cases.append(entry)
+    available = ", ".join(all_cases) or "(none)"
+    cases = all_cases
+    if args.case:
+        cases = [c for c in cases if c == args.case]
     if not cases:
-        print("[replay] 无案件（0 cases）——门禁空过（退出 0）；"
-              "README 数字仍须有 expected/verdict 收据背书")
-        print("SELFTEST %s" % ("PASS" if all_ok else "FAIL"))
-        return EXIT_OK if all_ok else EXIT_FAIL
+        # 走查 F1 修复（2026-11-07）：0 案受审绝不静默 exit 0——
+        # 门禁不为空卷宗背书：用法级失败 = 退出码 3 + stderr 明示。
+        if args.case:
+            print("[replay] unknown case: %r / available: %s——--case"
+                  "（精确单案名）在案卷 %s 中无匹配；案名可先跑 `list` 查看"
+                  % (args.case, available, args.cases_dir), file=sys.stderr)
+        else:
+            print("[replay] 无案件（0 cases）——案卷 %s 不存在、为空或不包含"
+                  "案件目录（案件目录 = 含 model.json 的子目录）；正式案卷以 "
+                  "cases/ 为准，烟测可用 --cases-dir smoke" % args.cases_dir,
+                  file=sys.stderr)
+        return EXIT_USAGE
 
     total_checked = 0
     for case_name in cases:

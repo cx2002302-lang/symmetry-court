@@ -176,6 +176,23 @@ consideration: document `--only` in the quick start, and/or have arbitrate
 exit non-zero when zero cases were selected (it already prints a warning
 line — the exit code is the trap for scripts).
 
+> **Resolved (2026-11-07) — F1 fixed.** All three hardenings landed, and the
+> trap is removed outright: (1) `arbitrate` and `selftest` now accept
+> `--case NAME` (exact single-case name, same behavior as `discover --case`);
+> (2) every subcommand now fails loudly when zero cases are selected — an
+> unknown case name or an empty docket prints a stderr explanation and exits
+> 3; a silent exit 0 on 0 cases is no longer possible (all argparse parsers
+> are built with `allow_abbrev=False`, so a mistyped flag such as `--cas` is
+> a loud error too, with the unknown-flag exit code normalized to 3);
+> (3) `compare`/`discover` refuse a zero-case root the same way. Rerun of
+> this report's command #5:
+> `python -X utf8 -m symmetry_court arbitrate --case tcp` → `案卷 …：1 案受审`,
+> the full trial table, receipt written, exit 0. The zero-match forms
+> (`arbitrate --case no-such-case`, `selftest --case no-such-case`, and an
+> empty `--cases-dir`/`--root` for arbitrate/selftest/compare/discover) each
+> print a stderr message and exit 3. Full gate re-run after the change:
+> `SELFTEST PASS（重放契约字段 450 个）`, exit 0 — no contract field moved.
+
 **F2 — the dependency step was not exercised from an empty environment.**
 networkx 3.6.1 was already installed, so pip reported
 `Requirement already satisfied` and the from-scratch download path went
