@@ -21,10 +21,12 @@ discover.py —— 第四个法庭能力：fixed 口径候选对称群的自动�
   · 报告三样：轨道（精确，或 下界=已枚举子群轨道 / 上界=WL 块）、群阶
     （精确或 ≥cap）、细分是否离散。
 
-正确性锚点（bring-up 实测，记录在判决书 provenance 里）：
-  · 5 个 n≤8 的案（raft-etcd/usb2/hadoop/k8s/imap）上，本模块的 VF2 枚举
-    与 S_n 暴力枚举逐元素集合全等，且与 field-trial 密封真值 fixed_aut_order
-    逐一相等（1/2/1/6/24）；
+正确性锚点（bring-up 实测，记录在判决书 provenance 里，如实两分）：
+  · S_n 暴力集合全等：5 个 n≤8 的案（raft-etcd/usb2/hadoop/k8s/imap）上，
+    本模块的 VF2 枚举与 S_n 暴力枚举逐元素集合全等（阶 1/2/1/6/24）；
+  · 密封真值阶相等：其中 4 个有 field-trial 密封真值文件的案
+    （raft-etcd/usb2/hadoop/k8s）另与密封真值 fixed_aut_order 逐一相等
+    （1/2/1/6）；imap 无密封真值文件，其 24 只由暴力枚举锚定；
   · WL 颜色的自同构不变性是 1-WL 的标准性质，作 node_match 剪枝无损
     （不丢任何自同构）——它只是剪枝，不是判据。
 
@@ -920,11 +922,14 @@ def run_discover_case(case_name, cases_dir, verdicts_dir, vendored_dir,
                     "verdicts/discover.%s.candidate.json --strict "
                     "(cwd=vendored/)" % (case_name, case_name)),
             "correctness_anchors": (
-                "VF2 enumeration set-equal to S_n brute force and equal to "
-                "field-trial sealed fixed_aut_order on the five n<=8 cases "
-                "during bring-up (orders 1/2/1/6/24); the WL node_match "
-                "pruning is sound because WL colors are "
-                "automorphism-invariant"),
+                "VF2 enumeration set-equal to S_n brute force on the five "
+                "n<=8 cases during bring-up (raft-etcd/usb2/hadoop/k8s/imap, "
+                "orders 1/2/1/6/24); equal to field-trial sealed "
+                "fixed_aut_order on the four of them with sealed truth "
+                "files (raft-etcd/usb2/hadoop/k8s, orders 1/2/1/6) - imap "
+                "has no sealed truth file, its 24 anchored by brute force "
+                "only; the WL node_match pruning is sound because WL colors "
+                "are automorphism-invariant"),
         },
     }
     out_path = os.path.join(verdicts_dir, "discover.%s.json" % case_name)
