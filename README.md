@@ -135,7 +135,15 @@ per-row detail keeps a separate contrast column `broken_real_cells_fixed`
 [cases/mini2048/README.md](cases/mini2048/README.md),
 [cases/lightsout3/README.md](cases/lightsout3/README.md),
 [cases/sliding2x3/README.md](cases/sliding2x3/README.md) and
-[cases/hanoi3/README.md](cases/hanoi3/README.md).
+[cases/hanoi3/README.md](cases/hanoi3/README.md). Since 2026-11-07, compare
+also reads each case's existing discovery receipt
+(`verdicts/discover.<case>.json`; the discover module is not imported and
+nothing is re-discovered) and carries the discovery arm into the same
+ledger: per-case conclusion (2 discrete identity groups / 9 pads
+discoveries / 1 beyond-padding fixed group, the 4 capped cases flagged;
+discovered order, or lower bound with orbit LB/UB), with false-positive
+indicators totaling 0 — the four capabilities close one loop: `discover`
+proposes, `arbitrate` judges, `compare` prices, `selftest` replays.
 
 ### How to read a verdict
 

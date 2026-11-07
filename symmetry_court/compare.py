@@ -21,6 +21,16 @@
 3. **对比结论**——朴素臂放行而真值/闸门拒绝的群 = "闸门救下的合并"；
    每个被救下的合并附带它的破坏格数与破坏率。
 
+4. **发现臂（2026-11-07 起，只读不跑）**——读取该案已有的发现收据
+   `verdicts/discover.<case>.json`（存在才读；compare **不 import discover
+   模块、绝不代跑发现**），把发现结论并入院账：结论分类（discrete 离散
+   ⇒ 恒等群 / pads 填充类 / nontrivial_fixed 填充之外的非平凡 fixed 群，
+   互斥主类；truncated 触顶为并列标记——触顶案只报群阶下界与轨道 LB/UB，
+   本仓四个触顶案都同时是 pads 案）、发现阶（或下界）、假阳性指示数
+   （从收据自身的验证记录清点：闸门臂拒收发现的候选、密封阶失配、对账
+   行与枚举矛盾、密封结构违例——本仓恒 0，逻辑能报非 0）。收据缺失如实
+   记 n/a，不臆造、不重跑。
+
 诚实声明：朴素臂是**代理**（structure-only intuition），不是某个具体的第三方
 压缩工具；它代表的决策方式（"长得一样就合并"）在工程里真实存在，TCP 孪生案
 里 networkx 的结构口径就判"可换"。
@@ -203,6 +213,136 @@ def _gate_run(case_dir, model_rel, group_path, strict):
     return r.returncode, verdict, dt
 
 
+_DISCOVERY_CONCLUSIONS = ("discrete", "pads", "nontrivial_fixed")
+
+
+def _discover_arm(verdicts_dir, case):
+    """发现臂：读该案**已有**的发现收据，返回结论结构（只读盘，不跑发现）。
+
+    本函数是 compare 与 discover 的唯一接口：文件级读取 JSON 收据，
+    不 import discover 模块——compare 永远不触发新的发现（禁重跑红线）。
+    收据缺失 → {"available": False, "conclusion": "n/a"}，如实上账。
+
+    结论分类（互斥主类，全部从收据字段推导，无按案硬编码）：
+      discrete         identity_group=True（离散 ⇒ 恒等群）；
+      pads             非恒等且 structural_pad_states 非空（发现的群带填充态）；
+      nontrivial_fixed 非恒等且无填充态（填充之外的非平凡 fixed 群）。
+    触顶（enumeration.truncated=True）是并列标记：触顶案不报精确阶，只报
+    下界（= 已枚举元素数）与轨道 LB/UB（已枚举子群轨道 / 1-WL 块）。
+
+    假阳性指示数（本仓恒 0，逻辑能报非 0）：逐条清点收据**自身验证记录**
+    里与发现声明相矛盾的记载——
+      a. 闸门臂拒收发现的候选群（engine_check exit != 0 或 verdict 非 pass）；
+      b. 密封真值阶失配（sealed_truth.order_matches is False）；
+      c. 对账行与直接判据矛盾（reconciliation 组行 fixed_row_consistent
+         为 False）；
+      d. 声明 pass 的组有元素缺席完整枚举（expected_fixed_verdict=="pass"
+         且 membership_all_in 为 False——发现漏掉了声明对称；注意
+         reject 组的缺席是「精确缺席证明」，是发现正确拒伪，不是假阳性）；
+      e. 密封结构违例（partial_enumeration_vs_sealed_structure 记 "NO ("）。
+    每命中一处 +1，命中明细逐条记录在 false_positive_hits。
+    """
+    path = os.path.join(verdicts_dir, "discover.%s.json" % case)
+    if not os.path.isfile(path):
+        return {"available": False, "conclusion": "n/a",
+                "note": ("no discover receipt on disk (discover has not been "
+                         "run for this case); compare never runs discovery "
+                         "itself")}
+    with open(path, "r", encoding="utf-8") as f:
+        d = json.load(f)
+    disc = d.get("discovery") or {}
+    enu = disc.get("enumeration") or {}
+    orbs = disc.get("orbits") or {}
+    pads = disc.get("structural_pad_states") or []
+    truncated = bool(enu.get("truncated"))
+    identity = bool(disc.get("identity_group"))
+    if identity:
+        conclusion = "discrete"
+    elif pads:
+        conclusion = "pads"
+    else:
+        conclusion = "nontrivial_fixed"
+    lb_blocks = orbs.get("lower_bound_blocks")
+    ub_blocks = orbs.get("upper_bound_blocks")
+
+    hits = []
+    gate = (d.get("gate_arm") or {}).get("engine_check") or {}
+    if gate and (gate.get("exit") != 0 or gate.get("verdict") != "pass"):
+        hits.append("gate arm did not accept the discovered candidate "
+                    "(exit=%r, verdict=%r)" % (gate.get("exit"),
+                                               gate.get("verdict")))
+    sealed = d.get("sealed_truth") or {}
+    if sealed.get("checked") and sealed.get("order_matches") is False:
+        hits.append("sealed order mismatch: discovered %r vs sealed %r"
+                    % (sealed.get("discovered_order"),
+                       sealed.get("sealed_fixed_aut_order")))
+    if sealed.get("checked") and isinstance(
+            sealed.get("partial_enumeration_vs_sealed_structure"), str) \
+            and "NO (" in sealed["partial_enumeration_vs_sealed_structure"]:
+        hits.append("sealed structural violations: %s"
+                    % sealed["partial_enumeration_vs_sealed_structure"])
+    rec = d.get("reconciliation") or {}
+    if rec.get("checked"):
+        for row in rec.get("groups") or []:
+            if row.get("fixed_row_consistent") is False:
+                hits.append("reconciliation: group %r fixed row contradicts "
+                            "the direct criterion" % row.get("group"))
+            if row.get("expected_fixed_verdict") == "pass" \
+                    and row.get("membership_all_in") is False:
+                hits.append("reconciliation: pass-declared group %r has "
+                            "elements absent from the completed enumeration "
+                            "(the discovery missed a declared symmetry)"
+                            % row.get("group"))
+
+    return {
+        "available": True,
+        "receipt": os.path.relpath(path, os.path.dirname(verdicts_dir)),
+        "conclusion": conclusion,
+        "truncated": truncated,
+        "order_exact": enu.get("order"),
+        "order_lower_bound": (enu.get("enumerated_count")
+                              if truncated else None),
+        "order_claim": enu.get("order_claim"),
+        "orbit_status": orbs.get("status"),
+        "n_state_orbits": orbs.get("n_orbits"),
+        "orbit_lower_bound_blocks": (len(lb_blocks)
+                                     if isinstance(lb_blocks, list) else None),
+        "orbit_upper_bound_blocks": (len(ub_blocks)
+                                     if isinstance(ub_blocks, list) else None),
+        "state_pads": len(pads),
+        "identity_group": identity,
+        "wl_discrete": bool(disc.get("discrete_wl")),
+        "false_positive_indicators": len(hits),
+        "false_positive_hits": hits,
+        "false_positive_note": ("counted from the receipt's own verification "
+                                "records (gate rejection of the discovered "
+                                "candidate; sealed-order mismatch; "
+                                "reconciliation rows contradicting the "
+                                "direct criterion; pass-declared elements "
+                                "absent from a completed enumeration; sealed "
+                                "structural violations); 0 = none recorded, "
+                                "the logic reports non-zero when any check "
+                                "records a disagreement"),
+    }
+
+
+def _discovery_row(arm):
+    """发现臂结论的逐行紧凑列（每行同案同值——发现按模型计，不按群计）。"""
+    if not arm.get("available"):
+        return {"conclusion": "n/a", "false_positive_indicators": None}
+    return {
+        "conclusion": arm["conclusion"],
+        "truncated": arm["truncated"],
+        "order_exact": arm["order_exact"],
+        "order_lower_bound": arm["order_lower_bound"],
+        "n_state_orbits": arm["n_state_orbits"],
+        "orbit_lower_bound_blocks": arm["orbit_lower_bound_blocks"],
+        "orbit_upper_bound_blocks": arm["orbit_upper_bound_blocks"],
+        "state_pads": arm["state_pads"],
+        "false_positive_indicators": arm["false_positive_indicators"],
+    }
+
+
 def compare_case(cases_root, case, verdicts_dir, vendored):
     case_dir = os.path.join(cases_root, case)
     model = _load_model(case_dir)
@@ -219,6 +359,9 @@ def compare_case(cases_root, case, verdicts_dir, vendored):
     if os.path.isfile(exp_path):
         with open(exp_path, "r", encoding="utf-8") as f:
             expected = json.load(f)
+
+    # 发现臂：读该案已有的 discover 收据（只读盘，绝不代跑发现）
+    discovery_arm = _discover_arm(verdicts_dir, case)
 
     rows = []
     gate_seconds = 0.0
@@ -284,6 +427,9 @@ def compare_case(cases_root, case, verdicts_dir, vendored):
             "would_be_orbits_if_merged": n_orbits,
             "compression_if_true": round(n / n_orbits, 3) if n_orbits else None,
             "gate_saved_this_merge": saved,
+            # 发现臂结论列（同案每行同值：发现按模型计，不按被告群计；
+            # 收据缺失时 = n/a）
+            "discovery": _discovery_row(discovery_arm),
         }
         if is_exp:
             # explicit 群的追加字段（fixed/无声明群不加，旧收据保持字节稳定；
@@ -328,6 +474,7 @@ def compare_case(cases_root, case, verdicts_dir, vendored):
         "gate_explicit_groups": sum(1 for r_ in rows
                                     if r_.get("damage_caliber") == "explicit"),
         "gate_total_seconds_rounded": round(gate_seconds, 1),
+        "discovery_arm": discovery_arm,
         "rows": rows,
     }
     out = {"case": case, "provenance": {
@@ -344,6 +491,12 @@ def compare_case(cases_root, case, verdicts_dir, vendored):
                    "element's own map; others: event names pinned); "
                    "fixed-caliber damage kept per row in "
                    "broken_real_cells_fixed for contrast"),
+        "discovery_arm": ("existing verdicts/discover.<case>.json receipt "
+                          "read as-is (file-level JSON read; the discover "
+                          "module is not imported and discovery is never "
+                          "re-run by compare); conclusion classified from "
+                          "the receipt's own fields; n/a when no receipt "
+                          "exists"),
     }, "summary": {k: v for k, v in summary.items() if k != "rows"}, "rows": rows}
     with open(os.path.join(verdicts_dir, "comparison.%s.json" % case), "w",
               encoding="utf-8", newline="") as f:
@@ -365,6 +518,7 @@ def cmd_compare(args):
     totals = {"cases": 0, "groups": 0, "naive_admits": 0, "naive_harmful": 0,
               "naive_broken": 0, "gate_admits": 0, "gate_broken": 0,
               "gate_explicit_groups": 0, "gate_seconds": 0.0}
+    discovery_cases = {}
     print("=" * 100)
     print("%-16s %-34s %-9s %-9s %-11s %s" % (
         "case", "group", "朴素臂", "闸门", "破坏格", "压缩读数(若真)"))
@@ -380,6 +534,30 @@ def cmd_compare(args):
         totals["gate_broken"] += s["gate_admitted_broken_cells"]
         totals["gate_explicit_groups"] += s["gate_explicit_groups"]
         totals["gate_seconds"] += s["gate_total_seconds_rounded"]
+        arm = s["discovery_arm"]
+        discovery_cases[case] = _discovery_row(arm)
+        if arm.get("available"):
+            bits = ["%s" % arm["conclusion"]]
+            if arm["truncated"]:
+                bits.append("触顶：群阶下界 %s" % arm["order_lower_bound"])
+            elif arm["order_exact"] is not None:
+                bits.append("精确阶 %s" % arm["order_exact"])
+            if arm["orbit_status"] == "exact":
+                bits.append("轨道 %s（exact）" % arm["n_state_orbits"])
+            elif arm["orbit_status"] == "bounded":
+                bits.append("轨道 %s LB / %s UB 块（bounded）"
+                            % (arm["orbit_lower_bound_blocks"],
+                               arm["orbit_upper_bound_blocks"]))
+            bits.append("填充态 %s" % arm["state_pads"])
+            bits.append("假阳性指示 %s" % arm["false_positive_indicators"])
+            print("  发现臂（读既有收据 %s，不重跑）：%s"
+                  % (arm["receipt"], "｜".join(bits)))
+            if arm["false_positive_indicators"]:
+                for h in arm["false_positive_hits"]:
+                    print("  发现臂假阳性指示：%s" % h)
+        else:
+            print("  发现臂：n/a（%s）" % arm.get("note",
+                                                 "no discover receipt"))
         for r_ in s["rows"]:
             ledger = (r_.get("broken_real_cells_declared")
                       if r_.get("damage_caliber") == "explicit"
@@ -388,7 +566,7 @@ def cmd_compare(args):
             all_rows.append({"case": case, **{k: r_[k] for k in (
                 "group", "naive_structure_admits", "gate_exit",
                 "broken_real_cells_fixed", "compression_if_true",
-                "gate_saved_this_merge")},
+                "gate_saved_this_merge", "discovery")},
                 "gate_caliber": ("explicit" if r_.get("damage_caliber") ==
                                  "explicit" else "fixed"),
                 "broken_by_gate_caliber": ledger})
@@ -401,11 +579,39 @@ def cmd_compare(args):
         print("-" * 100)
     print("(破坏格列：* = 声明口径（explicit：legacy 单映射或逐元素映射）下的对账；"
           "无 * = fixed 口径（动作名钉死）。)")
+    concl_counts = {"discrete": 0, "pads": 0, "nontrivial_fixed": 0, "n/a": 0}
+    truncated_count = 0
+    fp_total = 0
+    for arm_row in discovery_cases.values():
+        concl_counts[arm_row["conclusion"]] = \
+            concl_counts.get(arm_row["conclusion"], 0) + 1
+        if arm_row.get("truncated"):
+            truncated_count += 1
+        if arm_row.get("false_positive_indicators") is not None:
+            fp_total += arm_row["false_positive_indicators"]
     summary = {
         "generated": "see per-case comparison.<case>.json for provenance",
-        **totals,
+        **{**totals, "gate_seconds": round(totals["gate_seconds"], 1)},
         "gate_admitted_broken_is_zero_by_definition":
             "pass requires worst_tv <= 1e-9 on every cell",
+        "discovery_arm": {
+            "source": ("existing verdicts/discover.<case>.json receipts read "
+                       "as-is; compare never runs discovery (the discover "
+                       "module is not imported, nothing is re-discovered)"),
+            "n_cases": totals["cases"],
+            "with_receipt": sum(1 for a in discovery_cases.values()
+                                if a["conclusion"] != "n/a"),
+            "without_receipt": sum(1 for a in discovery_cases.values()
+                                   if a["conclusion"] == "n/a"),
+            "conclusions": concl_counts,
+            "truncated": truncated_count,
+            "false_positive_indicators_total": fp_total,
+            "false_positive_note": ("per-case counts come from each "
+                                    "comparison.<case>.json discovery_arm "
+                                    "block; 0 means no receipt records a "
+                                    "disagreement with its discovery"),
+            "cases": discovery_cases,
+        },
         "rows": all_rows,
     }
     with open(os.path.join(verdicts_dir, "comparison.summary.json"), "w",
@@ -416,7 +622,13 @@ def cmd_compare(args):
              totals["naive_harmful"], totals["naive_broken"]))
     print("      闸门放行 %d（放行群破坏格 %d，判据性质恒为 0）| 闸门总耗时约 %s 秒"
           % (totals["gate_admits"], totals["gate_broken"],
-             totals["gate_seconds"]))
+             round(totals["gate_seconds"], 1)))
+    print("      发现臂（读既有收据，不重跑发现）：离散 %d / pads %d / "
+          "非平凡 fixed %d / n/a %d｜触顶 %d（触顶与 pads 可同案）｜"
+          "假阳性指示合计 %d"
+          % (concl_counts["discrete"], concl_counts["pads"],
+             concl_counts["nontrivial_fixed"], concl_counts["n/a"],
+             truncated_count, fp_total))
     ok = totals["gate_broken"] == 0 and all(
         not (r_["gate_exit"] == 0
              and (r_["broken_by_gate_caliber"] or 0) > 0)

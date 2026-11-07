@@ -3,7 +3,8 @@
  "provenance": {
   "gate": "vendored wuxing_gua check, caliber per group declaration (compare v2; per-element action_maps recognized since 2026-11-04): groups declaring semantics.action=explicit with a valid action_map (single, legacy) or action_maps (per-element) run as declared (no --strict); groups declaring fixed or no declaration run --strict (live run)",
   "naive_arm": "structure-only edge-set invariance proxy (see module docstring)",
-  "damage": "cell-by-cell ledger over model trans, same caliber as the gate arm per group (explicit groups: events renamed per the declared mapping — per-element groups use each element's own map; others: event names pinned); fixed-caliber damage kept per row in broken_real_cells_fixed for contrast"
+  "damage": "cell-by-cell ledger over model trans, same caliber as the gate arm per group (explicit groups: events renamed per the declared mapping — per-element groups use each element's own map; others: event names pinned); fixed-caliber damage kept per row in broken_real_cells_fixed for contrast",
+  "discovery_arm": "existing verdicts/discover.<case>.json receipt read as-is (file-level JSON read; the discover module is not imported and discovery is never re-run by compare); conclusion classified from the receipt's own fields; n/a when no receipt exists"
  },
  "summary": {
   "case": "tls13-handshake",
@@ -17,7 +18,26 @@
   "gate_admitted_broken_cells": 0,
   "gate_saved_merges": 0,
   "gate_explicit_groups": 0,
-  "gate_total_seconds_rounded": 0.5
+  "gate_total_seconds_rounded": 0.5,
+  "discovery_arm": {
+   "available": true,
+   "receipt": "verdicts\\discover.tls13-handshake.json",
+   "conclusion": "pads",
+   "truncated": true,
+   "order_exact": null,
+   "order_lower_bound": 2000,
+   "order_claim": "lower bound: at least 2000 automorphisms proven (enumeration stopped at cap 2000)",
+   "orbit_status": "bounded",
+   "n_state_orbits": 26,
+   "orbit_lower_bound_blocks": 26,
+   "orbit_upper_bound_blocks": 18,
+   "state_pads": 15,
+   "identity_group": false,
+   "wl_discrete": false,
+   "false_positive_indicators": 0,
+   "false_positive_hits": [],
+   "false_positive_note": "counted from the receipt's own verification records (gate rejection of the discovered candidate; sealed-order mismatch; reconciliation rows contradicting the direct criterion; pass-declared elements absent from a completed enumeration; sealed structural violations); 0 = none recorded, the logic reports non-zero when any check records a disagreement"
+  }
  },
  "rows": [
   {
@@ -32,7 +52,18 @@
    "real_cells": 307,
    "would_be_orbits_if_merged": 31,
    "compression_if_true": 1.032,
-   "gate_saved_this_merge": false
+   "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": true,
+    "order_exact": null,
+    "order_lower_bound": 2000,
+    "n_state_orbits": 26,
+    "orbit_lower_bound_blocks": 26,
+    "orbit_upper_bound_blocks": 18,
+    "state_pads": 15,
+    "false_positive_indicators": 0
+   }
   },
   {
    "group": "g2_control_crossside_waitcert_swap_fixed.json",
@@ -46,7 +77,18 @@
    "real_cells": 307,
    "would_be_orbits_if_merged": 31,
    "compression_if_true": 1.032,
-   "gate_saved_this_merge": false
+   "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": true,
+    "order_exact": null,
+    "order_lower_bound": 2000,
+    "n_state_orbits": 26,
+    "orbit_lower_bound_blocks": 26,
+    "orbit_upper_bound_blocks": 18,
+    "state_pads": 15,
+    "false_positive_indicators": 0
+   }
   },
   {
    "group": "g3_pads_swap_fixed.json",
@@ -60,7 +102,18 @@
    "real_cells": 307,
    "would_be_orbits_if_merged": 31,
    "compression_if_true": 1.032,
-   "gate_saved_this_merge": false
+   "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": true,
+    "order_exact": null,
+    "order_lower_bound": 2000,
+    "n_state_orbits": 26,
+    "orbit_lower_bound_blocks": 26,
+    "orbit_upper_bound_blocks": 18,
+    "state_pads": 15,
+    "false_positive_indicators": 0
+   }
   }
  ]
 }

@@ -8,8 +8,157 @@
  "gate_admits": 20,
  "gate_broken": 0,
  "gate_explicit_groups": 10,
- "gate_seconds": 8.4,
+ "gate_seconds": 8.7,
  "gate_admitted_broken_is_zero_by_definition": "pass requires worst_tv <= 1e-9 on every cell",
+ "discovery_arm": {
+  "source": "existing verdicts/discover.<case>.json receipts read as-is; compare never runs discovery (the discover module is not imported, nothing is re-discovered)",
+  "n_cases": 12,
+  "with_receipt": 12,
+  "without_receipt": 0,
+  "conclusions": {
+   "discrete": 2,
+   "pads": 9,
+   "nontrivial_fixed": 1,
+   "n/a": 0
+  },
+  "truncated": 4,
+  "false_positive_indicators_total": 0,
+  "false_positive_note": "per-case counts come from each comparison.<case>.json discovery_arm block; 0 means no receipt records a disagreement with its discovery",
+  "cases": {
+   "dhcp": {
+    "conclusion": "pads",
+    "truncated": true,
+    "order_exact": null,
+    "order_lower_bound": 2000,
+    "n_state_orbits": 10,
+    "orbit_lower_bound_blocks": 10,
+    "orbit_upper_bound_blocks": 9,
+    "state_pads": 8,
+    "false_positive_indicators": 0
+   },
+   "hadoop-mr-task": {
+    "conclusion": "discrete",
+    "truncated": false,
+    "order_exact": 1,
+    "order_lower_bound": null,
+    "n_state_orbits": 8,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 1,
+    "false_positive_indicators": 0
+   },
+   "hanoi3": {
+    "conclusion": "pads",
+    "truncated": false,
+    "order_exact": 120,
+    "order_lower_bound": null,
+    "n_state_orbits": 28,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 5,
+    "false_positive_indicators": 0
+   },
+   "imap": {
+    "conclusion": "pads",
+    "truncated": false,
+    "order_exact": 24,
+    "order_lower_bound": null,
+    "n_state_orbits": 5,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 5,
+    "false_positive_indicators": 0
+   },
+   "k8s-pod-lifecycle": {
+    "conclusion": "pads",
+    "truncated": false,
+    "order_exact": 6,
+    "order_lower_bound": null,
+    "n_state_orbits": 6,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 5,
+    "false_positive_indicators": 0
+   },
+   "lightsout3": {
+    "conclusion": "nontrivial_fixed",
+    "truncated": false,
+    "order_exact": 512,
+    "order_lower_bound": null,
+    "n_state_orbits": 1,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 0,
+    "false_positive_indicators": 0
+   },
+   "mini2048": {
+    "conclusion": "pads",
+    "truncated": true,
+    "order_exact": null,
+    "order_lower_bound": 2000,
+    "n_state_orbits": 242,
+    "orbit_lower_bound_blocks": 242,
+    "orbit_upper_bound_blocks": 62,
+    "state_pads": 183,
+    "false_positive_indicators": 0
+   },
+   "raft-etcd": {
+    "conclusion": "discrete",
+    "truncated": false,
+    "order_exact": 1,
+    "order_lower_bound": null,
+    "n_state_orbits": 4,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 0,
+    "false_positive_indicators": 0
+   },
+   "sliding2x3": {
+    "conclusion": "pads",
+    "truncated": true,
+    "order_exact": null,
+    "order_lower_bound": 2000,
+    "n_state_orbits": 1018,
+    "orbit_lower_bound_blocks": 1018,
+    "orbit_upper_bound_blocks": 7,
+    "state_pads": 304,
+    "false_positive_indicators": 0
+   },
+   "tcp": {
+    "conclusion": "pads",
+    "truncated": false,
+    "order_exact": 120,
+    "order_lower_bound": null,
+    "n_state_orbits": 12,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 5,
+    "false_positive_indicators": 0
+   },
+   "tls13-handshake": {
+    "conclusion": "pads",
+    "truncated": true,
+    "order_exact": null,
+    "order_lower_bound": 2000,
+    "n_state_orbits": 26,
+    "orbit_lower_bound_blocks": 26,
+    "orbit_upper_bound_blocks": 18,
+    "state_pads": 15,
+    "false_positive_indicators": 0
+   },
+   "usb2-device-states": {
+    "conclusion": "pads",
+    "truncated": false,
+    "order_exact": 2,
+    "order_lower_bound": null,
+    "n_state_orbits": 7,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 2,
+    "false_positive_indicators": 0
+   }
+  }
+ },
  "rows": [
   {
    "case": "dhcp",
@@ -19,6 +168,17 @@
    "broken_real_cells_fixed": 11,
    "compression_if_true": 1.067,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": true,
+    "order_exact": null,
+    "order_lower_bound": 2000,
+    "n_state_orbits": 10,
+    "orbit_lower_bound_blocks": 10,
+    "orbit_upper_bound_blocks": 9,
+    "state_pads": 8,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 11
   },
@@ -30,6 +190,17 @@
    "broken_real_cells_fixed": 0,
    "compression_if_true": 1.067,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": true,
+    "order_exact": null,
+    "order_lower_bound": 2000,
+    "n_state_orbits": 10,
+    "orbit_lower_bound_blocks": 10,
+    "orbit_upper_bound_blocks": 9,
+    "state_pads": 8,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 0
   },
@@ -41,6 +212,17 @@
    "broken_real_cells_fixed": 6,
    "compression_if_true": 1.067,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": true,
+    "order_exact": null,
+    "order_lower_bound": 2000,
+    "n_state_orbits": 10,
+    "orbit_lower_bound_blocks": 10,
+    "orbit_upper_bound_blocks": 9,
+    "state_pads": 8,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 6
   },
@@ -52,6 +234,17 @@
    "broken_real_cells_fixed": 7,
    "compression_if_true": 1.067,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": true,
+    "order_exact": null,
+    "order_lower_bound": 2000,
+    "n_state_orbits": 10,
+    "orbit_lower_bound_blocks": 10,
+    "orbit_upper_bound_blocks": 9,
+    "state_pads": 8,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 7
   },
@@ -63,6 +256,17 @@
    "broken_real_cells_fixed": 17,
    "compression_if_true": 1.143,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "discrete",
+    "truncated": false,
+    "order_exact": 1,
+    "order_lower_bound": null,
+    "n_state_orbits": 8,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 1,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 17
   },
@@ -74,6 +278,17 @@
    "broken_real_cells_fixed": 14,
    "compression_if_true": 1.143,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "discrete",
+    "truncated": false,
+    "order_exact": 1,
+    "order_lower_bound": null,
+    "n_state_orbits": 8,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 1,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 14
   },
@@ -85,6 +300,17 @@
    "broken_real_cells_fixed": 11,
    "compression_if_true": 1.143,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "discrete",
+    "truncated": false,
+    "order_exact": 1,
+    "order_lower_bound": null,
+    "n_state_orbits": 8,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 1,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 11
   },
@@ -96,6 +322,17 @@
    "broken_real_cells_fixed": 122,
    "compression_if_true": 1.684,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": false,
+    "order_exact": 120,
+    "order_lower_bound": null,
+    "n_state_orbits": 28,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 5,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "explicit",
    "broken_by_gate_caliber": 0
   },
@@ -107,6 +344,17 @@
    "broken_real_cells_fixed": 122,
    "compression_if_true": 1.684,
    "gate_saved_this_merge": true,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": false,
+    "order_exact": 120,
+    "order_lower_bound": null,
+    "n_state_orbits": 28,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 5,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 122
   },
@@ -118,6 +366,17 @@
    "broken_real_cells_fixed": 630,
    "compression_if_true": 3.2,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": false,
+    "order_exact": 120,
+    "order_lower_bound": null,
+    "n_state_orbits": 28,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 5,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "explicit",
    "broken_by_gate_caliber": 0
   },
@@ -129,6 +388,17 @@
    "broken_real_cells_fixed": 0,
    "compression_if_true": 1.032,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": false,
+    "order_exact": 120,
+    "order_lower_bound": null,
+    "n_state_orbits": 28,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 5,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 0
   },
@@ -140,6 +410,17 @@
    "broken_real_cells_fixed": 6,
    "compression_if_true": 1.143,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": false,
+    "order_exact": 24,
+    "order_lower_bound": null,
+    "n_state_orbits": 5,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 5,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 6
   },
@@ -151,6 +432,17 @@
    "broken_real_cells_fixed": 7,
    "compression_if_true": 1.143,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": false,
+    "order_exact": 24,
+    "order_lower_bound": null,
+    "n_state_orbits": 5,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 5,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 7
   },
@@ -162,6 +454,17 @@
    "broken_real_cells_fixed": 0,
    "compression_if_true": 1.143,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": false,
+    "order_exact": 24,
+    "order_lower_bound": null,
+    "n_state_orbits": 5,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 5,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 0
   },
@@ -173,6 +476,17 @@
    "broken_real_cells_fixed": 9,
    "compression_if_true": 1.143,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": false,
+    "order_exact": 6,
+    "order_lower_bound": null,
+    "n_state_orbits": 6,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 5,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 9
   },
@@ -184,6 +498,17 @@
    "broken_real_cells_fixed": 8,
    "compression_if_true": 1.143,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": false,
+    "order_exact": 6,
+    "order_lower_bound": null,
+    "n_state_orbits": 6,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 5,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 8
   },
@@ -195,6 +520,17 @@
    "broken_real_cells_fixed": 0,
    "compression_if_true": 1.143,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": false,
+    "order_exact": 6,
+    "order_lower_bound": null,
+    "n_state_orbits": 6,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 5,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 0
   },
@@ -206,6 +542,17 @@
    "broken_real_cells_fixed": 12288,
    "compression_if_true": 3.657,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "nontrivial_fixed",
+    "truncated": false,
+    "order_exact": 512,
+    "order_lower_bound": null,
+    "n_state_orbits": 1,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 0,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "explicit",
    "broken_by_gate_caliber": 0
   },
@@ -217,6 +564,17 @@
    "broken_real_cells_fixed": 12288,
    "compression_if_true": 3.657,
    "gate_saved_this_merge": true,
+   "discovery": {
+    "conclusion": "nontrivial_fixed",
+    "truncated": false,
+    "order_exact": 512,
+    "order_lower_bound": null,
+    "n_state_orbits": 1,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 0,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 12288
   },
@@ -228,6 +586,17 @@
    "broken_real_cells_fixed": 0,
    "compression_if_true": 2.0,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "nontrivial_fixed",
+    "truncated": false,
+    "order_exact": 512,
+    "order_lower_bound": null,
+    "n_state_orbits": 1,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 0,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 0
   },
@@ -239,6 +608,17 @@
    "broken_real_cells_fixed": 24576,
    "compression_if_true": 5.02,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "nontrivial_fixed",
+    "truncated": false,
+    "order_exact": 512,
+    "order_lower_bound": null,
+    "n_state_orbits": 1,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 0,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "explicit",
    "broken_by_gate_caliber": 0
   },
@@ -250,6 +630,17 @@
    "broken_real_cells_fixed": 49152,
    "compression_if_true": 10.039,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "nontrivial_fixed",
+    "truncated": false,
+    "order_exact": 512,
+    "order_lower_bound": null,
+    "n_state_orbits": 1,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 0,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "explicit",
    "broken_by_gate_caliber": 0
   },
@@ -261,6 +652,17 @@
    "broken_real_cells_fixed": 740,
    "compression_if_true": 3.657,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": true,
+    "order_exact": null,
+    "order_lower_bound": 2000,
+    "n_state_orbits": 242,
+    "orbit_lower_bound_blocks": 242,
+    "orbit_upper_bound_blocks": 62,
+    "state_pads": 183,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "explicit",
    "broken_by_gate_caliber": 0
   },
@@ -272,6 +674,17 @@
    "broken_real_cells_fixed": 740,
    "compression_if_true": 3.657,
    "gate_saved_this_merge": true,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": true,
+    "order_exact": null,
+    "order_lower_bound": 2000,
+    "n_state_orbits": 242,
+    "orbit_lower_bound_blocks": 242,
+    "orbit_upper_bound_blocks": 62,
+    "state_pads": 183,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 740
   },
@@ -283,6 +696,17 @@
    "broken_real_cells_fixed": 130,
    "compression_if_true": 1.882,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": true,
+    "order_exact": null,
+    "order_lower_bound": 2000,
+    "n_state_orbits": 242,
+    "orbit_lower_bound_blocks": 242,
+    "orbit_upper_bound_blocks": 62,
+    "state_pads": 183,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "explicit",
    "broken_by_gate_caliber": 0
   },
@@ -294,6 +718,17 @@
    "broken_real_cells_fixed": 1480,
    "compression_if_true": 4.655,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": true,
+    "order_exact": null,
+    "order_lower_bound": 2000,
+    "n_state_orbits": 242,
+    "orbit_lower_bound_blocks": 242,
+    "orbit_upper_bound_blocks": 62,
+    "state_pads": 183,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "explicit",
    "broken_by_gate_caliber": 0
   },
@@ -305,6 +740,17 @@
    "broken_real_cells_fixed": 190,
    "compression_if_true": 1.6,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": true,
+    "order_exact": null,
+    "order_lower_bound": 2000,
+    "n_state_orbits": 242,
+    "orbit_lower_bound_blocks": 242,
+    "orbit_upper_bound_blocks": 62,
+    "state_pads": 183,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 190
   },
@@ -316,6 +762,17 @@
    "broken_real_cells_fixed": 0,
    "compression_if_true": 1.004,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": true,
+    "order_exact": null,
+    "order_lower_bound": 2000,
+    "n_state_orbits": 242,
+    "orbit_lower_bound_blocks": 242,
+    "orbit_upper_bound_blocks": 62,
+    "state_pads": 183,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 0
   },
@@ -327,6 +784,17 @@
    "broken_real_cells_fixed": 8,
    "compression_if_true": 1.333,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "discrete",
+    "truncated": false,
+    "order_exact": 1,
+    "order_lower_bound": null,
+    "n_state_orbits": 4,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 0,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 8
   },
@@ -338,6 +806,17 @@
    "broken_real_cells_fixed": 25,
    "compression_if_true": 1.333,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "discrete",
+    "truncated": false,
+    "order_exact": 1,
+    "order_lower_bound": null,
+    "n_state_orbits": 4,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 0,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 25
   },
@@ -349,6 +828,17 @@
    "broken_real_cells_fixed": 8,
    "compression_if_true": 1.333,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "discrete",
+    "truncated": false,
+    "order_exact": 1,
+    "order_lower_bound": null,
+    "n_state_orbits": 4,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 0,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 8
   },
@@ -360,6 +850,17 @@
    "broken_real_cells_fixed": 1440,
    "compression_if_true": 1.542,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": true,
+    "order_exact": null,
+    "order_lower_bound": 2000,
+    "n_state_orbits": 1018,
+    "orbit_lower_bound_blocks": 1018,
+    "orbit_upper_bound_blocks": 7,
+    "state_pads": 304,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "explicit",
    "broken_by_gate_caliber": 0
   },
@@ -371,6 +872,17 @@
    "broken_real_cells_fixed": 1440,
    "compression_if_true": 1.542,
    "gate_saved_this_merge": true,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": true,
+    "order_exact": null,
+    "order_lower_bound": 2000,
+    "n_state_orbits": 1018,
+    "orbit_lower_bound_blocks": 1018,
+    "orbit_upper_bound_blocks": 7,
+    "state_pads": 304,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 1440
   },
@@ -382,6 +894,17 @@
    "broken_real_cells_fixed": 0,
    "compression_if_true": 1.001,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": true,
+    "order_exact": null,
+    "order_lower_bound": 2000,
+    "n_state_orbits": 1018,
+    "orbit_lower_bound_blocks": 1018,
+    "orbit_upper_bound_blocks": 7,
+    "state_pads": 304,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 0
   },
@@ -393,6 +916,17 @@
    "broken_real_cells_fixed": 5760,
    "compression_if_true": 2.116,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": true,
+    "order_exact": null,
+    "order_lower_bound": 2000,
+    "n_state_orbits": 1018,
+    "orbit_lower_bound_blocks": 1018,
+    "orbit_upper_bound_blocks": 7,
+    "state_pads": 304,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "explicit",
    "broken_by_gate_caliber": 0
   },
@@ -404,6 +938,17 @@
    "broken_real_cells_fixed": 13,
    "compression_if_true": 1.067,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": false,
+    "order_exact": 120,
+    "order_lower_bound": null,
+    "n_state_orbits": 12,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 5,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 13
   },
@@ -415,6 +960,17 @@
    "broken_real_cells_fixed": 15,
    "compression_if_true": 1.067,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": false,
+    "order_exact": 120,
+    "order_lower_bound": null,
+    "n_state_orbits": 12,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 5,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 15
   },
@@ -426,6 +982,17 @@
    "broken_real_cells_fixed": 0,
    "compression_if_true": 1.067,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": false,
+    "order_exact": 120,
+    "order_lower_bound": null,
+    "n_state_orbits": 12,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 5,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 0
   },
@@ -437,6 +1004,17 @@
    "broken_real_cells_fixed": 6,
    "compression_if_true": 1.067,
    "gate_saved_this_merge": true,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": false,
+    "order_exact": 120,
+    "order_lower_bound": null,
+    "n_state_orbits": 12,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 5,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 6
   },
@@ -448,6 +1026,17 @@
    "broken_real_cells_fixed": 6,
    "compression_if_true": 1.032,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": true,
+    "order_exact": null,
+    "order_lower_bound": 2000,
+    "n_state_orbits": 26,
+    "orbit_lower_bound_blocks": 26,
+    "orbit_upper_bound_blocks": 18,
+    "state_pads": 15,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 6
   },
@@ -459,6 +1048,17 @@
    "broken_real_cells_fixed": 8,
    "compression_if_true": 1.032,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": true,
+    "order_exact": null,
+    "order_lower_bound": 2000,
+    "n_state_orbits": 26,
+    "orbit_lower_bound_blocks": 26,
+    "orbit_upper_bound_blocks": 18,
+    "state_pads": 15,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 8
   },
@@ -470,6 +1070,17 @@
    "broken_real_cells_fixed": 0,
    "compression_if_true": 1.032,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": true,
+    "order_exact": null,
+    "order_lower_bound": 2000,
+    "n_state_orbits": 26,
+    "orbit_lower_bound_blocks": 26,
+    "orbit_upper_bound_blocks": 18,
+    "state_pads": 15,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 0
   },
@@ -481,6 +1092,17 @@
    "broken_real_cells_fixed": 6,
    "compression_if_true": 1.143,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": false,
+    "order_exact": 2,
+    "order_lower_bound": null,
+    "n_state_orbits": 7,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 2,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 6
   },
@@ -492,6 +1114,17 @@
    "broken_real_cells_fixed": 9,
    "compression_if_true": 1.143,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": false,
+    "order_exact": 2,
+    "order_lower_bound": null,
+    "n_state_orbits": 7,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 2,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 9
   },
@@ -503,6 +1136,17 @@
    "broken_real_cells_fixed": 0,
    "compression_if_true": 1.143,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": false,
+    "order_exact": 2,
+    "order_lower_bound": null,
+    "n_state_orbits": 7,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 2,
+    "false_positive_indicators": 0
+   },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 0
   }

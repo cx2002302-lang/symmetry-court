@@ -3,7 +3,8 @@
  "provenance": {
   "gate": "vendored wuxing_gua check, caliber per group declaration (compare v2; per-element action_maps recognized since 2026-11-04): groups declaring semantics.action=explicit with a valid action_map (single, legacy) or action_maps (per-element) run as declared (no --strict); groups declaring fixed or no declaration run --strict (live run)",
   "naive_arm": "structure-only edge-set invariance proxy (see module docstring)",
-  "damage": "cell-by-cell ledger over model trans, same caliber as the gate arm per group (explicit groups: events renamed per the declared mapping — per-element groups use each element's own map; others: event names pinned); fixed-caliber damage kept per row in broken_real_cells_fixed for contrast"
+  "damage": "cell-by-cell ledger over model trans, same caliber as the gate arm per group (explicit groups: events renamed per the declared mapping — per-element groups use each element's own map; others: event names pinned); fixed-caliber damage kept per row in broken_real_cells_fixed for contrast",
+  "discovery_arm": "existing verdicts/discover.<case>.json receipt read as-is (file-level JSON read; the discover module is not imported and discovery is never re-run by compare); conclusion classified from the receipt's own fields; n/a when no receipt exists"
  },
  "summary": {
   "case": "hanoi3",
@@ -17,7 +18,26 @@
   "gate_admitted_broken_cells": 0,
   "gate_saved_merges": 1,
   "gate_explicit_groups": 2,
-  "gate_total_seconds_rounded": 0.7
+  "gate_total_seconds_rounded": 0.8,
+  "discovery_arm": {
+   "available": true,
+   "receipt": "verdicts\\discover.hanoi3.json",
+   "conclusion": "pads",
+   "truncated": false,
+   "order_exact": 120,
+   "order_lower_bound": null,
+   "order_claim": "exact: VF2 enumeration completed (120 automorphisms = the full fixed-caliber automorphism group)",
+   "orbit_status": "exact",
+   "n_state_orbits": 28,
+   "orbit_lower_bound_blocks": null,
+   "orbit_upper_bound_blocks": null,
+   "state_pads": 5,
+   "identity_group": false,
+   "wl_discrete": false,
+   "false_positive_indicators": 0,
+   "false_positive_hits": [],
+   "false_positive_note": "counted from the receipt's own verification records (gate rejection of the discovered candidate; sealed-order mismatch; reconciliation rows contradicting the direct criterion; pass-declared elements absent from a completed enumeration; sealed structural violations); 0 = none recorded, the logic reports non-zero when any check records a disagreement"
+  }
  },
  "rows": [
   {
@@ -33,6 +53,17 @@
    "would_be_orbits_if_merged": 19,
    "compression_if_true": 1.684,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": false,
+    "order_exact": 120,
+    "order_lower_bound": null,
+    "n_state_orbits": 28,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 5,
+    "false_positive_indicators": 0
+   },
    "gate_strict": false,
    "damage_caliber": "explicit",
    "declared_action_map_kind": "per_element",
@@ -69,7 +100,18 @@
    "real_cells": 192,
    "would_be_orbits_if_merged": 19,
    "compression_if_true": 1.684,
-   "gate_saved_this_merge": true
+   "gate_saved_this_merge": true,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": false,
+    "order_exact": 120,
+    "order_lower_bound": null,
+    "n_state_orbits": 28,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 5,
+    "false_positive_indicators": 0
+   }
   },
   {
    "group": "g3_s3_full.json",
@@ -84,6 +126,17 @@
    "would_be_orbits_if_merged": 10,
    "compression_if_true": 3.2,
    "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": false,
+    "order_exact": 120,
+    "order_lower_bound": null,
+    "n_state_orbits": 28,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 5,
+    "false_positive_indicators": 0
+   },
    "gate_strict": false,
    "damage_caliber": "explicit",
    "declared_action_map_kind": "per_element",
@@ -152,7 +205,18 @@
    "real_cells": 192,
    "would_be_orbits_if_merged": 31,
    "compression_if_true": 1.032,
-   "gate_saved_this_merge": false
+   "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "pads",
+    "truncated": false,
+    "order_exact": 120,
+    "order_lower_bound": null,
+    "n_state_orbits": 28,
+    "orbit_lower_bound_blocks": null,
+    "orbit_upper_bound_blocks": null,
+    "state_pads": 5,
+    "false_positive_indicators": 0
+   }
   }
  ]
 }
