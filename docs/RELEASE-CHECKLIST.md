@@ -210,3 +210,36 @@ mismatch, per the triage map above). The exit-1 record remains
 classified as a capture artifact of the original gate harness invocation; the
 classification now rests on six consecutive clean runs across two sessions.
 No code change was made by the confirmation session either.
+
+### Erratum — 2026-11-08 (wave 55): exit-1 root cause re-attributed to a workflow-draft wrapper constant syntax error
+
+Pure append; every line above is preserved verbatim, the original
+classification sentences included. The wave-50 initial attribution of the
+exit-1 record — "capture artifact of the gate harness (piped invocation /
+truncated log)", i.e. an environment/pipe artifact — is inaccurate. Wave-54
+located the true cause: the `COURT_SELFTEST` wrapper constant of the
+wave-49/54 workflow draft carried a syntax error (a `print` missing its
+closing parenthesis, plus a no-op `.replace`), so the wrapper-wrapped gate
+invocation was logged as exit 1; the logged code is a wrapper-layer recording
+artifact, not the gate process's real exit status. The gate itself has no
+defect:
+
+- nine consecutive clean re-runs across three sessions, on record above with
+  the full protocol and per-run readouts (`f70adf5` / `d84c28a`);
+- the wave-54 direct re-run replayed all 570 contract fields with exit 0
+  (359 s per the wave-54 escalation record; this tree's `4b235c0` commit
+  message likewise records a final-tree gate re-run
+  `SELFTEST PASS（570 contract fields）`, exit 0, stderr 0 bytes);
+- the main repo's landing gate re-run in wave 55: 3/3 PASS, exit 0
+  (readings carried by that wave's delivery records).
+
+勘误正文（与第 54 波 escalation 留证一致）：第 50 波初版归因（环境/管道假象）
+不准确；真因于第 54 波定位为 workflow 草稿 COURT_SELFTEST wrapper 常量语法错
+（print 缺右括号+.replace 空操作）；门禁本身无缺陷（九连净跑+本波复跑佐证）；
+§7 禁管道纪律仍然有效。
+
+The §7 no-pipe discipline remains fully binding and unchanged: it governs how
+exit codes are captured and archived, which is orthogonal to the wrapper bug —
+and it is what made the nine clean re-runs comparable evidence. Nothing in
+this tree changed for this erratum: judgment criteria untouched, `vendored/`
+untouched, and the original wave-50 disposition text above stays as written.
