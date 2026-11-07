@@ -239,8 +239,9 @@ The docket rows in `README.md` / `README.zh-CN.md` and
   in §4; `verdicts/comparison.summary.json` — the docket totals (at this
   document's writing 9 cases / 32 groups; since 2026-11-04 the ledger also
   carries `lightsout3` — 10 cases / 37 groups, see §9 —,
-  `sliding2x3` — 11 cases / 41 groups, see §10 — and, since 2026-11-07,
-  `hanoi3` — 12 cases / 45 groups, see §11).
+  `sliding2x3` — 11 cases / 41 groups, see §10 —, since 2026-11-07,
+  `hanoi3` — 12 cases / 45 groups, see §11 — and, since 2026-11-08, the
+  three blind-trial round-2 cases — 15 cases / 57 groups, see §13).
 - `cases/mini2048/README.md` (+ `README.zh-CN.md`) — the case's own
   diagnostic write-up, including the verified 8-element map table.
 
@@ -485,3 +486,72 @@ D4 with per-element button maps, V4, S3) were **not** discovered by the
 machine under the fixed caliber — the direct criterion rejects each of
 them there, which is the same fact the court's fixed column records. The
 declaration does the work; the machine, on both arms, only ever verifies.
+
+## 13. The blind-trial round 2: three externally transcribed cases join the docket (2026-11-08)
+
+Where §9–§11 are positive controls authored in this repository, the
+blind-test project's second round shipped three complete case files whose
+transcription was finished before the tool receipts were opened:
+`http2-stream-states` (RFC 9113 sec.5.1 stream states), `ppp-lcp` (RFC
+1661 sec.4 option-negotiation automaton) and `bgp-fsm` (RFC 4271 sec.8
+peer FSM). Each case was judged, sealed against an independent
+fresh-implementation oracle (write-once, frozen 2026-11-07), then
+unsealed and reconciled: **12 candidate groups × 5 axes (fixed / relabel
+/ binding / networkx-structure / networkx-labeled) = 60/60 AGREE, 0 false
+positives, 0 false negatives**, and the expected rows reconcile
+field-for-field with the tool receipts (96 fields, 0 mismatches). On
+2026-11-08 the three cases were adopted into the docket byte-identical
+(`cases/http2-stream-states/`, `cases/ppp-lcp/`, `cases/bgp-fsm/`; each
+case README carries an Adoption section), and the gate now replays **570
+contract fields over 15 cases** (each new case contributes 40). The
+networkx columns are carried from that round's sealed truth with the
+sourcing recorded in each `expected.json` provenance.
+
+What the three cases add to this file's story:
+
+- **A `semantics_duality` ruling on a role-mirror reading:
+  `http2-stream-states`.** The claim group `endpoint-mirror` swaps the
+  two endpoint roles (reserved (local) ↔ reserved (remote), half-closed
+  (local) ↔ half-closed (remote)) and passes the relabel column (exit 0,
+  worst_tv 0.0; the witness renaming is the full send↔recv frame mirror:
+  send PP ↔ recv PP, send H ↔ recv H, send ES ↔ recv ES, send R ↔ recv
+  R) while the fixed column rejects (exit 1, worst_tv 1.0; first
+  violating cell (idle, send PP): with names pinned, idle → reserved
+  (local) does not move while the mirror demands reserved (remote)); the
+  juror splits the same way (structure yes / labeled no). This is the
+  same verdict shape the docket already records for `tcp`'s twins
+  (relabel pass / fixed reject) — with the opposite polarity: here
+  the shared-diagram reading is the one the source itself writes (RFC
+  9113 sec.5.1: "Both endpoints have a subjective view of the state of a
+  stream"), so the endpoint-role mirror is a real symmetry of the
+  unlabeled diagram and the frame-event naming is exactly where it
+  stops. The gate-value ledger counts 12 real cells under the pinned
+  reading — the naive structure-only arm admits this merge, the gate
+  refuses it (the docket's sixth harmful naive admit, after the five of
+  §2/§9/§10/§11).
+- **Two honest negatives: `ppp-lcp` and `bgp-fsm`.** Each case's prose
+  describes its twin pair in near-verbatim mirror sentences (RFC 1661
+  sec.4.2's Ack-Received/Ack-Sent pair; RFC 4271's Connect/Active, which
+  "run the same machinery" in the prose pattern), and each transcription
+  refutes the reading: all three defendants per case reject under BOTH
+  calibers, with the first violating cell recorded in the sealed truth
+  (`ppp-lcp` ack-twins: (Stopped, RCR+) — the RFC table cell
+  `irc,scr,sca/8`, re-checked against that project's RFC snapshot at
+  line 746; `bgp-fsm` connect-active: (Idle, ManualStart)). The
+  structure-only arm refuses these swaps too — they fail at the edge-set
+  level, before event names even matter (18/23/18 and 7/11/16 broken
+  cells under the pinned reading) — while each case's pads control still
+  passes (1.067× / 1.143×), showing the pipeline admits a genuine
+  symmetry on the same models. "The prose says twins" is exactly the
+  kind of claim a court should test rather than grant, and the record
+  now holds two cases where the rhetoric says twin and the data says no.
+
+Receipts: `cases/<case>/expected.json` (with provenance),
+`verdicts/<case>.verdict.json`, `verdicts/comparison.<case>.json` (the
+round-2 cases are all fixed-declared groups — no explicit-caliber rows);
+the round-2 unsealing reconciliation is the blind-test project's
+`report/reconciliation.md`; the sealed truth files and their sha256
+manifest live in that project's `sealed/` directory (write-once, frozen
+2026-11-07T18:34:44Z). The three cases carry no
+`verdicts/discover.<case>.json` receipts, so compare's discovery arm
+records them n/a — compare never runs discovery itself.

@@ -92,7 +92,7 @@ means every verdict in the repository still matches its expected record.
 Since v2, compare dispatches the caliber per group declaration (groups
 declaring `explicit` run as declared, without `--strict`; groups declaring
 `fixed` or none run `--strict`; since 2026-11-04 this includes the
-per-element `action_maps` form). Across the 12-case / 45-group ledger every
+per-element `action_maps` form). Across the 15-case / 57-group ledger every
 gate admission is zero-damage by construction. The `mini2048` case (2048
 merge mechanics, 2×2 variant, D4) is the explicit caliber's first
 real-system docket: its "should-admit" is machine-asserted by the case
@@ -116,12 +116,13 @@ court's fourth non-trivial positive control: a fourth group structure (the
 full peg-relabel group S3, order 6, the first non-abelian one), and the
 docket's first entry whose action semantics is an ordered pair of rods —
 a relabeling renames the actions as ordered pairs (X, Y) ↦ (πX, πY).
-Across the 12-case / 45-group ledger, the structure-only naive
-arm would admit 25 groups, of which 5 are genuinely harmful — those 5 would
-silently rewrite 14596 real behavior cells (TCP twins, 6 cells;
+Across the 15-case / 57-group ledger, the structure-only naive
+arm would admit 29 groups, of which 6 are genuinely harmful — those 6 would
+silently rewrite 14608 real behavior cells (TCP twins, 6 cells;
 keys-pinned rotations and mirror, 740 + 12288 + 1440 cells; the
-pairs-pinned rod swap of `hanoi3`, 122 cells) — and the gate
-refuses exactly those 5. (The gate arm's 20 admissions carry zero damage,
+pairs-pinned rod swap of `hanoi3`, 122 cells; the frame-event names of
+`http2-stream-states`' endpoint mirror, 12 cells) — and the gate
+refuses exactly those 6. (The gate arm's 23 admissions carry zero damage,
 but that zero is guaranteed by construction, not independent evidence: by
 the criterion's definition a pass requires `worst_tv <= 1e-9` on every
 cell — receipt `gate_admitted_broken_is_zero_by_definition`;
@@ -131,7 +132,7 @@ result. On the figure "5": it is `naive_harmful`, defined at
 `compare.py:323` as `n_saved` — the count of harmful merges the gate
 caught, not the total number of naive-admitted harmful groups; the
 per-row detail keeps a separate contrast column `broken_real_cells_fixed`
-(15 of the naive-admitted rows have `>0`).) See
+(16 of the naive-admitted rows have `>0`).) See
 [docs/闸门价值对比.html](docs/闸门价值对比.html),
 [cases/mini2048/README.md](cases/mini2048/README.md),
 [cases/lightsout3/README.md](cases/lightsout3/README.md),
@@ -143,7 +144,9 @@ nothing is re-discovered) and carries the discovery arm into the same
 ledger: per-case conclusion (2 discrete identity groups / 9 pads
 discoveries / 1 beyond-padding fixed group, the 4 capped cases flagged;
 discovered order, or lower bound with orbit LB/UB), with false-positive
-indicators totaling 0 — the four capabilities close one loop: `discover`
+indicators totaling 0 — the three second-round cases carry no discovery
+receipts and are recorded n/a (compare never runs discovery itself). The
+four capabilities close one loop: `discover`
 proposes, `arbitrate` judges, `compare` prices, `selftest` replays.
 
 ### How to read a verdict
@@ -167,10 +170,15 @@ call, and the next section is the checklist for it.
 
 ## The docket
 
-The docket holds 12 cases: five incorporated from the field-trial blind-test
-project (model/groups/generator/README copied byte-identical; their verdicts
-reconcile group-by-group with field-trial's sealed truth, 15/15 groups — see
-each case's `expected.json` provenance) and seven transcribed in this
+The docket holds 15 cases: five incorporated from the field-trial blind-test
+project's first round (model/groups/generator/README copied byte-identical;
+their verdicts reconcile group-by-group with field-trial's sealed truth,
+15/15 groups — see each case's `expected.json` provenance), three from the
+same project's second round (`http2-stream-states`, `ppp-lcp`, `bgp-fsm`;
+byte-identical copies; the round-2 unsealing reconciliation matched the
+sealed truth on 60/60 checks — 12 candidate groups × 5 axes, 0 false
+positives, 0 false negatives — see each case's `expected.json` provenance
+and its README's Adoption section) and seven transcribed in this
 repository (`tcp`, `dhcp`, `imap`, `mini2048`, `lightsout3`,
 `sliding2x3`, `hanoi3`). Receipt:
 `python -X utf8 -m symmetry_court list` over `cases/`. Every number below is
@@ -191,6 +199,9 @@ from memory.
 | `lightsout3` | Lights Out toggle mechanics (3×3 deterministic variant) | Wikipedia "Lights Out (game)" (Gameplay + Strategy sentences) + Jaap's Puzzle Page (the rules page Wikipedia cites); 3×3 recorded as a variant boundary (the Tiger original is 5×5) | 512 states (all real, no padding), 9 buttons, rewards all zero (the source game has no score) | rot90 with renamed buttons (explicit) vs the same rotation with buttons pinned (fixed) — same group as `mini2048`, different mechanism (toggle algebra) | pass (exit 0, worst_tv 0.0; the bitstring judge's π-derived renaming coincides with the per-element button maps — see note) | reject (exit 1, worst_tv 1.0) | explicit caliber with per-element maps admits rot90/D4/D4×C2 (140/102/51 orbits), the fixed complement control passes (256 orbits); the keys-pinned rotation stays a non-symmetry (structure-only: yes) |
 | `sliding2x3` | Sliding-puzzle move mechanics (2×3 deterministic variant, n-puzzle family; Klotski is the sliding-block cognate) | Wikipedia "15 puzzle" (lead + Solvability sentences) + Wikipedia "Sliding puzzle" (lead sentences); 2×3 recorded as a variant boundary (the canonical n-puzzle is 4×4; the 8 puzzle is 3×3) | 1024 states (720 real arrangements + 304 padding), 4 slide directions, rewards all zero (the puzzle has no score) | hflip with renamed directions (explicit) vs the same mirror with directions pinned (fixed) — a third group structure: V4 on a non-square rectangle (no 90° rotation exists) | reject (exit 1, worst_tv 1.0; bitstring diagnostic — see note) | reject (exit 1, worst_tv 1.0) | explicit caliber with per-element maps admits hflip/V4 (664/484 orbits), the fixed pads control passes (1023 orbits); the directions-pinned mirror stays a non-symmetry (structure-only: yes) |
 | `hanoi3` | Tower of Hanoi move mechanics (3-disk deterministic variant) | Wikipedia "Tower of Hanoi" (lead rules + objective + minimum-moves + graph + S3-symmetry sentences); 3 disks recorded as a variant boundary (the source takes "a number of disks"; toy versions commonly 7–9) | 32 states (27 real arrangements + 5 padding), 6 ordered rod-pair actions, rewards all zero (the puzzle has no score) | A↔B rod swap with renamed ordered pairs (explicit) vs the same swap with pairs pinned (fixed) — a fourth group structure: the full peg-relabel group S3 (order 6, first non-abelian), and the docket's first ordered-pair action semantics | pass (exit 0, worst_tv 0.0; the relabel frame resolves to the generalized judge, which derives the renaming from the state permutation — see note) | reject (exit 1, worst_tv 1.0) | explicit caliber with per-element maps admits swap_ab/S3 (19/10 orbits), the fixed pads control passes (31 orbits); the pairs-pinned swap stays a non-symmetry (structure-only: yes) |
+| `http2-stream-states` | HTTP/2 stream state machine (one stream, one endpoint's view) | RFC 9113 §5.1 "Stream States" (Figure 2 + the per-state bullet lists + the END_STREAM separate-event paragraph) | 16 states (7 protocol + 9 padding), 20 transitions, 8 events, rewards all zero (the protocol has no score) | reserved (local) ↔ reserved (remote) AND half-closed (local) ↔ half-closed (remote) — the endpoint-role mirror (decided by the recorded verdict: a real symmetry of the unlabeled graph that breaks on the frame-event names) | pass (exit 0, worst_tv 0.0; judged `semantics_duality` — see note) | reject (exit 1, worst_tv 1.0) | not a symmetry at the labeled level (structure-only: yes — the mirror is real and stops exactly at the frame-event names) |
+| `ppp-lcp` | PPP LCP option-negotiation automaton | RFC 1661 §4 (the complete sec.4.1 state-transition table, both halves — all 16 event rows × 10 state columns — + the sec.4.1 preamble, p/r/x footnotes and sec.4.2/4.3 prose) | 16 states (10 protocol + 6 padding), 120 declared table cells, 16 events, rewards all zero (the protocol has no score) | Ack-Rcvd ↔ Ack-Sent (the sec.4.2 near-verbatim mirror sentences; decided by the table: not interchangeable) | reject (exit 1, worst_tv 1.0) | reject (exit 1, worst_tv 1.0) | not a symmetry (structure and labeled) |
+| `bgp-fsm` | BGP-4 peer finite state machine (one endpoint, one configured peer) | RFC 4271 §8 (the event list of sec.8.1.1–8.1.5, Events 1–28 + the per-state paragraphs of sec.8.2.2) | 8 states (6 protocol + 2 padding), 99 collected edges, 28 events, rewards all zero (the protocol has no score) | Connect ↔ Active (the two TCP-acquisition states; decided by the prose: not interchangeable) | reject (exit 1, worst_tv 1.0) | reject (exit 1, worst_tv 1.0) | not a symmetry (structure and labeled) |
 
 Notes on the `tcp` row: the state count includes 5 padding states required by
 the engine's bit-string convention (16 total, 11 protocol states); the
@@ -377,6 +388,54 @@ independent machine verification that the labeled real state space's
 automorphism group is exactly the rod-relabel group S3. Case write-up with
 the verified 6-element map table:
 [cases/hanoi3/README.md](cases/hanoi3/README.md).
+
+Notes on the three second-round rows (`http2-stream-states`, `ppp-lcp`,
+`bgp-fsm`) (2026-11-08): they come from the blind-test project's second
+round — transcribed before the tool receipts were opened, judged, sealed
+against an independent fresh-implementation oracle (write-once, frozen
+2026-11-07), unsealed and reconciled: 12 candidate groups × 5 axes
+(fixed / relabel / binding / networkx-structure / networkx-labeled) =
+**60/60 AGREE, 0 false positives, 0 false negatives** (and the expected
+rows reconcile field-for-field with the receipts, 96 fields, 0
+mismatches). The cases were adopted byte-identical; the networkx columns
+are carried from that round's sealed truth with the sourcing recorded in
+each `expected.json` provenance, and each case README carries an Adoption
+section with the receipts. The `http2-stream-states` row is a duality
+ruling (`semantics_duality` — the same shape the docket already records
+for `tcp`'s twins, relabel pass / fixed reject, with the
+polarity of a true mirror): the endpoint-role swap is a real symmetry of
+the unlabeled graph — relabel pass (exit 0, worst_tv 0.0; the witness
+renaming is the full send↔recv frame mirror, send PP ↔ recv PP, send H ↔
+recv H, send ES ↔ recv ES, send R ↔ recv R) — and breaks exactly on the
+frame-event names (fixed reject, exit 1, worst_tv 1.0; first violating
+cell (idle, send PP): with names pinned, idle → reserved (local) does not
+move while the mirror demands reserved (remote)); the juror splits the
+same way (structure yes / labeled no). Unlike `tcp`'s twins, the
+shared-diagram reading is the one the RFC writes (sec.5.1: "Both
+endpoints have a subjective view of the state of a stream"): the two
+endpoint roles share one diagram, and the sharing stops where the frame
+events are named (send ↔ recv flip with the role). The gate-value ledger
+counts 12 real cells under the pinned reading — the structure-only arm
+admits this merge, the gate refuses it (the docket's sixth harmful naive
+admit). The `ppp-lcp` and `bgp-fsm` rows are honest negatives: each
+case's prose describes its twin pair in near-verbatim mirror sentences
+(RFC 1661 sec.4.2's Ack-Received/Ack-Sent pair; RFC 4271's Connect/Active
+machinery), and each transcription refutes the reading — all three
+defendants per case reject under both calibers, with the first violating
+cell recorded in the sealed truth (`ppp-lcp` ack-twins: (Stopped, RCR+) —
+the RFC table cell `irc,scr,sca/8`, re-checked against that project's RFC
+snapshot at line 746; `bgp-fsm` connect-active: (Idle, ManualStart)). The
+structure-only arm refuses these swaps too — they fail at the edge-set
+level, before event names even matter (18/23/18 and 7/11/16 broken cells
+under the pinned reading) — while each case's pads control still passes
+(1.067× / 1.143×), showing the pipeline admits a genuine symmetry on the
+same models. In all three cases every group declares `fixed` (the
+protocol-true reading), so the gate arm runs `--strict` on every group
+and the fixed column is the declared reading. Case write-ups (with the
+Adoption sections):
+[cases/http2-stream-states/README.md](cases/http2-stream-states/README.md),
+[cases/ppp-lcp/README.md](cases/ppp-lcp/README.md) and
+[cases/bgp-fsm/README.md](cases/bgp-fsm/README.md).
 
 ## Which "identical"? — three questions
 

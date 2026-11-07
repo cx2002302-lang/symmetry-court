@@ -18,7 +18,7 @@
   "gate_admitted_broken_cells": 0,
   "gate_saved_merges": 0,
   "gate_explicit_groups": 0,
-  "gate_total_seconds_rounded": 0.8,
+  "gate_total_seconds_rounded": 0.5,
   "discovery_arm": {
    "available": true,
    "receipt": "verdicts\\discover.tls13-handshake.json",

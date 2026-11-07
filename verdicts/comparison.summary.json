@@ -1,30 +1,34 @@
 {
  "generated": "see per-case comparison.<case>.json for provenance",
- "cases": 12,
- "groups": 45,
- "naive_admits": 25,
- "naive_harmful": 5,
- "naive_broken": 14596,
- "gate_admits": 20,
+ "cases": 15,
+ "groups": 57,
+ "naive_admits": 29,
+ "naive_harmful": 6,
+ "naive_broken": 14608,
+ "gate_admits": 23,
  "gate_broken": 0,
  "gate_explicit_groups": 10,
- "gate_seconds": 13.8,
+ "gate_seconds": 10.3,
  "gate_admitted_broken_is_zero_by_definition": "pass requires worst_tv <= 1e-9 on every cell",
  "discovery_arm": {
   "source": "existing verdicts/discover.<case>.json receipts read as-is; compare never runs discovery (the discover module is not imported, nothing is re-discovered)",
-  "n_cases": 12,
+  "n_cases": 15,
   "with_receipt": 12,
-  "without_receipt": 0,
+  "without_receipt": 3,
   "conclusions": {
    "discrete": 2,
    "pads": 9,
    "nontrivial_fixed": 1,
-   "n/a": 0
+   "n/a": 3
   },
   "truncated": 4,
   "false_positive_indicators_total": 0,
   "false_positive_note": "per-case counts come from each comparison.<case>.json discovery_arm block; 0 means no receipt records a disagreement with its discovery",
   "cases": {
+   "bgp-fsm": {
+    "conclusion": "n/a",
+    "false_positive_indicators": null
+   },
    "dhcp": {
     "conclusion": "pads",
     "truncated": true,
@@ -57,6 +61,10 @@
     "orbit_upper_bound_blocks": null,
     "state_pads": 5,
     "false_positive_indicators": 0
+   },
+   "http2-stream-states": {
+    "conclusion": "n/a",
+    "false_positive_indicators": null
    },
    "imap": {
     "conclusion": "pads",
@@ -101,6 +109,10 @@
     "orbit_upper_bound_blocks": 62,
     "state_pads": 183,
     "false_positive_indicators": 0
+   },
+   "ppp-lcp": {
+    "conclusion": "n/a",
+    "false_positive_indicators": null
    },
    "raft-etcd": {
     "conclusion": "discrete",
@@ -160,6 +172,66 @@
   }
  },
  "rows": [
+  {
+   "case": "bgp-fsm",
+   "group": "connect-active-swap.json",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "broken_real_cells_fixed": 7,
+   "compression_if_true": 1.143,
+   "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "n/a",
+    "false_positive_indicators": null
+   },
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 7
+  },
+  {
+   "case": "bgp-fsm",
+   "group": "openconfirm-established-swap.json",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "broken_real_cells_fixed": 11,
+   "compression_if_true": 1.143,
+   "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "n/a",
+    "false_positive_indicators": null
+   },
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 11
+  },
+  {
+   "case": "bgp-fsm",
+   "group": "opensent-openconfirm-swap.json",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "broken_real_cells_fixed": 16,
+   "compression_if_true": 1.143,
+   "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "n/a",
+    "false_positive_indicators": null
+   },
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 16
+  },
+  {
+   "case": "bgp-fsm",
+   "group": "pads.json",
+   "naive_structure_admits": true,
+   "gate_exit": 0,
+   "broken_real_cells_fixed": 0,
+   "compression_if_true": 1.143,
+   "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "n/a",
+    "false_positive_indicators": null
+   },
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 0
+  },
   {
    "case": "dhcp",
    "group": "init_start.json",
@@ -401,6 +473,66 @@
    },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 0
+  },
+  {
+   "case": "http2-stream-states",
+   "group": "endpoint-mirror.json",
+   "naive_structure_admits": true,
+   "gate_exit": 1,
+   "broken_real_cells_fixed": 12,
+   "compression_if_true": 1.143,
+   "gate_saved_this_merge": true,
+   "discovery": {
+    "conclusion": "n/a",
+    "false_positive_indicators": null
+   },
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 12
+  },
+  {
+   "case": "http2-stream-states",
+   "group": "half-mirror-only.json",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "broken_real_cells_fixed": 8,
+   "compression_if_true": 1.067,
+   "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "n/a",
+    "false_positive_indicators": null
+   },
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 8
+  },
+  {
+   "case": "http2-stream-states",
+   "group": "pads.json",
+   "naive_structure_admits": true,
+   "gate_exit": 0,
+   "broken_real_cells_fixed": 0,
+   "compression_if_true": 1.067,
+   "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "n/a",
+    "false_positive_indicators": null
+   },
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 0
+  },
+  {
+   "case": "http2-stream-states",
+   "group": "reserved-swap-only.json",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "broken_real_cells_fixed": 6,
+   "compression_if_true": 1.067,
+   "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "n/a",
+    "false_positive_indicators": null
+   },
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 6
   },
   {
    "case": "imap",
@@ -772,6 +904,66 @@
     "orbit_upper_bound_blocks": 62,
     "state_pads": 183,
     "false_positive_indicators": 0
+   },
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 0
+  },
+  {
+   "case": "ppp-lcp",
+   "group": "ack-twins-swap.json",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "broken_real_cells_fixed": 18,
+   "compression_if_true": 1.067,
+   "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "n/a",
+    "false_positive_indicators": null
+   },
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 18
+  },
+  {
+   "case": "ppp-lcp",
+   "group": "closed-stopped-swap.json",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "broken_real_cells_fixed": 23,
+   "compression_if_true": 1.067,
+   "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "n/a",
+    "false_positive_indicators": null
+   },
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 23
+  },
+  {
+   "case": "ppp-lcp",
+   "group": "closing-stopping-swap.json",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "broken_real_cells_fixed": 18,
+   "compression_if_true": 1.067,
+   "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "n/a",
+    "false_positive_indicators": null
+   },
+   "gate_caliber": "fixed",
+   "broken_by_gate_caliber": 18
+  },
+  {
+   "case": "ppp-lcp",
+   "group": "pads.json",
+   "naive_structure_admits": true,
+   "gate_exit": 0,
+   "broken_real_cells_fixed": 0,
+   "compression_if_true": 1.067,
+   "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "n/a",
+    "false_positive_indicators": null
    },
    "gate_caliber": "fixed",
    "broken_by_gate_caliber": 0

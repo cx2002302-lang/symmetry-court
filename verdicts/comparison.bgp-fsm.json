@@ -1,0 +1,102 @@
+{
+ "case": "bgp-fsm",
+ "provenance": {
+  "gate": "vendored wuxing_gua check, caliber per group declaration (compare v2; per-element action_maps recognized since 2026-11-04): groups declaring semantics.action=explicit with a valid action_map (single, legacy) or action_maps (per-element) run as declared (no --strict); groups declaring fixed or no declaration run --strict (live run)",
+  "naive_arm": "structure-only edge-set invariance proxy (see module docstring)",
+  "damage": "cell-by-cell ledger over model trans, same caliber as the gate arm per group (explicit groups: events renamed per the declared mapping — per-element groups use each element's own map; others: event names pinned); fixed-caliber damage kept per row in broken_real_cells_fixed for contrast",
+  "discovery_arm": "existing verdicts/discover.<case>.json receipt read as-is (file-level JSON read; the discover module is not imported and discovery is never re-run by compare); conclusion classified from the receipt's own fields; n/a when no receipt exists"
+ },
+ "summary": {
+  "case": "bgp-fsm",
+  "n_states": 8,
+  "n_actions": 28,
+  "n_groups": 4,
+  "naive_admits": 1,
+  "naive_harmful_admits": 0,
+  "naive_broken_real_cells": 0,
+  "gate_admits": 1,
+  "gate_admitted_broken_cells": 0,
+  "gate_saved_merges": 0,
+  "gate_explicit_groups": 0,
+  "gate_total_seconds_rounded": 0.7,
+  "discovery_arm": {
+   "available": false,
+   "conclusion": "n/a",
+   "note": "no discover receipt on disk (discover has not been run for this case); compare never runs discovery itself"
+  }
+ },
+ "rows": [
+  {
+   "group": "connect-active-swap.json",
+   "claim": "defendant A (claim): the two TCP-acquisition states are twins -- Connect is 'waiting for the TCP connection to be completed' (snapshot txt:3012-3013) and Active is 'trying to acquire a peer by listening for, and accepting, a TCP connection' (txt:3257-3258) -- and they run the same machinery: both drop to Idle on ManualStop (txt:3017-3036 / txt:3262-3278), both enter OpenSent on DelayOpenTimer expiry and on TCP success (txt:3054-3061 + txt:3089-3100 / txt:3292-3313 + txt:3340-3350), both reach OpenConfirm on a delayed OPEN (Event 20; txt:3127-3161 / txt:3378-3404), both sink to Idle on TcpConnectionFails (txt:3117-3125 / txt:3355-3376) -- so swapping states 1 <-> 2 should map the connection-establishment half of the FSM onto itself.",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "gate_verdict": "reject",
+   "gate_admits": false,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 7,
+   "real_cells": 224,
+   "would_be_orbits_if_merged": 7,
+   "compression_if_true": 1.143,
+   "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "n/a",
+    "false_positive_indicators": null
+   }
+  },
+  {
+   "group": "openconfirm-established-swap.json",
+   "claim": "defendant B: OpenConfirm and Established are the two session-live states -- both answer ManualStop, AutomaticStop and HoldTimer expiry with a NOTIFICATION and a drop to Idle (txt:3715-3746, txt:3748-3773 / txt:3940-3974, txt:3988-4005), both keep the session alive on their periodic machinery (OpenConfirm 'remains in the OpenConfirmed state' on Event 11, txt:3775-3782; Established 'remains in the Established state' on Events 26/27, txt:4095-4111), and both sink to Idle on NOTIFICATION or TCP failure (txt:3792-3826 / txt:4064-4078) -- so maybe states 4 <-> 5 can be swapped alone",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "gate_verdict": "reject",
+   "gate_admits": false,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 11,
+   "real_cells": 224,
+   "would_be_orbits_if_merged": 7,
+   "compression_if_true": 1.143,
+   "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "n/a",
+    "false_positive_indicators": null
+   }
+  },
+  {
+   "group": "opensent-openconfirm-swap.json",
+   "claim": "defendant C: OpenSent and OpenConfirm are the two mid-negotiation states -- OpenSent 'waits for an OPEN message from its peer' (txt:3497) and OpenConfirm 'waits for a KEEPALIVE or NOTIFICATION message' (txt:3710); both drain to Idle on the administrative and hold-time events in the same prose pattern ('changes its state to Idle' per paragraph, txt:3502-3558 / txt:3715-3773) -- so maybe states 3 <-> 4 can be swapped alone",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "gate_verdict": "reject",
+   "gate_admits": false,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 16,
+   "real_cells": 224,
+   "would_be_orbits_if_merged": 7,
+   "compression_if_true": 1.143,
+   "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "n/a",
+    "false_positive_indicators": null
+   }
+  },
+  {
+   "group": "pads.json",
+   "claim": "positive control: padding states 6 and 7 have byte-identical rows (every event self-loops, reward 0), so the swap is a genuine symmetry under BOTH readings and should be admitted everywhere",
+   "naive_structure_admits": true,
+   "gate_exit": 0,
+   "gate_verdict": "pass",
+   "gate_admits": true,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 0,
+   "real_cells": 224,
+   "would_be_orbits_if_merged": 7,
+   "compression_if_true": 1.143,
+   "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "n/a",
+    "false_positive_indicators": null
+   }
+  }
+ ]
+}

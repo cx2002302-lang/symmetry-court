@@ -1,0 +1,102 @@
+{
+ "case": "http2-stream-states",
+ "provenance": {
+  "gate": "vendored wuxing_gua check, caliber per group declaration (compare v2; per-element action_maps recognized since 2026-11-04): groups declaring semantics.action=explicit with a valid action_map (single, legacy) or action_maps (per-element) run as declared (no --strict); groups declaring fixed or no declaration run --strict (live run)",
+  "naive_arm": "structure-only edge-set invariance proxy (see module docstring)",
+  "damage": "cell-by-cell ledger over model trans, same caliber as the gate arm per group (explicit groups: events renamed per the declared mapping — per-element groups use each element's own map; others: event names pinned); fixed-caliber damage kept per row in broken_real_cells_fixed for contrast",
+  "discovery_arm": "existing verdicts/discover.<case>.json receipt read as-is (file-level JSON read; the discover module is not imported and discovery is never re-run by compare); conclusion classified from the receipt's own fields; n/a when no receipt exists"
+ },
+ "summary": {
+  "case": "http2-stream-states",
+  "n_states": 16,
+  "n_actions": 8,
+  "n_groups": 4,
+  "naive_admits": 2,
+  "naive_harmful_admits": 1,
+  "naive_broken_real_cells": 12,
+  "gate_admits": 1,
+  "gate_admitted_broken_cells": 0,
+  "gate_saved_merges": 1,
+  "gate_explicit_groups": 0,
+  "gate_total_seconds_rounded": 0.7,
+  "discovery_arm": {
+   "available": false,
+   "conclusion": "n/a",
+   "note": "no discover receipt on disk (discover has not been run for this case); compare never runs discovery itself"
+  }
+ },
+ "rows": [
+  {
+   "group": "endpoint-mirror.json",
+   "claim": "defendant A (claim): the stream state graph is endpoint-role symmetric -- swapping the two endpoint roles (local <-> remote) maps every arrow to an arrow: reserved (local) <-> reserved (remote) (server-push reservation twins), half-closed (local) <-> half-closed (remote), with idle, open and closed fixed. The RFC writes the two reserved states and the two half-closed states as mirror bullet lists, and the RST escape says verbatim 'Either endpoint can send a RST_STREAM frame' in both reserved states.",
+   "naive_structure_admits": true,
+   "gate_exit": 1,
+   "gate_verdict": "reject",
+   "gate_admits": false,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 12,
+   "real_cells": 128,
+   "would_be_orbits_if_merged": 14,
+   "compression_if_true": 1.143,
+   "gate_saved_this_merge": true,
+   "discovery": {
+    "conclusion": "n/a",
+    "false_positive_indicators": null
+   }
+  },
+  {
+   "group": "half-mirror-only.json",
+   "claim": "defendant B: half-closed (local) and half-closed (remote) are shape-twins (both drain to closed on three events), so maybe they can be swapped while keeping reserved (local)/(remote) fixed",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "gate_verdict": "reject",
+   "gate_admits": false,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 8,
+   "real_cells": 128,
+   "would_be_orbits_if_merged": 15,
+   "compression_if_true": 1.067,
+   "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "n/a",
+    "false_positive_indicators": null
+   }
+  },
+  {
+   "group": "pads.json",
+   "claim": "positive control: padding states 7 and 8 have byte-identical rows (every event self-loops, reward 0), so the swap is a genuine symmetry under BOTH readings and should be admitted everywhere",
+   "naive_structure_admits": true,
+   "gate_exit": 0,
+   "gate_verdict": "pass",
+   "gate_admits": true,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 0,
+   "real_cells": 128,
+   "would_be_orbits_if_merged": 15,
+   "compression_if_true": 1.067,
+   "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "n/a",
+    "false_positive_indicators": null
+   }
+  },
+  {
+   "group": "reserved-swap-only.json",
+   "claim": "defendant C: reserved (local) and reserved (remote) are server-push twins (both released by RST from either endpoint), so maybe they can be swapped while keeping the half-closed pair fixed",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "gate_verdict": "reject",
+   "gate_admits": false,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 6,
+   "real_cells": 128,
+   "would_be_orbits_if_merged": 15,
+   "compression_if_true": 1.067,
+   "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "n/a",
+    "false_positive_indicators": null
+   }
+  }
+ ]
+}

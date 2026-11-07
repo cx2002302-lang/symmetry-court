@@ -1,0 +1,102 @@
+{
+ "case": "ppp-lcp",
+ "provenance": {
+  "gate": "vendored wuxing_gua check, caliber per group declaration (compare v2; per-element action_maps recognized since 2026-11-04): groups declaring semantics.action=explicit with a valid action_map (single, legacy) or action_maps (per-element) run as declared (no --strict); groups declaring fixed or no declaration run --strict (live run)",
+  "naive_arm": "structure-only edge-set invariance proxy (see module docstring)",
+  "damage": "cell-by-cell ledger over model trans, same caliber as the gate arm per group (explicit groups: events renamed per the declared mapping — per-element groups use each element's own map; others: event names pinned); fixed-caliber damage kept per row in broken_real_cells_fixed for contrast",
+  "discovery_arm": "existing verdicts/discover.<case>.json receipt read as-is (file-level JSON read; the discover module is not imported and discovery is never re-run by compare); conclusion classified from the receipt's own fields; n/a when no receipt exists"
+ },
+ "summary": {
+  "case": "ppp-lcp",
+  "n_states": 16,
+  "n_actions": 16,
+  "n_groups": 4,
+  "naive_admits": 1,
+  "naive_harmful_admits": 0,
+  "naive_broken_real_cells": 0,
+  "gate_admits": 1,
+  "gate_admitted_broken_cells": 0,
+  "gate_saved_merges": 0,
+  "gate_explicit_groups": 0,
+  "gate_total_seconds_rounded": 0.7,
+  "discovery_arm": {
+   "available": false,
+   "conclusion": "n/a",
+   "note": "no discover receipt on disk (discover has not been run for this case); compare never runs discovery itself"
+  }
+ },
+ "rows": [
+  {
+   "group": "ack-twins-swap.json",
+   "claim": "defendant A (claim): the negotiation automaton is initiator/responder symmetric at the Ack twins -- Ack-Rcvd and Ack-Sent are the two one-step-from-Open states, and sec.4.2 describes them in near-verbatim mirror sentences: 'Ack-Received': 'a Configure-Request has been sent and a Configure-Ack has been received. The Restart timer is still running, since a Configure-Ack has not yet been sent' (snapshot txt:945-949) vs 'Ack-Sent': 'a Configure-Request and a Configure-Ack have both been sent, but a Configure-Ack has not yet been received. The Restart timer is running' (snapshot txt:951-956) -- so swapping states 7 <-> 8 with every other state fixed should map the negotiation race onto itself.",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "gate_verdict": "reject",
+   "gate_admits": false,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 18,
+   "real_cells": 256,
+   "would_be_orbits_if_merged": 15,
+   "compression_if_true": 1.067,
+   "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "n/a",
+    "false_positive_indicators": null
+   }
+  },
+  {
+   "group": "closed-stopped-swap.json",
+   "claim": "defendant C: Closed and Stopped are the quiet twins -- in neither is a negotiation in flight, in neither does the Restart timer run, and both answer an unwanted Configure-Request with a Terminate-Ack (sec.4.2 'Closed' txt:853-860, 'Stopped' txt:862-872; txt:864 'The Stopped state is the Open counterpart to the Closed state'), so maybe states 2 <-> 3 can be swapped alone",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "gate_verdict": "reject",
+   "gate_admits": false,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 23,
+   "real_cells": 256,
+   "would_be_orbits_if_merged": 15,
+   "compression_if_true": 1.067,
+   "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "n/a",
+    "false_positive_indicators": null
+   }
+  },
+  {
+   "group": "closing-stopping-swap.json",
+   "claim": "defendant B: Closing and Stopping are the termination twins -- in both, a Terminate-Request has been sent and the Restart timer is running while waiting for a Terminate-Ack, and sec.4.2 says 'The Stopping state is the Open counterpart to the Closing state' (snapshot txt:918-929, counterpart sentence at txt:920; 'Closing' at txt:906-916), so maybe states 4 <-> 5 can be swapped alone",
+   "naive_structure_admits": false,
+   "gate_exit": 1,
+   "gate_verdict": "reject",
+   "gate_admits": false,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 18,
+   "real_cells": 256,
+   "would_be_orbits_if_merged": 15,
+   "compression_if_true": 1.067,
+   "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "n/a",
+    "false_positive_indicators": null
+   }
+  },
+  {
+   "group": "pads.json",
+   "claim": "positive control: padding states 10 and 11 have byte-identical rows (every event self-loops, reward 0), so the swap is a genuine symmetry under BOTH readings and should be admitted everywhere",
+   "naive_structure_admits": true,
+   "gate_exit": 0,
+   "gate_verdict": "pass",
+   "gate_admits": true,
+   "nx_labeled_symmetry": null,
+   "broken_real_cells_fixed": 0,
+   "real_cells": 256,
+   "would_be_orbits_if_merged": 15,
+   "compression_if_true": 1.067,
+   "gate_saved_this_merge": false,
+   "discovery": {
+    "conclusion": "n/a",
+    "false_positive_indicators": null
+   }
+  }
+ ]
+}
