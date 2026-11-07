@@ -8,7 +8,7 @@
  "gate_admits": 20,
  "gate_broken": 0,
  "gate_explicit_groups": 10,
- "gate_seconds": 8.7,
+ "gate_seconds": 13.8,
  "gate_admitted_broken_is_zero_by_definition": "pass requires worst_tv <= 1e-9 on every cell",
  "discovery_arm": {
   "source": "existing verdicts/discover.<case>.json receipts read as-is; compare never runs discovery (the discover module is not imported, nothing is re-discovered)",

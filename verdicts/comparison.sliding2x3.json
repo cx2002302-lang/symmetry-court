@@ -18,7 +18,7 @@
   "gate_admitted_broken_cells": 0,
   "gate_saved_merges": 1,
   "gate_explicit_groups": 2,
-  "gate_total_seconds_rounded": 0.8,
+  "gate_total_seconds_rounded": 1.4,
   "discovery_arm": {
    "available": true,
    "receipt": "verdicts\\discover.sliding2x3.json",
