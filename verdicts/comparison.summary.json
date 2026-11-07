@@ -8,7 +8,7 @@
  "gate_admits": 20,
  "gate_broken": 0,
  "gate_explicit_groups": 10,
- "gate_seconds": 8.8,
+ "gate_seconds": 8.0,
  "gate_admitted_broken_is_zero_by_definition": "pass requires worst_tv <= 1e-9 on every cell",
  "rows": [
   {

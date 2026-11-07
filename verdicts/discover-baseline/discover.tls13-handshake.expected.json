@@ -1,0 +1,179 @@
+{
+ "_kind": "reconciliation baseline for the discover capability (draft); hand-derived and machine-checked from the named sources; NOT an engine receipt and NOT discover output",
+ "_honesty_boundary": "discover discovers candidate state symmetries only under the fixed caliber (event names pinned).  Action-renaming symmetries (explicit or relabel caliber) stay author-declared; the machine does not guess them and this baseline does not record them as discover targets.  A fixed-pass declared group must be contained in the discovered group; a fixed-reject declared group must not be fully contained.",
+ "case": "tls13-handshake",
+ "caliber": "fixed (event names pinned; rewards kept)",
+ "sources": {
+  "model": "cases/tls13-handshake/model.json",
+  "declared_groups": "cases/tls13-handshake/groups/",
+  "court_receipt": "cases/tls13-handshake/expected.json",
+  "sealed_truth": {
+   "sealed_file": "field-trial blind-test project, sealed/tls13-handshake.truth.json",
+   "sha256": "ce844b06260eeb2bd0e21cc23fb1b1960e0516d8081bc7e95efaf364ad235a07",
+   "sealed_wave": "W3-independent-benchmark",
+   "sealed_utc": "2026-10-31T06:30:36Z",
+   "fixed_aut_order": 1307674368000,
+   "fixed_aut_order_no_reward": 1307674368000,
+   "method": "isolated-filler decomposition (k=15) + networkx VF2 on the 17-state reduced model, direct filtering, relabel witnesses by bipartite backtracking; cross-checked by a fresh backtracking enumerator and random lifted spot checks",
+   "group_verdicts": {
+    "g1_claim_waitcert_waitcv_swap_fixed.json": "FALSE",
+    "g2_control_crossside_waitcert_swap_fixed.json": "FALSE",
+    "g3_pads_swap_fixed.json": "TRUE"
+   },
+   "filler_decomposition": {
+    "class": [
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23,
+     24,
+     25,
+     26,
+     27,
+     28,
+     29,
+     30,
+     31
+    ],
+    "class_size": 15,
+    "isolated": true,
+    "k_factorial": 1307674368000
+   },
+   "lifted_formula": "|Aut(full)| = |Aut(reduced)| * 15!",
+   "lifted_spot_checks": true
+  },
+  "baseline_method": "declared group elements machine-verified against the fixed criterion directly on the model; free class and per-action (prob, reward) signatures computed directly from the model; no discover output read"
+ },
+ "model_facts": {
+  "n_states": 32,
+  "n_actions": 18,
+  "edges_total": 579,
+  "n_real_states": 17,
+  "n_padding_states": 15,
+  "uniform_isolated_free_class": {
+   "size": 15,
+   "members": [
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31
+   ],
+   "contains_real_states": false,
+   "real_members": []
+  }
+ },
+ "fixed_automorphism_expectation": {
+  "order_exact": 1307674368000,
+  "order_exact_basis": "sealed truth (brute-force/VF2/backtracker cross-validated in the field-trial blind-test project)",
+  "order_lower_bound": 1307674368000,
+  "order_lower_bound_basis": "Sym(free class) <= Aut_fixed: all 15 member(s) have uniform isolated rows (machine-checked); bound tight here",
+  "complement_rigidity_certified": true,
+  "expected_state_orbits_if_order_exact": 18,
+  "expected_state_orbits_if_complement_rigid": 18,
+  "wl_refinement_expected_discrete": false,
+  "wl_note": "the free class of 15 states is one 1-WL block (its members are genuinely automorphism-equivalent), so the refinement is not discrete; WL upper bound = product of block factorials, tight here only if the complement is WL-discrete",
+  "automorphism_cap_default_2000": {
+   "hit_expected": true,
+   "on_hit": "stop enumeration, report orbit lower bound from the enumerated subset plus the WL upper bound; the exact order stays pinned by the sources above"
+  },
+  "notes": []
+ },
+ "declared_groups": [
+  {
+   "file": "g1_claim_waitcert_waitcv_swap_fixed.json",
+   "declared_semantics": "fixed",
+   "n_elements": 2,
+   "element_cycles": [
+    [
+     "id"
+    ],
+    [
+     "(4 5)"
+    ]
+   ],
+   "element_is_fixed_automorphism": [
+    true,
+    false
+   ],
+   "all_elements_in_aut_fixed": false,
+   "expected_fixed_row": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0
+   },
+   "networkx_labeled_column": false,
+   "discover_admission_expected": "not_fully_contained"
+  },
+  {
+   "file": "g2_control_crossside_waitcert_swap_fixed.json",
+   "declared_semantics": "fixed",
+   "n_elements": 2,
+   "element_cycles": [
+    [
+     "id"
+    ],
+    [
+     "(4 13)"
+    ]
+   ],
+   "element_is_fixed_automorphism": [
+    true,
+    false
+   ],
+   "all_elements_in_aut_fixed": false,
+   "expected_fixed_row": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0
+   },
+   "networkx_labeled_column": false,
+   "discover_admission_expected": "not_fully_contained"
+  },
+  {
+   "file": "g3_pads_swap_fixed.json",
+   "declared_semantics": "fixed",
+   "n_elements": 2,
+   "element_cycles": [
+    [
+     "id"
+    ],
+    [
+     "(17 18)"
+    ]
+   ],
+   "element_is_fixed_automorphism": [
+    true,
+    true
+   ],
+   "all_elements_in_aut_fixed": true,
+   "expected_fixed_row": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0
+   },
+   "networkx_labeled_column": true,
+   "discover_admission_expected": "contained"
+  }
+ ],
+ "reconciliation_checks": [
+  "order: discovered order (exact, or cap lower bound plus WL upper bound) consistent with order_exact / order_lower_bound above",
+  "admission: every fixed-pass declared group contained in the discovered group; every fixed-reject declared group not fully contained",
+  "orbits: free class forms a single orbit; orbit count consistent with expected_state_orbits_if_order_exact when the order is exact",
+  "discreteness: wl_refinement_expected_discrete must match the discover refinement report",
+  "cap: automorphism_cap hit flag consistent with the expectation recorded above"
+ ]
+}

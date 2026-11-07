@@ -1,0 +1,167 @@
+{
+ "_kind": "reconciliation baseline for the discover capability (draft); hand-derived and machine-checked from the named sources; NOT an engine receipt and NOT discover output",
+ "_honesty_boundary": "discover discovers candidate state symmetries only under the fixed caliber (event names pinned).  Action-renaming symmetries (explicit or relabel caliber) stay author-declared; the machine does not guess them and this baseline does not record them as discover targets.  A fixed-pass declared group must be contained in the discovered group; a fixed-reject declared group must not be fully contained.",
+ "case": "hadoop-mr-task",
+ "caliber": "fixed (event names pinned; rewards kept)",
+ "sources": {
+  "model": "cases/hadoop-mr-task/model.json",
+  "declared_groups": "cases/hadoop-mr-task/groups/",
+  "court_receipt": "cases/hadoop-mr-task/expected.json",
+  "sealed_truth": {
+   "sealed_file": "field-trial blind-test project, sealed/hadoop-mr-task.truth.json",
+   "sha256": "f959492d35968ab6959f3384f768a641e996fdf0484081aa72c631e5bde9910e",
+   "sealed_wave": "W3-independent-benchmark",
+   "sealed_utc": "2026-10-31T06:30:17Z",
+   "fixed_aut_order": 1,
+   "fixed_aut_order_no_reward": 1,
+   "method": "brute force over S_8 (8! <= 40320), cross-validated by networkx VF2 and a fresh backtracking enumerator",
+   "group_verdicts": {
+    "g1_claim_failed_killed_swap_fixed.json": "FALSE",
+    "g2_control_new_scheduled_swap_fixed.json": "FALSE",
+    "g3_control_running_killwait_swap_fixed.json": "FALSE"
+   },
+   "state_orbits": [
+    [
+     0
+    ],
+    [
+     1
+    ],
+    [
+     2
+    ],
+    [
+     3
+    ],
+    [
+     4
+    ],
+    [
+     5
+    ],
+    [
+     6
+    ],
+    [
+     7
+    ]
+   ]
+  },
+  "baseline_method": "declared group elements machine-verified against the fixed criterion directly on the model; free class and per-action (prob, reward) signatures computed directly from the model; no discover output read"
+ },
+ "model_facts": {
+  "n_states": 8,
+  "n_actions": 9,
+  "edges_total": 83,
+  "n_real_states": 7,
+  "n_padding_states": 1,
+  "uniform_isolated_free_class": {
+   "size": 1,
+   "members": [
+    7
+   ],
+   "contains_real_states": false,
+   "real_members": []
+  }
+ },
+ "fixed_automorphism_expectation": {
+  "order_exact": 1,
+  "order_exact_basis": "sealed truth (brute-force/VF2/backtracker cross-validated in the field-trial blind-test project)",
+  "order_lower_bound": 1,
+  "order_lower_bound_basis": "Sym(free class) <= Aut_fixed: all 1 member(s) have uniform isolated rows (machine-checked); bound tight here",
+  "complement_rigidity_certified": true,
+  "expected_state_orbits_if_order_exact": 8,
+  "expected_state_orbits_if_complement_rigid": 8,
+  "wl_refinement_expected_discrete": true,
+  "wl_note": "complement states have pairwise-distinct per-action (prob, reward) signatures and the free class is a singleton, so the refinement is expected to be discrete (identity group only when the free class is empty or a single state pinned by in-edges)",
+  "automorphism_cap_default_2000": {
+   "hit_expected": false,
+   "on_hit": "stop enumeration, report orbit lower bound from the enumerated subset plus the WL upper bound; the exact order stays pinned by the sources above"
+  },
+  "notes": []
+ },
+ "declared_groups": [
+  {
+   "file": "g1_claim_failed_killed_swap_fixed.json",
+   "declared_semantics": "fixed",
+   "n_elements": 2,
+   "element_cycles": [
+    [
+     "id"
+    ],
+    [
+     "(4 6)"
+    ]
+   ],
+   "element_is_fixed_automorphism": [
+    true,
+    false
+   ],
+   "all_elements_in_aut_fixed": false,
+   "expected_fixed_row": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0
+   },
+   "networkx_labeled_column": false,
+   "discover_admission_expected": "not_fully_contained"
+  },
+  {
+   "file": "g2_control_new_scheduled_swap_fixed.json",
+   "declared_semantics": "fixed",
+   "n_elements": 2,
+   "element_cycles": [
+    [
+     "id"
+    ],
+    [
+     "(0 1)"
+    ]
+   ],
+   "element_is_fixed_automorphism": [
+    true,
+    false
+   ],
+   "all_elements_in_aut_fixed": false,
+   "expected_fixed_row": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0
+   },
+   "networkx_labeled_column": false,
+   "discover_admission_expected": "not_fully_contained"
+  },
+  {
+   "file": "g3_control_running_killwait_swap_fixed.json",
+   "declared_semantics": "fixed",
+   "n_elements": 2,
+   "element_cycles": [
+    [
+     "id"
+    ],
+    [
+     "(2 5)"
+    ]
+   ],
+   "element_is_fixed_automorphism": [
+    true,
+    false
+   ],
+   "all_elements_in_aut_fixed": false,
+   "expected_fixed_row": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0
+   },
+   "networkx_labeled_column": false,
+   "discover_admission_expected": "not_fully_contained"
+  }
+ ],
+ "reconciliation_checks": [
+  "order: discovered order (exact, or cap lower bound plus WL upper bound) consistent with order_exact / order_lower_bound above",
+  "admission: every fixed-pass declared group contained in the discovered group; every fixed-reject declared group not fully contained",
+  "orbits: free class forms a single orbit; orbit count consistent with expected_state_orbits_if_order_exact when the order is exact",
+  "discreteness: wl_refinement_expected_discrete must match the discover refinement report",
+  "cap: automorphism_cap hit flag consistent with the expectation recorded above"
+ ]
+}

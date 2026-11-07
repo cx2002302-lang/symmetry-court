@@ -1,6 +1,6 @@
 {
  "case": "usb2-device-states",
- "generated_utc": "2026-11-07T00:11:05Z",
+ "generated_utc": "2026-11-07T00:30:42Z",
  "capability": {
   "name": "discover",
   "semantics": "fixed",
@@ -179,7 +179,7 @@
    "strict": true
   },
   "engine_group_order_reported": 2,
-  "gate_seconds": 0.219
+  "gate_seconds": 0.172
  },
  "reconciliation": {
   "checked": true,
@@ -255,7 +255,7 @@
   "wl": 0.0,
   "vf2": 0.0,
   "orbits_and_generators": 0.0,
-  "gate_engine": 0.219
+  "gate_engine": 0.172
  },
  "provenance": {
   "recorded_from_live_run": true,

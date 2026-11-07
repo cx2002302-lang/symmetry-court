@@ -1,0 +1,157 @@
+{
+ "_kind": "reconciliation baseline for the discover capability (draft); hand-derived and machine-checked from the named sources; NOT an engine receipt and NOT discover output",
+ "_honesty_boundary": "discover discovers candidate state symmetries only under the fixed caliber (event names pinned).  Action-renaming symmetries (explicit or relabel caliber) stay author-declared; the machine does not guess them and this baseline does not record them as discover targets.  A fixed-pass declared group must be contained in the discovered group; a fixed-reject declared group must not be fully contained.",
+ "case": "tcp",
+ "caliber": "fixed (event names pinned; rewards kept)",
+ "sources": {
+  "model": "cases/tcp/model.json",
+  "declared_groups": "cases/tcp/groups/",
+  "court_receipt": "cases/tcp/expected.json",
+  "sealed_truth": null,
+  "baseline_method": "declared group elements machine-verified against the fixed criterion directly on the model; free class and per-action (prob, reward) signatures computed directly from the model; no discover output read"
+ },
+ "model_facts": {
+  "n_states": 16,
+  "n_actions": 12,
+  "edges_total": 192,
+  "n_real_states": 11,
+  "n_padding_states": 5,
+  "uniform_isolated_free_class": {
+   "size": 5,
+   "members": [
+    11,
+    12,
+    13,
+    14,
+    15
+   ],
+   "contains_real_states": false,
+   "real_members": []
+  }
+ },
+ "fixed_automorphism_expectation": {
+  "order_exact": 120,
+  "order_exact_basis": "machine certificate: free class of 5 uniform isolated states (Sym(free class) <= Aut) + complement of 11 states with pairwise-distinct (prob, reward) per-action signatures (rigid); orders multiply because the free class is Aut-invariant",
+  "order_lower_bound": 120,
+  "order_lower_bound_basis": "Sym(free class) <= Aut_fixed: all 5 member(s) have uniform isolated rows (machine-checked); bound tight here",
+  "complement_rigidity_certified": true,
+  "expected_state_orbits_if_order_exact": 12,
+  "expected_state_orbits_if_complement_rigid": 12,
+  "wl_refinement_expected_discrete": false,
+  "wl_note": "the free class of 5 states is one 1-WL block (its members are genuinely automorphism-equivalent), so the refinement is not discrete; WL upper bound = product of block factorials, tight here only if the complement is WL-discrete",
+  "automorphism_cap_default_2000": {
+   "hit_expected": false,
+   "on_hit": "stop enumeration, report orbit lower bound from the enumerated subset plus the WL upper bound; the exact order stays pinned by the sources above"
+  },
+  "notes": []
+ },
+ "declared_groups": [
+  {
+   "file": "absurd.json",
+   "declared_semantics": "fixed",
+   "n_elements": 2,
+   "element_cycles": [
+    [
+     "id"
+    ],
+    [
+     "(0 4)"
+    ]
+   ],
+   "element_is_fixed_automorphism": [
+    true,
+    false
+   ],
+   "all_elements_in_aut_fixed": false,
+   "expected_fixed_row": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0
+   },
+   "networkx_labeled_column": false,
+   "discover_admission_expected": "not_fully_contained"
+  },
+  {
+   "file": "other.json",
+   "declared_semantics": "fixed",
+   "n_elements": 2,
+   "element_cycles": [
+    [
+     "id"
+    ],
+    [
+     "(3 5)"
+    ]
+   ],
+   "element_is_fixed_automorphism": [
+    true,
+    false
+   ],
+   "all_elements_in_aut_fixed": false,
+   "expected_fixed_row": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0
+   },
+   "networkx_labeled_column": false,
+   "discover_admission_expected": "not_fully_contained"
+  },
+  {
+   "file": "pads.json",
+   "declared_semantics": "fixed",
+   "n_elements": 2,
+   "element_cycles": [
+    [
+     "id"
+    ],
+    [
+     "(11 12)"
+    ]
+   ],
+   "element_is_fixed_automorphism": [
+    true,
+    true
+   ],
+   "all_elements_in_aut_fixed": true,
+   "expected_fixed_row": {
+    "exit": 0,
+    "verdict": "pass",
+    "worst_tv": 0.0
+   },
+   "networkx_labeled_column": true,
+   "discover_admission_expected": "contained"
+  },
+  {
+   "file": "swap.json",
+   "declared_semantics": "fixed",
+   "n_elements": 2,
+   "element_cycles": [
+    [
+     "id"
+    ],
+    [
+     "(6 8)"
+    ]
+   ],
+   "element_is_fixed_automorphism": [
+    true,
+    false
+   ],
+   "all_elements_in_aut_fixed": false,
+   "expected_fixed_row": {
+    "exit": 1,
+    "verdict": "reject",
+    "worst_tv": 1.0
+   },
+   "networkx_labeled_column": false,
+   "discover_admission_expected": "not_fully_contained"
+  }
+ ],
+ "reconciliation_checks": [
+  "order: discovered order (exact, or cap lower bound plus WL upper bound) consistent with order_exact / order_lower_bound above",
+  "admission: every fixed-pass declared group contained in the discovered group; every fixed-reject declared group not fully contained",
+  "orbits: free class forms a single orbit; orbit count consistent with expected_state_orbits_if_order_exact when the order is exact",
+  "discreteness: wl_refinement_expected_discrete must match the discover refinement report",
+  "cap: automorphism_cap hit flag consistent with the expectation recorded above"
+ ]
+}

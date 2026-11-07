@@ -1,6 +1,6 @@
 {
  "case": "tcp",
- "generated_utc": "2026-11-07T00:11:04Z",
+ "generated_utc": "2026-11-07T00:30:41Z",
  "capability": {
   "name": "discover",
   "semantics": "fixed",
@@ -2409,7 +2409,7 @@
    "strict": true
   },
   "engine_group_order_reported": 120,
-  "gate_seconds": 0.281
+  "gate_seconds": 0.203
  },
  "reconciliation": {
   "checked": true,
@@ -2506,7 +2506,7 @@
   "wl": 0.0,
   "vf2": 0.016,
   "orbits_and_generators": 0.0,
-  "gate_engine": 0.281
+  "gate_engine": 0.203
  },
  "provenance": {
   "recorded_from_live_run": true,

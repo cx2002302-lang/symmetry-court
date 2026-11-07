@@ -430,3 +430,58 @@ a disk cycle admit no ρ at all — sizes are attached to disk identity, not
 positions) without spending group files on them, and cross-validates the
 legal-move function against an independent stack-based implementation on
 every (state, action) pair.
+
+## 12. The automatic discovery arm — `discover`, the fourth capability (2026-11-07)
+
+The court now proposes candidates as well as judging them, and the proposal
+step is scoped by the same distinction this file turns on: **fixed-caliber
+candidates only** (event names pinned — the model transition table becomes a
+directed multigraph with `(action, prob, reward)` edge labels, networkx VF2
+enumerates the label-preserving automorphisms, 1-WL edge-label refinement
+prunes soundly, a hard cap of 2000 turns explosion into honest lower
+bounds). Action-renaming (relabel/explicit) candidates — the declared
+groups this file is about — remain the case author's declaration; the
+machine does not guess them.
+
+The full-docket run reconciled clean, case by case, against each case's
+existing truth (per-case audit report:
+[report/discover-audit.md](../report/discover-audit.md), Chinese twin
+[report/discover-audit.zh-CN.md](../report/discover-audit.zh-CN.md);
+pre-registered expectations in `verdicts/discover-baseline/`):
+
+- **12/12 cases reconciled; 0 false positives** — all 8,786 enumerated
+  permutations direct-checked against the sealed fixed criterion by an
+  audit-side independent implementation, 0 violations;
+- **7/7 set-level equalities** where the enumeration completed (four small
+  incorporated cases equal to the sealed element sets; `tcp`/`imap`/
+  `hanoi3` equal to the explicitly generated padding-class symmetric
+  groups; `lightsout3` equal to the 512 XOR translations);
+- **2 discrete cases** ⇒ identity groups (`hadoop-mr-task`, `raft-etcd`;
+  the former is the docket's |Aut| = 1 anchor, sealed order equality);
+- **9 cases auto-discover their pads class** (`tcp` 5! = 120, `dhcp`
+  capped with the baseline certificate 8! = 40320, `imap` 4! = 24,
+  `mini2048` capped with a 183-state free class — 175 padding states plus
+  the 8 real absorbing dead boards this file's case carries,
+  `sliding2x3` capped at 304, `hanoi3` 5! = 120, `k8s-pod-lifecycle`
+  S3 of order 6, `tls13-handshake` capped on its 15 fillers,
+  `usb2-device-states` 2);
+- **1 case discovers a non-trivial fixed group beyond padding** —
+  `lightsout3`, whose fixed automorphism group is exactly the
+  512-element translation group C2^9 on the state space (a single orbit;
+  the 1-WL refinement is one block because the graph is genuinely
+  vertex-transitive — the exact order comes from enumeration);
+- **4 capped cases** report lower bounds only (`dhcp`, `mini2048`,
+  `sliding2x3`, `tls13-handshake` — the sealed 15! exceeds any reachable
+  cap, which is the honest outcome);
+- **44 declared groups consistent with their expected fixed rows** — every
+  fixed-pass group admitted (or direct-criterion-proven at cap), every
+  fixed-reject group independently rejected by the direct criterion; the
+  tls13 partial enumeration fixes all 17 protocol states pointwise,
+  matching the sealed isolated-filler decomposition.
+
+The mirror image of this file's story holds on the discovery side too:
+the explicit-caliber groups this file records (rot90 with renamed keys,
+D4 with per-element button maps, V4, S3) were **not** discovered by the
+machine under the fixed caliber — the direct criterion rejects each of
+them there, which is the same fact the court's fixed column records. The
+declaration does the work; the machine, on both arms, only ever verifies.

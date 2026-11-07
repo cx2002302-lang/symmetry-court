@@ -1,6 +1,6 @@
 {
  "case": "sliding2x3",
- "generated_utc": "2026-11-07T00:11:03Z",
+ "generated_utc": "2026-11-07T00:30:41Z",
  "capability": {
   "name": "discover",
   "semantics": "fixed",
@@ -14749,7 +14749,7 @@
    "strict": true
   },
   "engine_group_order_reported": 120,
-  "gate_seconds": 1.031
+  "gate_seconds": 0.813
  },
  "reconciliation": {
   "checked": true,
@@ -14825,11 +14825,11 @@
   "applicable": false
  },
  "timing_seconds": {
-  "graph": 0.0,
-  "wl": 0.016,
-  "vf2": 8.265,
-  "orbits_and_generators": 0.406,
-  "gate_engine": 1.031
+  "graph": 0.016,
+  "wl": 0.015,
+  "vf2": 7.844,
+  "orbits_and_generators": 0.375,
+  "gate_engine": 0.813
  },
  "provenance": {
   "recorded_from_live_run": true,

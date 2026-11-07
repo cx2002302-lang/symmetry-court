@@ -449,7 +449,12 @@ honest outcome. `lightsout3` completes exactly at minutes-scale — its state
 graph is vertex-transitive (1-WL cannot split it, and indeed its fixed
 automorphism group is the 512-element translation group, a single orbit).
 Timing magnitude: most cases and all cap cases finish within seconds;
-exact per-stage numbers live in each receipt's `timing_seconds`.
+exact per-stage numbers live in each receipt's `timing_seconds`. The
+12-case truth reconciliation (outcome: **0 false positives**; the
+reconciliation table, per-case conclusions and honesty notes) is recorded
+in [report/discover-audit.md](report/discover-audit.md) (Chinese twin
+[report/discover-audit.zh-CN.md](report/discover-audit.zh-CN.md)), checked
+against the pre-registered expectations in `verdicts/discover-baseline/`.
 
 ## Honest boundaries
 

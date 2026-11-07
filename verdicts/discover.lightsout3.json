@@ -1,6 +1,6 @@
 {
  "case": "lightsout3",
- "generated_utc": "2026-11-07T00:10:51Z",
+ "generated_utc": "2026-11-07T00:30:29Z",
  "capability": {
   "name": "discover",
   "semantics": "fixed",
@@ -5744,7 +5744,7 @@
    "strict": true
   },
   "engine_group_order_reported": 512,
-  "gate_seconds": 3.25
+  "gate_seconds": 3.328
  },
  "reconciliation": {
   "checked": true,
@@ -5888,10 +5888,10 @@
  },
  "timing_seconds": {
   "graph": 0.0,
-  "wl": 0.015,
-  "vf2": 289.063,
-  "orbits_and_generators": 0.265,
-  "gate_engine": 3.25
+  "wl": 0.016,
+  "vf2": 291.453,
+  "orbits_and_generators": 0.281,
+  "gate_engine": 3.328
  },
  "provenance": {
   "recorded_from_live_run": true,

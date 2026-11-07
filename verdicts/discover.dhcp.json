@@ -1,6 +1,6 @@
 {
  "case": "dhcp",
- "generated_utc": "2026-11-07T00:05:57Z",
+ "generated_utc": "2026-11-07T00:25:33Z",
  "capability": {
   "name": "discover",
   "semantics": "fixed",
@@ -349,7 +349,7 @@
    "strict": true
   },
   "engine_group_order_reported": 120,
-  "gate_seconds": 0.25
+  "gate_seconds": 0.219
  },
  "reconciliation": {
   "checked": true,
@@ -425,9 +425,9 @@
  "timing_seconds": {
   "graph": 0.0,
   "wl": 0.0,
-  "vf2": 0.266,
-  "orbits_and_generators": 0.016,
-  "gate_engine": 0.25
+  "vf2": 0.234,
+  "orbits_and_generators": 0.0,
+  "gate_engine": 0.219
  },
  "provenance": {
   "recorded_from_live_run": true,

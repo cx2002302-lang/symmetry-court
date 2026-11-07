@@ -1,6 +1,6 @@
 {
  "case": "k8s-pod-lifecycle",
- "generated_utc": "2026-11-07T00:05:58Z",
+ "generated_utc": "2026-11-07T00:25:34Z",
  "capability": {
   "name": "discover",
   "semantics": "fixed",
@@ -225,7 +225,7 @@
    "strict": true
   },
   "engine_group_order_reported": 6,
-  "gate_seconds": 0.203
+  "gate_seconds": 0.171
  },
  "reconciliation": {
   "checked": true,
@@ -301,7 +301,7 @@
   "wl": 0.0,
   "vf2": 0.0,
   "orbits_and_generators": 0.0,
-  "gate_engine": 0.203
+  "gate_engine": 0.171
  },
  "provenance": {
   "recorded_from_live_run": true,

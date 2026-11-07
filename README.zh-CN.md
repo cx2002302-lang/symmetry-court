@@ -121,7 +121,7 @@ compare 自 v2 起按各群声明分派口径：声明 `explicit` 的群原样�
 - **闸门臂：** 每个发现的候选都写成可重放群文件（`verdicts/discover.<case>.candidate.json`，semantics `fixed`），并送 vendored 引擎 `check --strict`——同一判据、独立代码路径。引擎拒绝的发现按失败记录，不抹平。
 - **对账：** 每份判决书（`verdicts/discover.<case>.json`）把发现结果与案卷自己的 expected 记录对账（逐群直接判据 `multiset(trans[π(s)][a]) == multiset{(p, π(t), r)}` + 枚举成员资格）；五个收编案另与 field-trial 密封真值对账（传 `--sealed-dir`）：枚举完整处群阶精确相等，触顶处记结构一致性注记。
 
-实测读数（收据可重生成：`python -X utf8 -m symmetry_court discover --all`）：`tcp` 案自动发现完整的填充互换群——阶 120 = 5!，5 个补位态两两互换，12 个轨道，细分非离散；而结构直觉的 `swap` 不在已枚举集合内（精确的「不在」——枚举完整；直接判据也独立否定它）。这个双方向冒烟契约的两个方向都记录在判决书的 `smoke` 块里。四个大填充案（`dhcp`、`tls13-handshake`、`mini2048`、`sliding2x3`）触顶、只报下界；tls13 密封真值的 15! 远超任何可达上限——这正是诚实的结果。`lightsout3` 在分钟量级内精确枚举完成——其状态图点传递（1-WL 无法细分，而它的 fixed 自同构群也确实是 512 阶平移群、单一轨道）。计时量级：多数案与全部触顶案秒级完成；逐阶段精确数字在各判决书 `timing_seconds` 里。
+实测读数（收据可重生成：`python -X utf8 -m symmetry_court discover --all`）：`tcp` 案自动发现完整的填充互换群——阶 120 = 5!，5 个补位态两两互换，12 个轨道，细分非离散；而结构直觉的 `swap` 不在已枚举集合内（精确的「不在」——枚举完整；直接判据也独立否定它）。这个双方向冒烟契约的两个方向都记录在判决书的 `smoke` 块里。四个大填充案（`dhcp`、`tls13-handshake`、`mini2048`、`sliding2x3`）触顶、只报下界；tls13 密封真值的 15! 远超任何可达上限——这正是诚实的结果。`lightsout3` 在分钟量级内精确枚举完成——其状态图点传递（1-WL 无法细分，而它的 fixed 自同构群也确实是 512 阶平移群、单一轨道）。计时量级：多数案与全部触顶案秒级完成；逐阶段精确数字在各判决书 `timing_seconds` 里。12 案真值对账审计（结论：**假阳性 0**；对账表、逐案结论与诚实注记）见 [report/discover-audit.zh-CN.md](report/discover-audit.zh-CN.md)（英文版 [report/discover-audit.md](report/discover-audit.md)），对账基准为 `verdicts/discover-baseline/` 的预注册预期。
 
 ## 边界诚实
 
