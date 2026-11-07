@@ -1,0 +1,216 @@
+{
+ "case": "raft-etcd",
+ "generated_utc": "2026-11-07T00:10:53Z",
+ "capability": {
+  "name": "discover",
+  "semantics": "fixed",
+  "honesty_boundary": "fixed-caliber (event names pinned) candidate discovery only; action-renaming (relabel/explicit) candidates remain the case author's explicit declaration - the machine does not guess which kind of sameness applies",
+  "method": "networkx MultiDiGraph VF2 automorphism enumeration with edge labels (action, prob, reward), pruned by 1-WL edge-label color refinement (sound: WL colors are automorphism-invariant); hard cap on enumeration",
+  "cap": 2000,
+  "wall_clock_budget_s": null
+ },
+ "model": {
+  "path": "cases\\raft-etcd\\model.json",
+  "n_bits": 2,
+  "n_states": 4,
+  "n_actions": 14,
+  "source_system": "etcd-io/raft (go.etcd.io/raft) single-node role state machine (Follower/Candidate/Leader/PreCandidate), transcribed by field-trial W2 from pinned public source",
+  "source_citation": [
+   "etcd-io/raft main @ c51f010c851edd0dada5af41bafbf68e54617767（HEAD 提交日期 2026-10-23，2026-10-31 浅克隆）:",
+   "  - raft.go:49-56 StateType 四值（StateFollower=51, StateCandidate=52, StateLeader=53, StatePreCandidate=54）",
+   "  - raftpb/raft.pb.go:89-112 MessageType 枚举（0..23）；本转录收 14 个、裁剪 10 个（见 trimmed_events）",
+   "  - Step:1089；hup:973；campaign:1025；poll:1075；becomeFollower:891；becomeCandidate:902；becomePreCandidate:917；becomeLeader:933",
+   "  - stepLeader:1275；stepCandidate:1665（与 PreCandidate 共用，注释 1663-1664）；stepFollower:1710",
+   "  - 本地留档 _scratch/sources/raft/repo/（含 .git HEAD）",
+   "论文（仅作主张来源，非转录对象）: Ongaro & Ousterhout, 'In Search of an Understandable Consensus Algorithm', ATC'14, §5.1, §5.4.1（raft.github.io/raft.pdf）"
+  ]
+ },
+ "discovery": {
+  "semantics": "fixed",
+  "method": "networkx MultiDiGraph VF2 automorphism enumeration with edge labels (action, prob, reward), pruned by 1-WL edge-label color refinement (sound: WL colors are automorphism-invariant); hard cap on enumeration",
+  "honesty_boundary": "fixed-caliber (event names pinned) candidate discovery only; action-renaming (relabel/explicit) candidates remain the case author's explicit declaration - the machine does not guess which kind of sameness applies",
+  "graph": {
+   "nodes": 4,
+   "edges": 56,
+   "multi_entry_cells": 0
+  },
+  "cap": 2000,
+  "wl_refinement": {
+   "n_blocks": 4,
+   "discrete": true,
+   "blocks": [
+    [
+     0
+    ],
+    [
+     1
+    ],
+    [
+     2
+    ],
+    [
+     3
+    ]
+   ]
+  },
+  "enumeration": {
+   "enumerated_count": 1,
+   "truncated": false,
+   "stop_reason": "search exhausted (all automorphisms enumerated)",
+   "order": 1,
+   "order_claim": "exact: VF2 enumeration completed (1 automorphisms = the full fixed-caliber automorphism group)",
+   "elements_storage": "full_enumeration",
+   "elements": [
+    [
+     0,
+     1,
+     2,
+     3
+    ]
+   ],
+   "generators": [],
+   "n_generators": 0,
+   "generators_note": null
+  },
+  "orbits": {
+   "status": "exact",
+   "n_orbits": 4,
+   "blocks": [
+    [
+     0
+    ],
+    [
+     1
+    ],
+    [
+     2
+    ],
+    [
+     3
+    ]
+   ],
+   "lower_bound_blocks": null,
+   "upper_bound_blocks": null,
+   "note": "enumeration completed: this is the orbit partition of the full automorphism group"
+  },
+  "discrete_wl": true,
+  "identity_group": true,
+  "structural_pad_states": []
+ },
+ "gate_arm": {
+  "candidate_group_file": "verdicts/discover.raft-etcd.candidate.json",
+  "candidate": {
+   "kind": "full enumerated group (the exact fixed-caliber automorphism group)",
+   "order": 1,
+   "closure_truncated": false
+  },
+  "engine_check": {
+   "exit": 0,
+   "verdict": "pass",
+   "worst_tv": 0.0,
+   "judge": "strict",
+   "reason": "两层判据均通过：转移等变（max TV=0.00e+00 ≤ tol=1e-09）+ 奖励剖面（n_bad=0）",
+   "error": null,
+   "command": [
+    "python",
+    "-X",
+    "utf8",
+    "-m",
+    "wuxing_gua",
+    "check",
+    "--trans",
+    "cases\\raft-etcd\\model.json",
+    "--group",
+    "verdicts\\discover.raft-etcd.candidate.json",
+    "--strict"
+   ],
+   "cwd": "vendored/",
+   "strict": true
+  },
+  "engine_group_order_reported": 1,
+  "gate_seconds": 0.172
+ },
+ "reconciliation": {
+  "checked": true,
+  "expected_file": "cases\\raft-etcd\\expected.json",
+  "criterion_direct": "multiset(trans[pi(s)][a]) == multiset{(p, pi(t), r)} per (s, a) - the sealed fixed criterion",
+  "groups": [
+   {
+    "group": "g1_claim_cand_precand_swap_fixed",
+    "expected_fixed_verdict": "reject",
+    "expected_labeled_symmetry": false,
+    "n_elements": 2,
+    "nontrivial_elements": [
+     "(1 3)"
+    ],
+    "all_elements_fixed_aut": false,
+    "fixed_row_consistent": true,
+    "membership_all_in": false,
+    "membership_absent_elements": [
+     "(1 3)"
+    ],
+    "enumeration_membership": "not in enumerated set: ['(1 3)'] (exact: enumeration completed; these elements are not fixed automorphisms)"
+   },
+   {
+    "group": "g2_control_follower_leader_swap_fixed",
+    "expected_fixed_verdict": "reject",
+    "expected_labeled_symmetry": false,
+    "n_elements": 2,
+    "nontrivial_elements": [
+     "(0 2)"
+    ],
+    "all_elements_fixed_aut": false,
+    "fixed_row_consistent": true,
+    "membership_all_in": false,
+    "membership_absent_elements": [
+     "(0 2)"
+    ],
+    "enumeration_membership": "not in enumerated set: ['(0 2)'] (exact: enumeration completed; these elements are not fixed automorphisms)"
+   },
+   {
+    "group": "g3_claim_twin_cand_precand_swap_relabel",
+    "expected_fixed_verdict": "reject",
+    "expected_labeled_symmetry": false,
+    "n_elements": 2,
+    "nontrivial_elements": [
+     "(1 3)"
+    ],
+    "all_elements_fixed_aut": false,
+    "fixed_row_consistent": true,
+    "membership_all_in": false,
+    "membership_absent_elements": [
+     "(1 3)"
+    ],
+    "enumeration_membership": "not in enumerated set: ['(1 3)'] (exact: enumeration completed; these elements are not fixed automorphisms)"
+   }
+  ],
+  "all_consistent": true
+ },
+ "sealed_truth": {
+  "checked": true,
+  "sealed_file": "raft-etcd.truth.json",
+  "sealed_file_sha256": "d32da78aeeb0e1f3d56d594645618f6cacc6e17d5e5b9165efa03af95125b6cd",
+  "sealed_fixed_aut_order": 1,
+  "sealed_method": "brute force over S_4 (8! <= 40320), cross-validated by networkx VF2 and a fresh backtracking enumerator",
+  "discovered_order": 1,
+  "discovered_truncated": false,
+  "order_matches": true,
+  "note": "enumeration completed: exact order comparison",
+  "elements_set_match": true
+ },
+ "smoke": {
+  "applicable": false
+ },
+ "timing_seconds": {
+  "graph": 0.0,
+  "wl": 0.0,
+  "vf2": 0.0,
+  "orbits_and_generators": 0.0,
+  "gate_engine": 0.172
+ },
+ "provenance": {
+  "recorded_from_live_run": true,
+  "how": "python -X utf8 -m symmetry_court discover [--case raft-etcd]; the candidate group file is independently replayable: python -X utf8 -m wuxing_gua check --trans <cases>/<case>/model.json --group verdicts/discover.raft-etcd.candidate.json --strict (cwd=vendored/)",
+  "correctness_anchors": "VF2 enumeration set-equal to S_n brute force and equal to field-trial sealed fixed_aut_order on the five n<=8 cases during bring-up (orders 1/2/1/6/24); the WL node_match pruning is sound because WL colors are automorphism-invariant"
+ }
+}

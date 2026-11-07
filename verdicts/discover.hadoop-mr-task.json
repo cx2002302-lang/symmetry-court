@@ -1,0 +1,246 @@
+{
+ "case": "hadoop-mr-task",
+ "generated_utc": "2026-11-07T00:05:57Z",
+ "capability": {
+  "name": "discover",
+  "semantics": "fixed",
+  "honesty_boundary": "fixed-caliber (event names pinned) candidate discovery only; action-renaming (relabel/explicit) candidates remain the case author's explicit declaration - the machine does not guess which kind of sameness applies",
+  "method": "networkx MultiDiGraph VF2 automorphism enumeration with edge labels (action, prob, reward), pruned by 1-WL edge-label color refinement (sound: WL colors are automorphism-invariant); hard cap on enumeration",
+  "cap": 2000,
+  "wall_clock_budget_s": null
+ },
+ "model": {
+  "path": "cases\\hadoop-mr-task\\model.json",
+  "n_bits": 3,
+  "n_states": 8,
+  "n_actions": 9,
+  "source_system": "apache/hadoop MRv2 TaskImpl declarative state machine (TaskStateInternal), transcribed by field-trial W2 from pinned public source",
+  "source_citation": [
+   "apache/hadoop trunk @ e66f40daf3cc4ebbb5164cec1ce54b71eddec8a4（git ls-remote refs/heads/trunk, 2026-10-31）：",
+   "  - hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-app/src/main/java/org/apache/hadoop/mapreduce/v2/app/job/TaskStateInternal.java:19-23（7 值枚举, line 22）",
+   "  - .../job/event/TaskEventType.java:24-41（9 事件: T_KILL:27, T_SCHEDULE:30, T_RECOVER:31, T_ADD_SPEC_ATTEMPT:34, T_ATTEMPT_LAUNCHED:37, T_ATTEMPT_COMMIT_PENDING:38, T_ATTEMPT_FAILED:39, T_ATTEMPT_SUCCEEDED:40, T_ATTEMPT_KILLED:41）",
+   "  - .../job/impl/TaskImpl.java:154-273 stateMachineFactory（24 个 addTransition 行: 163,165,167,176,178,180,182,188,190,193,195,198,201,205,209,213,217,222,231,234,237,241,249,266）",
+   "  - hadoop-yarn-project/hadoop-yarn/hadoop-yarn-common/src/main/java/org/apache/hadoop/yarn/state/StateMachineFactory.java:305（未注册 (态,事件) 抛 InvalidStateTransitionException）",
+   "  - 本地留档 _scratch/sources/hadoop/（jsdelivr CDN 抓取，trunk SHA 经 git ls-remote 核对）",
+   "论文（仅作主张来源）: Dean & Ghemawat, MapReduce, OSDI'04, §3.3/§3.6（W1 快照 dossier/sources/mapreduce-osdi04.pdf）"
+  ]
+ },
+ "discovery": {
+  "semantics": "fixed",
+  "method": "networkx MultiDiGraph VF2 automorphism enumeration with edge labels (action, prob, reward), pruned by 1-WL edge-label color refinement (sound: WL colors are automorphism-invariant); hard cap on enumeration",
+  "honesty_boundary": "fixed-caliber (event names pinned) candidate discovery only; action-renaming (relabel/explicit) candidates remain the case author's explicit declaration - the machine does not guess which kind of sameness applies",
+  "graph": {
+   "nodes": 8,
+   "edges": 83,
+   "multi_entry_cells": 8
+  },
+  "cap": 2000,
+  "wl_refinement": {
+   "n_blocks": 8,
+   "discrete": true,
+   "blocks": [
+    [
+     0
+    ],
+    [
+     1
+    ],
+    [
+     2
+    ],
+    [
+     3
+    ],
+    [
+     4
+    ],
+    [
+     5
+    ],
+    [
+     6
+    ],
+    [
+     7
+    ]
+   ]
+  },
+  "enumeration": {
+   "enumerated_count": 1,
+   "truncated": false,
+   "stop_reason": "search exhausted (all automorphisms enumerated)",
+   "order": 1,
+   "order_claim": "exact: VF2 enumeration completed (1 automorphisms = the full fixed-caliber automorphism group)",
+   "elements_storage": "full_enumeration",
+   "elements": [
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7
+    ]
+   ],
+   "generators": [],
+   "n_generators": 0,
+   "generators_note": null
+  },
+  "orbits": {
+   "status": "exact",
+   "n_orbits": 8,
+   "blocks": [
+    [
+     0
+    ],
+    [
+     1
+    ],
+    [
+     2
+    ],
+    [
+     3
+    ],
+    [
+     4
+    ],
+    [
+     5
+    ],
+    [
+     6
+    ],
+    [
+     7
+    ]
+   ],
+   "lower_bound_blocks": null,
+   "upper_bound_blocks": null,
+   "note": "enumeration completed: this is the orbit partition of the full automorphism group"
+  },
+  "discrete_wl": true,
+  "identity_group": true,
+  "structural_pad_states": [
+   7
+  ]
+ },
+ "gate_arm": {
+  "candidate_group_file": "verdicts/discover.hadoop-mr-task.candidate.json",
+  "candidate": {
+   "kind": "full enumerated group (the exact fixed-caliber automorphism group)",
+   "order": 1,
+   "closure_truncated": false
+  },
+  "engine_check": {
+   "exit": 0,
+   "verdict": "pass",
+   "worst_tv": 0.0,
+   "judge": "strict",
+   "reason": "两层判据均通过：转移等变（max TV=0.00e+00 ≤ tol=1e-09）+ 奖励剖面（n_bad=0）",
+   "error": null,
+   "command": [
+    "python",
+    "-X",
+    "utf8",
+    "-m",
+    "wuxing_gua",
+    "check",
+    "--trans",
+    "cases\\hadoop-mr-task\\model.json",
+    "--group",
+    "verdicts\\discover.hadoop-mr-task.candidate.json",
+    "--strict"
+   ],
+   "cwd": "vendored/",
+   "strict": true
+  },
+  "engine_group_order_reported": 1,
+  "gate_seconds": 0.188
+ },
+ "reconciliation": {
+  "checked": true,
+  "expected_file": "cases\\hadoop-mr-task\\expected.json",
+  "criterion_direct": "multiset(trans[pi(s)][a]) == multiset{(p, pi(t), r)} per (s, a) - the sealed fixed criterion",
+  "groups": [
+   {
+    "group": "g1_claim_failed_killed_swap_fixed",
+    "expected_fixed_verdict": "reject",
+    "expected_labeled_symmetry": false,
+    "n_elements": 2,
+    "nontrivial_elements": [
+     "(4 6)"
+    ],
+    "all_elements_fixed_aut": false,
+    "fixed_row_consistent": true,
+    "membership_all_in": false,
+    "membership_absent_elements": [
+     "(4 6)"
+    ],
+    "enumeration_membership": "not in enumerated set: ['(4 6)'] (exact: enumeration completed; these elements are not fixed automorphisms)"
+   },
+   {
+    "group": "g2_control_new_scheduled_swap_fixed",
+    "expected_fixed_verdict": "reject",
+    "expected_labeled_symmetry": false,
+    "n_elements": 2,
+    "nontrivial_elements": [
+     "(0 1)"
+    ],
+    "all_elements_fixed_aut": false,
+    "fixed_row_consistent": true,
+    "membership_all_in": false,
+    "membership_absent_elements": [
+     "(0 1)"
+    ],
+    "enumeration_membership": "not in enumerated set: ['(0 1)'] (exact: enumeration completed; these elements are not fixed automorphisms)"
+   },
+   {
+    "group": "g3_control_running_killwait_swap_fixed",
+    "expected_fixed_verdict": "reject",
+    "expected_labeled_symmetry": false,
+    "n_elements": 2,
+    "nontrivial_elements": [
+     "(2 5)"
+    ],
+    "all_elements_fixed_aut": false,
+    "fixed_row_consistent": true,
+    "membership_all_in": false,
+    "membership_absent_elements": [
+     "(2 5)"
+    ],
+    "enumeration_membership": "not in enumerated set: ['(2 5)'] (exact: enumeration completed; these elements are not fixed automorphisms)"
+   }
+  ],
+  "all_consistent": true
+ },
+ "sealed_truth": {
+  "checked": true,
+  "sealed_file": "hadoop-mr-task.truth.json",
+  "sealed_file_sha256": "f959492d35968ab6959f3384f768a641e996fdf0484081aa72c631e5bde9910e",
+  "sealed_fixed_aut_order": 1,
+  "sealed_method": "brute force over S_8 (8! <= 40320), cross-validated by networkx VF2 and a fresh backtracking enumerator",
+  "discovered_order": 1,
+  "discovered_truncated": false,
+  "order_matches": true,
+  "note": "enumeration completed: exact order comparison",
+  "elements_set_match": true
+ },
+ "smoke": {
+  "applicable": false
+ },
+ "timing_seconds": {
+  "graph": 0.0,
+  "wl": 0.0,
+  "vf2": 0.015,
+  "orbits_and_generators": 0.0,
+  "gate_engine": 0.188
+ },
+ "provenance": {
+  "recorded_from_live_run": true,
+  "how": "python -X utf8 -m symmetry_court discover [--case hadoop-mr-task]; the candidate group file is independently replayable: python -X utf8 -m wuxing_gua check --trans <cases>/<case>/model.json --group verdicts/discover.hadoop-mr-task.candidate.json --strict (cwd=vendored/)",
+  "correctness_anchors": "VF2 enumeration set-equal to S_n brute force and equal to field-trial sealed fixed_aut_order on the five n<=8 cases during bring-up (orders 1/2/1/6/24); the WL node_match pruning is sound because WL colors are automorphism-invariant"
+ }
+}

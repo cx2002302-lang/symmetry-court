@@ -1,0 +1,24 @@
+{
+ "case": "hadoop-mr-task",
+ "semantics": {
+  "action": "fixed",
+  "note": "machine-discovered candidate group under the fixed standard (event names pinned); produced by symmetry_court discover; the declared-caliber contrast groups live in the case's own groups/ dir"
+ },
+ "elements": [
+  [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7
+  ]
+ ],
+ "meta": {
+  "claim": "candidate symmetry group auto-discovered from the model transition table (fixed caliber); verified by the vendored engine check as the gate arm",
+  "discovered_by": "networkx MultiDiGraph VF2 automorphism enumeration with edge labels (action, prob, reward), pruned by 1-WL edge-label color refinement (sound: WL colors are automorphism-invariant); hard cap on enumeration",
+  "candidate_kind": "full enumerated group (the exact fixed-caliber automorphism group)"
+ }
+}

@@ -1,0 +1,708 @@
+{
+ "case": "tls13-handshake",
+ "generated_utc": "2026-11-07T00:11:04Z",
+ "capability": {
+  "name": "discover",
+  "semantics": "fixed",
+  "honesty_boundary": "fixed-caliber (event names pinned) candidate discovery only; action-renaming (relabel/explicit) candidates remain the case author's explicit declaration - the machine does not guess which kind of sameness applies",
+  "method": "networkx MultiDiGraph VF2 automorphism enumeration with edge labels (action, prob, reward), pruned by 1-WL edge-label color refinement (sound: WL colors are automorphism-invariant); hard cap on enumeration",
+  "cap": 2000,
+  "wall_clock_budget_s": null
+ },
+ "model": {
+  "path": "cases\\tls13-handshake\\model.json",
+  "n_bits": 5,
+  "n_states": 32,
+  "n_actions": 18,
+  "source_system": "RFC 8446 (TLS 1.3) Appendix A client+server handshake state machines, transcribed by field-trial W2 from pinned public RFC text",
+  "source_citation": [
+   "RFC 8446 (TLS 1.3), https://www.rfc-editor.org/rfc/rfc8446.txt（2018-08 冻结文本; W1 快照 dossier/sources/rfc8446.txt,",
+   " W2 本会话对 Appendix A 6671-6768 行逐行复核）:",
+   "  - §A.1 Client 状态机图 txt:6682-6711（8 态: START, WAIT_SH, WAIT_EE, WAIT_CERT_CR, WAIT_CERT, WAIT_CV, WAIT_FINISHED, CONNECTED）",
+   "  - §A.2 Server 状态机图 txt:6729-6768（9 态: START, RECVD_CH, NEGOTIATED, WAIT_EOED, WAIT_FLIGHT2, WAIT_CERT, WAIT_CV, WAIT_FINISHED, CONNECTED）",
+   "  - §4 规范锚点（transcription_notes 逐边回引）: §4.1.2 ClientHello txt:1485; §4.1.3 HelloRetryRequest txt:1816;",
+   "    §4.2.10 Early Data txt:2893; §4.3.2 Certificate Request txt:3334; §4.4.2 Certificate txt:3535;",
+   "    §4.4.3 CertificateVerify txt:3823; §4.4.4 Finished txt:3945",
+   "  - Appendix A 自述（txt:6673-6676）: 'This appendix provides a summary of the legal state transitions... State names... have no formal meaning'",
+   "    —— 本卷以 Appendix A 图为迁移结构一手依据、§4 为关键边规范锚点（W1 风险项口径）"
+  ]
+ },
+ "discovery": {
+  "semantics": "fixed",
+  "method": "networkx MultiDiGraph VF2 automorphism enumeration with edge labels (action, prob, reward), pruned by 1-WL edge-label color refinement (sound: WL colors are automorphism-invariant); hard cap on enumeration",
+  "honesty_boundary": "fixed-caliber (event names pinned) candidate discovery only; action-renaming (relabel/explicit) candidates remain the case author's explicit declaration - the machine does not guess which kind of sameness applies",
+  "graph": {
+   "nodes": 32,
+   "edges": 579,
+   "multi_entry_cells": 3
+  },
+  "cap": 2000,
+  "wl_refinement": {
+   "n_blocks": 18,
+   "discrete": false,
+   "blocks": [
+    [
+     0
+    ],
+    [
+     1
+    ],
+    [
+     2
+    ],
+    [
+     3
+    ],
+    [
+     4
+    ],
+    [
+     5
+    ],
+    [
+     6
+    ],
+    [
+     7
+    ],
+    [
+     8
+    ],
+    [
+     9
+    ],
+    [
+     10
+    ],
+    [
+     11
+    ],
+    [
+     12
+    ],
+    [
+     13
+    ],
+    [
+     14
+    ],
+    [
+     15
+    ],
+    [
+     16
+    ],
+    [
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23,
+     24,
+     25,
+     26,
+     27,
+     28,
+     29,
+     30,
+     31
+    ]
+   ]
+  },
+  "enumeration": {
+   "enumerated_count": 2000,
+   "truncated": true,
+   "stop_reason": "hard cap reached (2000 automorphisms enumerated; enumeration stopped, order is a lower bound)",
+   "order": null,
+   "order_claim": "lower bound: at least 2000 automorphisms proven (enumeration stopped at cap 2000)",
+   "elements_storage": "generating_set",
+   "elements": null,
+   "generators": [
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23,
+     24,
+     25,
+     26,
+     27,
+     28,
+     29,
+     31,
+     30
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23,
+     24,
+     25,
+     26,
+     27,
+     28,
+     30,
+     29,
+     31
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23,
+     24,
+     25,
+     26,
+     27,
+     29,
+     28,
+     30,
+     31
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23,
+     24,
+     25,
+     26,
+     28,
+     27,
+     29,
+     30,
+     31
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23,
+     24,
+     25,
+     27,
+     26,
+     28,
+     29,
+     30,
+     31
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23,
+     24,
+     26,
+     25,
+     27,
+     28,
+     29,
+     30,
+     31
+    ]
+   ],
+   "n_generators": 6,
+   "generators_note": "partial enumeration at cap 2000: these generators generate a subgroup of the enumerated set with the same orbits as the enumerated set; the full group is NOT claimed (order >= 2000)"
+  },
+  "orbits": {
+   "status": "bounded",
+   "n_orbits": 26,
+   "blocks": [
+    [
+     0
+    ],
+    [
+     1
+    ],
+    [
+     2
+    ],
+    [
+     3
+    ],
+    [
+     4
+    ],
+    [
+     5
+    ],
+    [
+     6
+    ],
+    [
+     7
+    ],
+    [
+     8
+    ],
+    [
+     9
+    ],
+    [
+     10
+    ],
+    [
+     11
+    ],
+    [
+     12
+    ],
+    [
+     13
+    ],
+    [
+     14
+    ],
+    [
+     15
+    ],
+    [
+     16
+    ],
+    [
+     17
+    ],
+    [
+     18
+    ],
+    [
+     19
+    ],
+    [
+     20
+    ],
+    [
+     21
+    ],
+    [
+     22
+    ],
+    [
+     23
+    ],
+    [
+     24
+    ],
+    [
+     25,
+     26,
+     27,
+     28,
+     29,
+     30,
+     31
+    ]
+   ],
+   "lower_bound_blocks": [
+    [
+     0
+    ],
+    [
+     1
+    ],
+    [
+     2
+    ],
+    [
+     3
+    ],
+    [
+     4
+    ],
+    [
+     5
+    ],
+    [
+     6
+    ],
+    [
+     7
+    ],
+    [
+     8
+    ],
+    [
+     9
+    ],
+    [
+     10
+    ],
+    [
+     11
+    ],
+    [
+     12
+    ],
+    [
+     13
+    ],
+    [
+     14
+    ],
+    [
+     15
+    ],
+    [
+     16
+    ],
+    [
+     17
+    ],
+    [
+     18
+    ],
+    [
+     19
+    ],
+    [
+     20
+    ],
+    [
+     21
+    ],
+    [
+     22
+    ],
+    [
+     23
+    ],
+    [
+     24
+    ],
+    [
+     25,
+     26,
+     27,
+     28,
+     29,
+     30,
+     31
+    ]
+   ],
+   "upper_bound_blocks": [
+    [
+     0
+    ],
+    [
+     1
+    ],
+    [
+     2
+    ],
+    [
+     3
+    ],
+    [
+     4
+    ],
+    [
+     5
+    ],
+    [
+     6
+    ],
+    [
+     7
+    ],
+    [
+     8
+    ],
+    [
+     9
+    ],
+    [
+     10
+    ],
+    [
+     11
+    ],
+    [
+     12
+    ],
+    [
+     13
+    ],
+    [
+     14
+    ],
+    [
+     15
+    ],
+    [
+     16
+    ],
+    [
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23,
+     24,
+     25,
+     26,
+     27,
+     28,
+     29,
+     30,
+     31
+    ]
+   ],
+   "note": "truncated enumeration: lower_bound_blocks = orbits of the enumerated-permutation subgroup (each block is a proven symmetric set, contained in some true orbit); upper_bound_blocks = 1-WL blocks (each true orbit is contained in one block); the number of true orbits lies between #upper_bound_blocks and #lower_bound_blocks"
+  },
+  "discrete_wl": false,
+  "identity_group": false,
+  "structural_pad_states": [
+   17,
+   18,
+   19,
+   20,
+   21,
+   22,
+   23,
+   24,
+   25,
+   26,
+   27,
+   28,
+   29,
+   30,
+   31
+  ]
+ },
+ "gate_arm": {
+  "candidate_group_file": "verdicts/discover.tls13-handshake.candidate.json",
+  "candidate": {
+   "kind": "closed subgroup of the enumerated set (greedy generators, closure capped at 256) -- partial discovery: this subgroup is a proven subset of the true automorphism group, not the full group",
+   "order": 120,
+   "closure_truncated": false
+  },
+  "engine_check": {
+   "exit": 0,
+   "verdict": "pass",
+   "worst_tv": 0.0,
+   "judge": "strict",
+   "reason": "两层判据均通过：转移等变（max TV=0.00e+00 ≤ tol=1e-09）+ 奖励剖面（n_bad=0）",
+   "error": null,
+   "command": [
+    "python",
+    "-X",
+    "utf8",
+    "-m",
+    "wuxing_gua",
+    "check",
+    "--trans",
+    "cases\\tls13-handshake\\model.json",
+    "--group",
+    "verdicts\\discover.tls13-handshake.candidate.json",
+    "--strict"
+   ],
+   "cwd": "vendored/",
+   "strict": true
+  },
+  "engine_group_order_reported": 120,
+  "gate_seconds": 0.328
+ },
+ "reconciliation": {
+  "checked": true,
+  "expected_file": "cases\\tls13-handshake\\expected.json",
+  "criterion_direct": "multiset(trans[pi(s)][a]) == multiset{(p, pi(t), r)} per (s, a) - the sealed fixed criterion",
+  "groups": [
+   {
+    "group": "g1_claim_waitcert_waitcv_swap_fixed",
+    "expected_fixed_verdict": "reject",
+    "expected_labeled_symmetry": false,
+    "n_elements": 2,
+    "nontrivial_elements": [
+     "(4 5)"
+    ],
+    "all_elements_fixed_aut": false,
+    "fixed_row_consistent": true,
+    "membership_all_in": null,
+    "membership_found_count": 1,
+    "enumeration_membership": "1/2 elements found in the partial enumeration (found => proven automorphism; not found => inconclusive at cap 2000)"
+   },
+   {
+    "group": "g2_control_crossside_waitcert_swap_fixed",
+    "expected_fixed_verdict": "reject",
+    "expected_labeled_symmetry": false,
+    "n_elements": 2,
+    "nontrivial_elements": [
+     "(4 13)"
+    ],
+    "all_elements_fixed_aut": false,
+    "fixed_row_consistent": true,
+    "membership_all_in": null,
+    "membership_found_count": 1,
+    "enumeration_membership": "1/2 elements found in the partial enumeration (found => proven automorphism; not found => inconclusive at cap 2000)"
+   },
+   {
+    "group": "g3_pads_swap_fixed",
+    "expected_fixed_verdict": "pass",
+    "expected_labeled_symmetry": true,
+    "n_elements": 2,
+    "nontrivial_elements": [
+     "(17 18)"
+    ],
+    "all_elements_fixed_aut": true,
+    "fixed_row_consistent": true,
+    "membership_all_in": null,
+    "membership_found_count": 1,
+    "enumeration_membership": "1/2 elements found in the partial enumeration (found => proven automorphism; not found => inconclusive at cap 2000)"
+   }
+  ],
+  "all_consistent": true
+ },
+ "sealed_truth": {
+  "checked": true,
+  "sealed_file": "tls13-handshake.truth.json",
+  "sealed_file_sha256": "ce844b06260eeb2bd0e21cc23fb1b1960e0516d8081bc7e95efaf364ad235a07",
+  "sealed_fixed_aut_order": 1307674368000,
+  "sealed_method": "isolated-filler decomposition (k=15) + networkx VF2 on the 17-state reduced model, direct filtering, relabel witnesses by bipartite backtracking; cross-checked by a fresh backtracking enumerator and random lifted spot checks",
+  "discovered_order": null,
+  "discovered_truncated": true,
+  "order_matches": null,
+  "note": "enumeration truncated at cap 2000: the discovered order is a lower bound (>= 2000); the sealed order 1307674368000 exceeds the cap, so no contradiction is derivable from this run; structural consistency evidence is recorded below",
+  "partial_enumeration_vs_sealed_structure": "all 6 stored generators fix every non-pad state: yes"
+ },
+ "smoke": {
+  "applicable": false
+ },
+ "timing_seconds": {
+  "graph": 0.0,
+  "wl": 0.0,
+  "vf2": 0.484,
+  "orbits_and_generators": 0.016,
+  "gate_engine": 0.328
+ },
+ "provenance": {
+  "recorded_from_live_run": true,
+  "how": "python -X utf8 -m symmetry_court discover [--case tls13-handshake]; the candidate group file is independently replayable: python -X utf8 -m wuxing_gua check --trans <cases>/<case>/model.json --group verdicts/discover.tls13-handshake.candidate.json --strict (cwd=vendored/)",
+  "correctness_anchors": "VF2 enumeration set-equal to S_n brute force and equal to field-trial sealed fixed_aut_order on the five n<=8 cases during bring-up (orders 1/2/1/6/24); the WL node_match pruning is sound because WL colors are automorphism-invariant"
+ }
+}

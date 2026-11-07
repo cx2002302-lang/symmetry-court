@@ -1,0 +1,437 @@
+{
+ "case": "dhcp",
+ "generated_utc": "2026-11-07T00:05:57Z",
+ "capability": {
+  "name": "discover",
+  "semantics": "fixed",
+  "honesty_boundary": "fixed-caliber (event names pinned) candidate discovery only; action-renaming (relabel/explicit) candidates remain the case author's explicit declaration - the machine does not guess which kind of sameness applies",
+  "method": "networkx MultiDiGraph VF2 automorphism enumeration with edge labels (action, prob, reward), pruned by 1-WL edge-label color refinement (sound: WL colors are automorphism-invariant); hard cap on enumeration",
+  "cap": 2000,
+  "wall_clock_budget_s": null
+ },
+ "model": {
+  "path": "cases\\dhcp\\model.json",
+  "n_bits": 4,
+  "n_states": 16,
+  "n_actions": 15,
+  "source_system": "DHCP client state-transition diagram, transcribed from RFC 2131 section 4.4 Figure 5, cross-checked against sections 3.1, 3.2 and 4.4.1-4.4.5. RFC 2131 is a public standard (proposed standard, March 1997).",
+  "source_citation": "RFC 2131 (March 1997), section 4.4, Figure 5 'State-transition diagram for DHCP clients'; sections 3.1, 3.2, 4.4.1-4.4.5 for cross-checks. Per-edge citations in meta.edges_with_citations."
+ },
+ "discovery": {
+  "semantics": "fixed",
+  "method": "networkx MultiDiGraph VF2 automorphism enumeration with edge labels (action, prob, reward), pruned by 1-WL edge-label color refinement (sound: WL colors are automorphism-invariant); hard cap on enumeration",
+  "honesty_boundary": "fixed-caliber (event names pinned) candidate discovery only; action-renaming (relabel/explicit) candidates remain the case author's explicit declaration - the machine does not guess which kind of sameness applies",
+  "graph": {
+   "nodes": 16,
+   "edges": 240,
+   "multi_entry_cells": 0
+  },
+  "cap": 2000,
+  "wl_refinement": {
+   "n_blocks": 9,
+   "discrete": false,
+   "blocks": [
+    [
+     0
+    ],
+    [
+     1
+    ],
+    [
+     2
+    ],
+    [
+     3
+    ],
+    [
+     4
+    ],
+    [
+     5
+    ],
+    [
+     6
+    ],
+    [
+     7
+    ],
+    [
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15
+    ]
+   ]
+  },
+  "enumeration": {
+   "enumerated_count": 2000,
+   "truncated": true,
+   "stop_reason": "hard cap reached (2000 automorphisms enumerated; enumeration stopped, order is a lower bound)",
+   "order": null,
+   "order_claim": "lower bound: at least 2000 automorphisms proven (enumeration stopped at cap 2000)",
+   "elements_storage": "generating_set",
+   "elements": null,
+   "generators": [
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     15,
+     14
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     14,
+     13,
+     15
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     13,
+     12,
+     14,
+     15
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     12,
+     11,
+     13,
+     14,
+     15
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     11,
+     10,
+     12,
+     13,
+     14,
+     15
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     10,
+     9,
+     11,
+     12,
+     13,
+     14,
+     15
+    ]
+   ],
+   "n_generators": 6,
+   "generators_note": "partial enumeration at cap 2000: these generators generate a subgroup of the enumerated set with the same orbits as the enumerated set; the full group is NOT claimed (order >= 2000)"
+  },
+  "orbits": {
+   "status": "bounded",
+   "n_orbits": 10,
+   "blocks": [
+    [
+     0
+    ],
+    [
+     1
+    ],
+    [
+     2
+    ],
+    [
+     3
+    ],
+    [
+     4
+    ],
+    [
+     5
+    ],
+    [
+     6
+    ],
+    [
+     7
+    ],
+    [
+     8
+    ],
+    [
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15
+    ]
+   ],
+   "lower_bound_blocks": [
+    [
+     0
+    ],
+    [
+     1
+    ],
+    [
+     2
+    ],
+    [
+     3
+    ],
+    [
+     4
+    ],
+    [
+     5
+    ],
+    [
+     6
+    ],
+    [
+     7
+    ],
+    [
+     8
+    ],
+    [
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15
+    ]
+   ],
+   "upper_bound_blocks": [
+    [
+     0
+    ],
+    [
+     1
+    ],
+    [
+     2
+    ],
+    [
+     3
+    ],
+    [
+     4
+    ],
+    [
+     5
+    ],
+    [
+     6
+    ],
+    [
+     7
+    ],
+    [
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     15
+    ]
+   ],
+   "note": "truncated enumeration: lower_bound_blocks = orbits of the enumerated-permutation subgroup (each block is a proven symmetric set, contained in some true orbit); upper_bound_blocks = 1-WL blocks (each true orbit is contained in one block); the number of true orbits lies between #upper_bound_blocks and #lower_bound_blocks"
+  },
+  "discrete_wl": false,
+  "identity_group": false,
+  "structural_pad_states": [
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15
+  ]
+ },
+ "gate_arm": {
+  "candidate_group_file": "verdicts/discover.dhcp.candidate.json",
+  "candidate": {
+   "kind": "closed subgroup of the enumerated set (greedy generators, closure capped at 256) -- partial discovery: this subgroup is a proven subset of the true automorphism group, not the full group",
+   "order": 120,
+   "closure_truncated": false
+  },
+  "engine_check": {
+   "exit": 0,
+   "verdict": "pass",
+   "worst_tv": 0.0,
+   "judge": "strict",
+   "reason": "两层判据均通过：转移等变（max TV=0.00e+00 ≤ tol=1e-09）+ 奖励剖面（n_bad=0）",
+   "error": null,
+   "command": [
+    "python",
+    "-X",
+    "utf8",
+    "-m",
+    "wuxing_gua",
+    "check",
+    "--trans",
+    "cases\\dhcp\\model.json",
+    "--group",
+    "verdicts\\discover.dhcp.candidate.json",
+    "--strict"
+   ],
+   "cwd": "vendored/",
+   "strict": true
+  },
+  "engine_group_order_reported": 120,
+  "gate_seconds": 0.25
+ },
+ "reconciliation": {
+  "checked": true,
+  "expected_file": "cases\\dhcp\\expected.json",
+  "criterion_direct": "multiset(trans[pi(s)][a]) == multiset{(p, pi(t), r)} per (s, a) - the sealed fixed criterion",
+  "groups": [
+   {
+    "group": "init_start",
+    "expected_fixed_verdict": "reject",
+    "expected_labeled_symmetry": false,
+    "n_elements": 2,
+    "nontrivial_elements": [
+     "(0 6)"
+    ],
+    "all_elements_fixed_aut": false,
+    "fixed_row_consistent": true,
+    "membership_all_in": null,
+    "membership_found_count": 1,
+    "enumeration_membership": "1/2 elements found in the partial enumeration (found => proven automorphism; not found => inconclusive at cap 2000)"
+   },
+   {
+    "group": "pads",
+    "expected_fixed_verdict": "pass",
+    "expected_labeled_symmetry": true,
+    "n_elements": 2,
+    "nontrivial_elements": [
+     "(8 9)"
+    ],
+    "all_elements_fixed_aut": true,
+    "fixed_row_consistent": true,
+    "membership_all_in": null,
+    "membership_found_count": 1,
+    "enumeration_membership": "1/2 elements found in the partial enumeration (found => proven automorphism; not found => inconclusive at cap 2000)"
+   },
+   {
+    "group": "reboot_rebind",
+    "expected_fixed_verdict": "reject",
+    "expected_labeled_symmetry": false,
+    "n_elements": 2,
+    "nontrivial_elements": [
+     "(5 7)"
+    ],
+    "all_elements_fixed_aut": false,
+    "fixed_row_consistent": true,
+    "membership_all_in": null,
+    "membership_found_count": 1,
+    "enumeration_membership": "1/2 elements found in the partial enumeration (found => proven automorphism; not found => inconclusive at cap 2000)"
+   },
+   {
+    "group": "renew_rebind",
+    "expected_fixed_verdict": "reject",
+    "expected_labeled_symmetry": false,
+    "n_elements": 2,
+    "nontrivial_elements": [
+     "(4 5)"
+    ],
+    "all_elements_fixed_aut": false,
+    "fixed_row_consistent": true,
+    "membership_all_in": null,
+    "membership_found_count": 1,
+    "enumeration_membership": "1/2 elements found in the partial enumeration (found => proven automorphism; not found => inconclusive at cap 2000)"
+   }
+  ],
+  "all_consistent": true
+ },
+ "sealed_truth": {
+  "checked": false,
+  "reason": "no sealed truth file for this case in the provided sealed dir (dhcp.truth.json)"
+ },
+ "smoke": {
+  "applicable": false
+ },
+ "timing_seconds": {
+  "graph": 0.0,
+  "wl": 0.0,
+  "vf2": 0.266,
+  "orbits_and_generators": 0.016,
+  "gate_engine": 0.25
+ },
+ "provenance": {
+  "recorded_from_live_run": true,
+  "how": "python -X utf8 -m symmetry_court discover [--case dhcp]; the candidate group file is independently replayable: python -X utf8 -m wuxing_gua check --trans <cases>/<case>/model.json --group verdicts/discover.dhcp.candidate.json --strict (cwd=vendored/)",
+  "correctness_anchors": "VF2 enumeration set-equal to S_n brute force and equal to field-trial sealed fixed_aut_order on the five n<=8 cases during bring-up (orders 1/2/1/6/24); the WL node_match pruning is sound because WL colors are automorphism-invariant"
+ }
+}

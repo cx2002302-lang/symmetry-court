@@ -77,6 +77,7 @@ python -X utf8 -m pip install networkx
 python -X utf8 -m symmetry_court list        # see the docket
 python -X utf8 -m symmetry_court arbitrate   # run the trial — a verdict table per case
 python -X utf8 -m symmetry_court compare     # gate-value A/B: naive structural merge vs the gate, per-group damage ledger (caliber per group declaration since v2)
+python -X utf8 -m symmetry_court discover    # fixed-caliber candidate discovery + gate arm (scoped — see its section below)
 python -X utf8 -m symmetry_court selftest    # replay every verdict against expected (exit 0 = green)
 ```
 
@@ -390,14 +391,76 @@ Run both standards when unsure (the court always does), and read the
 disagreement as a finding. The long version, with two hand-checkable worked
 examples, is [docs/which-identical.md](docs/which-identical.md).
 
+## Candidate discovery — the fourth capability
+
+`python -X utf8 -m symmetry_court discover [--case NAME] [--all] [--cap N]
+[--sealed-dir DIR]`
+
+The court can now propose candidates as well as judge them. The proposal step
+is deliberately scoped, and the scope is the same distinction the whole
+repository turns on:
+
+- **What it discovers:** fixed-caliber candidates only. Each model's
+  transition table becomes a directed multigraph whose edges carry
+  `(action, prob, reward)` labels; networkx's VF2 matcher enumerates the
+  label-preserving automorphisms, pruned by a 1-WL color refinement in which
+  edge labels participate. Event names stay pinned throughout — this is the
+  `wuxing-gua@fixed` / `networkx@labeled` reading of the docket, applied to
+  proposal instead of judgment.
+- **What it refuses to discover:** action-renaming (relabel/explicit)
+  candidates. "Which kind of sameness applies" is the case author's
+  declaration, not a machine guess — the repository's core argument applies
+  to the proposal step too. The engine's own group-finder covers the relabel
+  family; the court's discover deliberately does not.
+- **Explosion guard, honest by construction:** a large filler class can make
+  automorphism enumeration explode (the TLS 1.3 case carries 15 padding
+  states; its full fixed automorphism group has order 15! ≈ 1.3 × 10¹²).
+  Enumeration therefore runs under a hard cap (`--cap`, default 2000). When
+  the cap is hit, the receipt says so and reports: the group order as a lower
+  bound (≥ cap); the 1-WL blocks as the orbit upper bound (every true orbit
+  sits inside one block); and the orbits of the enumerated permutations as
+  the orbit lower bound (each block is a proven symmetric set). Discrete
+  refinement ⇒ the identity group. A capped case never reports an exact
+  number it did not earn.
+- **Gate arm:** each discovery is written as a replayable group file
+  (`verdicts/discover.<case>.candidate.json`, semantics `fixed`) and passed
+  through the vendored engine's `check --strict` — the same judge via an
+  independent code path. A discovery the engine rejects is recorded as a
+  failure, not smoothed over.
+- **Reconciliation:** every receipt (`verdicts/discover.<case>.json`) checks
+  the discovery against the case's own expected records (per-group direct
+  criterion `multiset(trans[π(s)][a]) == multiset{(p, π(t), r)}` plus
+  enumeration membership) and, for the five incorporated field cases, against
+  the field-trial sealed truth (pass `--sealed-dir`): exact order equality
+  wherever the enumeration completed; structural consistency notes where it
+  capped.
+
+Readings from the live receipts (regenerate with
+`python -X utf8 -m symmetry_court discover --all`): the `tcp` case discovers
+the full padding-swap group — order 120 = 5!, five padding states mutually
+interchangeable, 12 orbits, refinement not discrete — while the shape-twin
+`swap` is absent from the enumerated set (an exact absence, since the
+enumeration completed; the direct criterion rejects it independently). Both
+directions of that two-sided smoke contract are recorded in the receipt's
+`smoke` block. The four large-filler cases (`dhcp`, `tls13-handshake`,
+`mini2048`, `sliding2x3`) hit the cap and report lower bounds only; the
+sealed truth's 15! for tls13 exceeds any reachable cap, which is exactly the
+honest outcome. `lightsout3` completes exactly at minutes-scale — its state
+graph is vertex-transitive (1-WL cannot split it, and indeed its fixed
+automorphism group is the 512-element translation group, a single orbit).
+Timing magnitude: most cases and all cap cases finish within seconds;
+exact per-stage numbers live in each receipt's `timing_seconds`.
+
 ## Honest boundaries
 
-- **`discover` guards event-class systems.** The engine's group-finder
-  (`discover`) proposes candidate groups under the relabel family of judges —
-  it was built for coordinate-bound systems. On an event-driven machine,
-  treat discover's proposals as leads, not verdicts: re-judge them under the
-  fixed standard before any compression. The court's check columns exist
-  precisely for that re-judging.
+- **Two different "discovers" — know which one you are running.** The
+  engine's group-finder (`wuxing_gua discover`) proposes candidates under the
+  relabel family of judges — it was built for coordinate-bound systems. The
+  court's own `symmetry_court discover` takes the opposite scoping:
+  fixed-caliber candidates only (see the section above). On an event-driven
+  machine, treat any proposal as a lead, not a verdict: re-judge it under the
+  fixed standard before any compression. The court's gate arm runs exactly
+  that re-judging on every candidate it discovers.
 - **A trivial group is the protocol's own property.** If the only symmetry
   found is the identity, that is not the judge failing: it says the
   protocol's own event structure already pins every state. TCP, read with

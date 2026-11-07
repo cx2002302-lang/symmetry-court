@@ -16,7 +16,8 @@ symmetry_court —— 对称主张的法庭
   · cases/ 目录归案例工程师所有，本包只读不写。
 
 命令（仓库根目录运行）：
-  python -X utf8 -m symmetry_court arbitrate|selftest|list
+  python -X utf8 -m symmetry_court arbitrate|selftest|compare|discover|list
+  （discover = 第四个能力：fixed 口径候选发现 + 闸门臂，见 discover.py 文档串）
 """
 
 import os

@@ -1,0 +1,311 @@
+{
+ "case": "k8s-pod-lifecycle",
+ "generated_utc": "2026-11-07T00:05:58Z",
+ "capability": {
+  "name": "discover",
+  "semantics": "fixed",
+  "honesty_boundary": "fixed-caliber (event names pinned) candidate discovery only; action-renaming (relabel/explicit) candidates remain the case author's explicit declaration - the machine does not guess which kind of sameness applies",
+  "method": "networkx MultiDiGraph VF2 automorphism enumeration with edge labels (action, prob, reward), pruned by 1-WL edge-label color refinement (sound: WL colors are automorphism-invariant); hard cap on enumeration",
+  "cap": 2000,
+  "wall_clock_budget_s": null
+ },
+ "model": {
+  "path": "cases\\k8s-pod-lifecycle\\model.json",
+  "n_bits": 3,
+  "n_states": 8,
+  "n_actions": 7,
+  "source_system": "Kubernetes official docs Pod Lifecycle (PodPhase), transcribed by field-trial W2 from pinned public docs",
+  "source_citation": [
+   "Kubernetes 官方文档 Pod Lifecycle 页: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/",
+   "  - W1 快照 dossier/sources/k8s_pod_lifecycle.html；W2 本会话（2026-10-31）WebFetch 在线抽查：5 相定义、lifecycle 句、",
+   "    node-death 句、1.27 deletion 句、PodGC 句与快照逐句一致",
+   "  - 关键原文（全部在 transcription_notes.cell_citations 逐边回引）: lifecycle 句 / Pending,Running,Succeeded,Failed,Unknown 相定义 /",
+   "    \"If a node dies or is disconnected...\" / \"Since Kubernetes 1.27, the kubelet transitions deleted Pods to a terminal phase...\" /",
+   "    \"Along with cleaning up the Pods, PodGC will also mark them as failed if they are in a non-terminal phase.\"",
+   "辅助主张来源（W1 快照，未进转录）: kubernetes.io Deployment 页、Service 页"
+  ]
+ },
+ "discovery": {
+  "semantics": "fixed",
+  "method": "networkx MultiDiGraph VF2 automorphism enumeration with edge labels (action, prob, reward), pruned by 1-WL edge-label color refinement (sound: WL colors are automorphism-invariant); hard cap on enumeration",
+  "honesty_boundary": "fixed-caliber (event names pinned) candidate discovery only; action-renaming (relabel/explicit) candidates remain the case author's explicit declaration - the machine does not guess which kind of sameness applies",
+  "graph": {
+   "nodes": 8,
+   "edges": 57,
+   "multi_entry_cells": 1
+  },
+  "cap": 2000,
+  "wl_refinement": {
+   "n_blocks": 6,
+   "discrete": false,
+   "blocks": [
+    [
+     0
+    ],
+    [
+     1
+    ],
+    [
+     2
+    ],
+    [
+     3
+    ],
+    [
+     4
+    ],
+    [
+     5,
+     6,
+     7
+    ]
+   ]
+  },
+  "enumeration": {
+   "enumerated_count": 6,
+   "truncated": false,
+   "stop_reason": "search exhausted (all automorphisms enumerated)",
+   "order": 6,
+   "order_claim": "exact: VF2 enumeration completed (6 automorphisms = the full fixed-caliber automorphism group)",
+   "elements_storage": "full_enumeration",
+   "elements": [
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     7,
+     6
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     6,
+     5,
+     7
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     6,
+     7,
+     5
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     7,
+     5,
+     6
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     7,
+     6,
+     5
+    ]
+   ],
+   "generators": [
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     7,
+     6
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     6,
+     5,
+     7
+    ]
+   ],
+   "n_generators": 2,
+   "generators_note": null
+  },
+  "orbits": {
+   "status": "exact",
+   "n_orbits": 6,
+   "blocks": [
+    [
+     0
+    ],
+    [
+     1
+    ],
+    [
+     2
+    ],
+    [
+     3
+    ],
+    [
+     4
+    ],
+    [
+     5,
+     6,
+     7
+    ]
+   ],
+   "lower_bound_blocks": null,
+   "upper_bound_blocks": null,
+   "note": "enumeration completed: this is the orbit partition of the full automorphism group"
+  },
+  "discrete_wl": false,
+  "identity_group": false,
+  "structural_pad_states": [
+   2,
+   3,
+   5,
+   6,
+   7
+  ]
+ },
+ "gate_arm": {
+  "candidate_group_file": "verdicts/discover.k8s-pod-lifecycle.candidate.json",
+  "candidate": {
+   "kind": "full enumerated group (the exact fixed-caliber automorphism group)",
+   "order": 6,
+   "closure_truncated": false
+  },
+  "engine_check": {
+   "exit": 0,
+   "verdict": "pass",
+   "worst_tv": 0.0,
+   "judge": "strict",
+   "reason": "两层判据均通过：转移等变（max TV=0.00e+00 ≤ tol=1e-09）+ 奖励剖面（n_bad=0）",
+   "error": null,
+   "command": [
+    "python",
+    "-X",
+    "utf8",
+    "-m",
+    "wuxing_gua",
+    "check",
+    "--trans",
+    "cases\\k8s-pod-lifecycle\\model.json",
+    "--group",
+    "verdicts\\discover.k8s-pod-lifecycle.candidate.json",
+    "--strict"
+   ],
+   "cwd": "vendored/",
+   "strict": true
+  },
+  "engine_group_order_reported": 6,
+  "gate_seconds": 0.203
+ },
+ "reconciliation": {
+  "checked": true,
+  "expected_file": "cases\\k8s-pod-lifecycle\\expected.json",
+  "criterion_direct": "multiset(trans[pi(s)][a]) == multiset{(p, pi(t), r)} per (s, a) - the sealed fixed criterion",
+  "groups": [
+   {
+    "group": "g1_claim_succeeded_failed_swap_fixed",
+    "expected_fixed_verdict": "reject",
+    "expected_labeled_symmetry": false,
+    "n_elements": 2,
+    "nontrivial_elements": [
+     "(2 3)"
+    ],
+    "all_elements_fixed_aut": false,
+    "fixed_row_consistent": true,
+    "membership_all_in": false,
+    "membership_absent_elements": [
+     "(2 3)"
+    ],
+    "enumeration_membership": "not in enumerated set: ['(2 3)'] (exact: enumeration completed; these elements are not fixed automorphisms)"
+   },
+   {
+    "group": "g2_control_pending_running_swap_fixed",
+    "expected_fixed_verdict": "reject",
+    "expected_labeled_symmetry": false,
+    "n_elements": 2,
+    "nontrivial_elements": [
+     "(0 1)"
+    ],
+    "all_elements_fixed_aut": false,
+    "fixed_row_consistent": true,
+    "membership_all_in": false,
+    "membership_absent_elements": [
+     "(0 1)"
+    ],
+    "enumeration_membership": "not in enumerated set: ['(0 1)'] (exact: enumeration completed; these elements are not fixed automorphisms)"
+   },
+   {
+    "group": "g3_pads_swap_fixed",
+    "expected_fixed_verdict": "pass",
+    "expected_labeled_symmetry": true,
+    "n_elements": 2,
+    "nontrivial_elements": [
+     "(5 6)"
+    ],
+    "all_elements_fixed_aut": true,
+    "fixed_row_consistent": true,
+    "membership_all_in": true,
+    "membership_absent_elements": [],
+    "enumeration_membership": "all 2 elements in the enumerated set (exact: enumeration completed)"
+   }
+  ],
+  "all_consistent": true
+ },
+ "sealed_truth": {
+  "checked": true,
+  "sealed_file": "k8s-pod-lifecycle.truth.json",
+  "sealed_file_sha256": "aee2deeb4563d52e7b687056a66b46cf4249d6173ce822d4ded07327de356a2f",
+  "sealed_fixed_aut_order": 6,
+  "sealed_method": "brute force over S_8 (8! <= 40320), cross-validated by networkx VF2 and a fresh backtracking enumerator",
+  "discovered_order": 6,
+  "discovered_truncated": false,
+  "order_matches": true,
+  "note": "enumeration completed: exact order comparison",
+  "elements_set_match": true
+ },
+ "smoke": {
+  "applicable": false
+ },
+ "timing_seconds": {
+  "graph": 0.0,
+  "wl": 0.0,
+  "vf2": 0.0,
+  "orbits_and_generators": 0.0,
+  "gate_engine": 0.203
+ },
+ "provenance": {
+  "recorded_from_live_run": true,
+  "how": "python -X utf8 -m symmetry_court discover [--case k8s-pod-lifecycle]; the candidate group file is independently replayable: python -X utf8 -m wuxing_gua check --trans <cases>/<case>/model.json --group verdicts/discover.k8s-pod-lifecycle.candidate.json --strict (cwd=vendored/)",
+  "correctness_anchors": "VF2 enumeration set-equal to S_n brute force and equal to field-trial sealed fixed_aut_order on the five n<=8 cases during bring-up (orders 1/2/1/6/24); the WL node_match pruning is sound because WL colors are automorphism-invariant"
+ }
+}

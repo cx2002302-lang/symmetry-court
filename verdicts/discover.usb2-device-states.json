@@ -1,0 +1,265 @@
+{
+ "case": "usb2-device-states",
+ "generated_utc": "2026-11-07T00:11:05Z",
+ "capability": {
+  "name": "discover",
+  "semantics": "fixed",
+  "honesty_boundary": "fixed-caliber (event names pinned) candidate discovery only; action-renaming (relabel/explicit) candidates remain the case author's explicit declaration - the machine does not guess which kind of sameness applies",
+  "method": "networkx MultiDiGraph VF2 automorphism enumeration with edge labels (action, prob, reward), pruned by 1-WL edge-label color refinement (sound: WL colors are automorphism-invariant); hard cap on enumeration",
+  "cap": 2000,
+  "wall_clock_budget_s": null
+ },
+ "model": {
+  "path": "cases\\usb2-device-states\\model.json",
+  "n_bits": 3,
+  "n_states": 8,
+  "n_actions": 8,
+  "source_system": "USB 2.0 Specification Chapter 9 device visible state machine (Figure 9-1 / Table 9-1), transcribed by field-trial W2 from the official USB-IF package",
+  "source_citation": [
+   "Universal Serial Bus Specification Revision 2.0（USB-IF 官方包 usb_20_20250603.zip -> usb_20_20240927/usb_20.pdf;",
+   " W1 快照 dossier/sources/usb20/；来源页 https://www.usb.org/document-library/usb-20-specification）：",
+   "  - §9.1 USB Device States（doc p.239）",
+   "  - §9.1.1 Visible Device States（doc p.239）+ §9.1.1 note（reset signaling 句）",
+   "  - Figure 9-1 Device State Diagram（doc p.240 = PDF p.268；W2 本会话 pdftotext -layout + PyMuPDF 渲染 PNG 逐箭头目视核验）",
+   "  - Table 9-1 Visible Device States（doc p.240-241；6 态 Yes/No/-- 矩阵 + '-- Other attributes are not significant'）",
+   "  - §9.1.1.1 Attached / §9.1.1.2 Powered（VBUS applied 句、power source change 回落句）/ §9.1.1.3 Default（reset 句）/",
+   "    §9.1.1.4 Address（unique address 句）/ §9.1.1.5 Configured（SetConfiguration() non-zero 句）/ §9.1.1.6 Suspended（bus inactivity 句、",
+   "    bus activity 恢复句、selective suspend 句）（doc p.241-242）",
+   "  - 本地快照全文 usb_20_spec.txt（W1 pdftotext 抽取，30360 行；W2 复用并 -layout 重抽 §9.1 区域）"
+  ]
+ },
+ "discovery": {
+  "semantics": "fixed",
+  "method": "networkx MultiDiGraph VF2 automorphism enumeration with edge labels (action, prob, reward), pruned by 1-WL edge-label color refinement (sound: WL colors are automorphism-invariant); hard cap on enumeration",
+  "honesty_boundary": "fixed-caliber (event names pinned) candidate discovery only; action-renaming (relabel/explicit) candidates remain the case author's explicit declaration - the machine does not guess which kind of sameness applies",
+  "graph": {
+   "nodes": 8,
+   "edges": 67,
+   "multi_entry_cells": 1
+  },
+  "cap": 2000,
+  "wl_refinement": {
+   "n_blocks": 7,
+   "discrete": false,
+   "blocks": [
+    [
+     0
+    ],
+    [
+     1
+    ],
+    [
+     2
+    ],
+    [
+     3
+    ],
+    [
+     4
+    ],
+    [
+     5
+    ],
+    [
+     6,
+     7
+    ]
+   ]
+  },
+  "enumeration": {
+   "enumerated_count": 2,
+   "truncated": false,
+   "stop_reason": "search exhausted (all automorphisms enumerated)",
+   "order": 2,
+   "order_claim": "exact: VF2 enumeration completed (2 automorphisms = the full fixed-caliber automorphism group)",
+   "elements_storage": "full_enumeration",
+   "elements": [
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     7,
+     6
+    ]
+   ],
+   "generators": [
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     7,
+     6
+    ]
+   ],
+   "n_generators": 1,
+   "generators_note": null
+  },
+  "orbits": {
+   "status": "exact",
+   "n_orbits": 7,
+   "blocks": [
+    [
+     0
+    ],
+    [
+     1
+    ],
+    [
+     2
+    ],
+    [
+     3
+    ],
+    [
+     4
+    ],
+    [
+     5
+    ],
+    [
+     6,
+     7
+    ]
+   ],
+   "lower_bound_blocks": null,
+   "upper_bound_blocks": null,
+   "note": "enumeration completed: this is the orbit partition of the full automorphism group"
+  },
+  "discrete_wl": false,
+  "identity_group": false,
+  "structural_pad_states": [
+   6,
+   7
+  ]
+ },
+ "gate_arm": {
+  "candidate_group_file": "verdicts/discover.usb2-device-states.candidate.json",
+  "candidate": {
+   "kind": "full enumerated group (the exact fixed-caliber automorphism group)",
+   "order": 2,
+   "closure_truncated": false
+  },
+  "engine_check": {
+   "exit": 0,
+   "verdict": "pass",
+   "worst_tv": 0.0,
+   "judge": "strict",
+   "reason": "两层判据均通过：转移等变（max TV=0.00e+00 ≤ tol=1e-09）+ 奖励剖面（n_bad=0）",
+   "error": null,
+   "command": [
+    "python",
+    "-X",
+    "utf8",
+    "-m",
+    "wuxing_gua",
+    "check",
+    "--trans",
+    "cases\\usb2-device-states\\model.json",
+    "--group",
+    "verdicts\\discover.usb2-device-states.candidate.json",
+    "--strict"
+   ],
+   "cwd": "vendored/",
+   "strict": true
+  },
+  "engine_group_order_reported": 2,
+  "gate_seconds": 0.219
+ },
+ "reconciliation": {
+  "checked": true,
+  "expected_file": "cases\\usb2-device-states\\expected.json",
+  "criterion_direct": "multiset(trans[pi(s)][a]) == multiset{(p, pi(t), r)} per (s, a) - the sealed fixed criterion",
+  "groups": [
+   {
+    "group": "g1_claim_default_address_swap_fixed",
+    "expected_fixed_verdict": "reject",
+    "expected_labeled_symmetry": false,
+    "n_elements": 2,
+    "nontrivial_elements": [
+     "(2 3)"
+    ],
+    "all_elements_fixed_aut": false,
+    "fixed_row_consistent": true,
+    "membership_all_in": false,
+    "membership_absent_elements": [
+     "(2 3)"
+    ],
+    "enumeration_membership": "not in enumerated set: ['(2 3)'] (exact: enumeration completed; these elements are not fixed automorphisms)"
+   },
+   {
+    "group": "g2_control_attached_configured_swap_fixed",
+    "expected_fixed_verdict": "reject",
+    "expected_labeled_symmetry": false,
+    "n_elements": 2,
+    "nontrivial_elements": [
+     "(0 4)"
+    ],
+    "all_elements_fixed_aut": false,
+    "fixed_row_consistent": true,
+    "membership_all_in": false,
+    "membership_absent_elements": [
+     "(0 4)"
+    ],
+    "enumeration_membership": "not in enumerated set: ['(0 4)'] (exact: enumeration completed; these elements are not fixed automorphisms)"
+   },
+   {
+    "group": "g3_pads_swap_fixed",
+    "expected_fixed_verdict": "pass",
+    "expected_labeled_symmetry": true,
+    "n_elements": 2,
+    "nontrivial_elements": [
+     "(6 7)"
+    ],
+    "all_elements_fixed_aut": true,
+    "fixed_row_consistent": true,
+    "membership_all_in": true,
+    "membership_absent_elements": [],
+    "enumeration_membership": "all 2 elements in the enumerated set (exact: enumeration completed)"
+   }
+  ],
+  "all_consistent": true
+ },
+ "sealed_truth": {
+  "checked": true,
+  "sealed_file": "usb2-device-states.truth.json",
+  "sealed_file_sha256": "76fe7cb668b666e803c5872e36d98d4d7b8f5cecd1a6c1c32295cfe82769674a",
+  "sealed_fixed_aut_order": 2,
+  "sealed_method": "brute force over S_8 (8! <= 40320), cross-validated by networkx VF2 and a fresh backtracking enumerator",
+  "discovered_order": 2,
+  "discovered_truncated": false,
+  "order_matches": true,
+  "note": "enumeration completed: exact order comparison",
+  "elements_set_match": true
+ },
+ "smoke": {
+  "applicable": false
+ },
+ "timing_seconds": {
+  "graph": 0.0,
+  "wl": 0.0,
+  "vf2": 0.0,
+  "orbits_and_generators": 0.0,
+  "gate_engine": 0.219
+ },
+ "provenance": {
+  "recorded_from_live_run": true,
+  "how": "python -X utf8 -m symmetry_court discover [--case usb2-device-states]; the candidate group file is independently replayable: python -X utf8 -m wuxing_gua check --trans <cases>/<case>/model.json --group verdicts/discover.usb2-device-states.candidate.json --strict (cwd=vendored/)",
+  "correctness_anchors": "VF2 enumeration set-equal to S_n brute force and equal to field-trial sealed fixed_aut_order on the five n<=8 cases during bring-up (orders 1/2/1/6/24); the WL node_match pruning is sound because WL colors are automorphism-invariant"
+ }
+}

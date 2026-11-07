@@ -1,0 +1,481 @@
+{
+ "case": "imap",
+ "generated_utc": "2026-11-07T00:05:58Z",
+ "capability": {
+  "name": "discover",
+  "semantics": "fixed",
+  "honesty_boundary": "fixed-caliber (event names pinned) candidate discovery only; action-renaming (relabel/explicit) candidates remain the case author's explicit declaration - the machine does not guess which kind of sameness applies",
+  "method": "networkx MultiDiGraph VF2 automorphism enumeration with edge labels (action, prob, reward), pruned by 1-WL edge-label color refinement (sound: WL colors are automorphism-invariant); hard cap on enumeration",
+  "cap": 2000,
+  "wall_clock_budget_s": null
+ },
+ "model": {
+  "path": "cases\\imap\\model.json",
+  "n_bits": 3,
+  "n_states": 8,
+  "n_actions": 6,
+  "source_system": "IMAP4rev1 connection state machine, transcribed from RFC 3501 section 3 (states and entry conditions) and section 6 (per-state commands), cross-checked against sections 6.4.2 and 7.1.4. RFC 3501 is a public standard (proposed standard, March 2003).",
+  "source_citation": "RFC 3501 (March 2003), sections 3, 3.1-3.4, 6.1, 6.2, 6.3, 6.4, 6.4.2, 7.1.4, 7.1.5. Per-edge citations in meta.edges_with_citations."
+ },
+ "discovery": {
+  "semantics": "fixed",
+  "method": "networkx MultiDiGraph VF2 automorphism enumeration with edge labels (action, prob, reward), pruned by 1-WL edge-label color refinement (sound: WL colors are automorphism-invariant); hard cap on enumeration",
+  "honesty_boundary": "fixed-caliber (event names pinned) candidate discovery only; action-renaming (relabel/explicit) candidates remain the case author's explicit declaration - the machine does not guess which kind of sameness applies",
+  "graph": {
+   "nodes": 8,
+   "edges": 48,
+   "multi_entry_cells": 0
+  },
+  "cap": 2000,
+  "wl_refinement": {
+   "n_blocks": 5,
+   "discrete": false,
+   "blocks": [
+    [
+     0
+    ],
+    [
+     1
+    ],
+    [
+     2
+    ],
+    [
+     3
+    ],
+    [
+     4,
+     5,
+     6,
+     7
+    ]
+   ]
+  },
+  "enumeration": {
+   "enumerated_count": 24,
+   "truncated": false,
+   "stop_reason": "search exhausted (all automorphisms enumerated)",
+   "order": 24,
+   "order_claim": "exact: VF2 enumeration completed (24 automorphisms = the full fixed-caliber automorphism group)",
+   "elements_storage": "full_enumeration",
+   "elements": [
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     7,
+     6
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     6,
+     5,
+     7
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     6,
+     7,
+     5
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     7,
+     5,
+     6
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     7,
+     6,
+     5
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     5,
+     4,
+     6,
+     7
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     5,
+     4,
+     7,
+     6
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     5,
+     6,
+     4,
+     7
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     5,
+     6,
+     7,
+     4
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     5,
+     7,
+     4,
+     6
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     5,
+     7,
+     6,
+     4
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     6,
+     4,
+     5,
+     7
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     6,
+     4,
+     7,
+     5
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     6,
+     5,
+     4,
+     7
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     6,
+     5,
+     7,
+     4
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     6,
+     7,
+     4,
+     5
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     6,
+     7,
+     5,
+     4
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     7,
+     4,
+     5,
+     6
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     7,
+     4,
+     6,
+     5
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     7,
+     5,
+     4,
+     6
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     7,
+     5,
+     6,
+     4
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     7,
+     6,
+     4,
+     5
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     7,
+     6,
+     5,
+     4
+    ]
+   ],
+   "generators": [
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     7,
+     6
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     4,
+     6,
+     5,
+     7
+    ],
+    [
+     0,
+     1,
+     2,
+     3,
+     5,
+     4,
+     6,
+     7
+    ]
+   ],
+   "n_generators": 3,
+   "generators_note": null
+  },
+  "orbits": {
+   "status": "exact",
+   "n_orbits": 5,
+   "blocks": [
+    [
+     0
+    ],
+    [
+     1
+    ],
+    [
+     2
+    ],
+    [
+     3
+    ],
+    [
+     4,
+     5,
+     6,
+     7
+    ]
+   ],
+   "lower_bound_blocks": null,
+   "upper_bound_blocks": null,
+   "note": "enumeration completed: this is the orbit partition of the full automorphism group"
+  },
+  "discrete_wl": false,
+  "identity_group": false,
+  "structural_pad_states": [
+   3,
+   4,
+   5,
+   6,
+   7
+  ]
+ },
+ "gate_arm": {
+  "candidate_group_file": "verdicts/discover.imap.candidate.json",
+  "candidate": {
+   "kind": "full enumerated group (the exact fixed-caliber automorphism group)",
+   "order": 24,
+   "closure_truncated": false
+  },
+  "engine_check": {
+   "exit": 0,
+   "verdict": "pass",
+   "worst_tv": 0.0,
+   "judge": "strict",
+   "reason": "两层判据均通过：转移等变（max TV=0.00e+00 ≤ tol=1e-09）+ 奖励剖面（n_bad=0）",
+   "error": null,
+   "command": [
+    "python",
+    "-X",
+    "utf8",
+    "-m",
+    "wuxing_gua",
+    "check",
+    "--trans",
+    "cases\\imap\\model.json",
+    "--group",
+    "verdicts\\discover.imap.candidate.json",
+    "--strict"
+   ],
+   "cwd": "vendored/",
+   "strict": true
+  },
+  "engine_group_order_reported": 24,
+  "gate_seconds": 0.219
+ },
+ "reconciliation": {
+  "checked": true,
+  "expected_file": "cases\\imap\\expected.json",
+  "criterion_direct": "multiset(trans[pi(s)][a]) == multiset{(p, pi(t), r)} per (s, a) - the sealed fixed criterion",
+  "groups": [
+   {
+    "group": "auth_selected",
+    "expected_fixed_verdict": "reject",
+    "expected_labeled_symmetry": false,
+    "n_elements": 2,
+    "nontrivial_elements": [
+     "(1 2)"
+    ],
+    "all_elements_fixed_aut": false,
+    "fixed_row_consistent": true,
+    "membership_all_in": false,
+    "membership_absent_elements": [
+     "(1 2)"
+    ],
+    "enumeration_membership": "not in enumerated set: ['(1 2)'] (exact: enumeration completed; these elements are not fixed automorphisms)"
+   },
+   {
+    "group": "notauth_auth",
+    "expected_fixed_verdict": "reject",
+    "expected_labeled_symmetry": false,
+    "n_elements": 2,
+    "nontrivial_elements": [
+     "(0 1)"
+    ],
+    "all_elements_fixed_aut": false,
+    "fixed_row_consistent": true,
+    "membership_all_in": false,
+    "membership_absent_elements": [
+     "(0 1)"
+    ],
+    "enumeration_membership": "not in enumerated set: ['(0 1)'] (exact: enumeration completed; these elements are not fixed automorphisms)"
+   },
+   {
+    "group": "pads",
+    "expected_fixed_verdict": "pass",
+    "expected_labeled_symmetry": true,
+    "n_elements": 2,
+    "nontrivial_elements": [
+     "(4 5)"
+    ],
+    "all_elements_fixed_aut": true,
+    "fixed_row_consistent": true,
+    "membership_all_in": true,
+    "membership_absent_elements": [],
+    "enumeration_membership": "all 2 elements in the enumerated set (exact: enumeration completed)"
+   }
+  ],
+  "all_consistent": true
+ },
+ "sealed_truth": {
+  "checked": false,
+  "reason": "no sealed truth file for this case in the provided sealed dir (imap.truth.json)"
+ },
+ "smoke": {
+  "applicable": false
+ },
+ "timing_seconds": {
+  "graph": 0.0,
+  "wl": 0.0,
+  "vf2": 0.0,
+  "orbits_and_generators": 0.0,
+  "gate_engine": 0.219
+ },
+ "provenance": {
+  "recorded_from_live_run": true,
+  "how": "python -X utf8 -m symmetry_court discover [--case imap]; the candidate group file is independently replayable: python -X utf8 -m wuxing_gua check --trans <cases>/<case>/model.json --group verdicts/discover.imap.candidate.json --strict (cwd=vendored/)",
+  "correctness_anchors": "VF2 enumeration set-equal to S_n brute force and equal to field-trial sealed fixed_aut_order on the five n<=8 cases during bring-up (orders 1/2/1/6/24); the WL node_match pruning is sound because WL colors are automorphism-invariant"
+ }
+}
