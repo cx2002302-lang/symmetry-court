@@ -188,3 +188,25 @@ Reference invocation (clean-protocol form):
 
     python -X utf8 -m symmetry_court selftest > gate_stdout.txt 2> gate_stderr.txt
     echo "exit=$?"
+
+### Independent confirmation re-run — 2026-11-07 (later session, same tree)
+
+The SOP above was re-executed end to end by a separate close-out session as an
+independent confirmation of the disposition, with the same protocol (three
+consecutive isolated invocations, no pipe anywhere in any command line,
+stdout/stderr redirected to files, `$?` read directly from the gate process):
+
+- [x] run 1 → exit 0, 204 s wall, `SELFTEST PASS（重放契约字段 450 个）`, stderr 0 bytes
+- [x] run 2 → exit 0, 242 s wall, `SELFTEST PASS（重放契约字段 450 个）`, stderr 0 bytes
+- [x] run 3 → exit 0, 210 s wall, `SELFTEST PASS（重放契约字段 450 个）`, stderr 0 bytes
+
+Zero `FAIL` lines in all three captures, zero failed branches, working tree
+clean before and after every run (receipt comparison is read-only), and the
+contract-field total stayed 450 (12 cases), i.e. no drift against the
+disposition baseline. Wall time varied 204–242 s under ordinary background
+load; the 0 exits with every contract field replayed also rule out any
+per-arm engine timeout (a timed-out arm leaves a null verdict and a field
+mismatch, per the triage map above). The exit-1 record remains
+classified as a capture artifact of the original gate harness invocation; the
+classification now rests on six consecutive clean runs across two sessions.
+No code change was made by the confirmation session either.
